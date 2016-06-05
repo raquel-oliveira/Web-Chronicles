@@ -8,6 +8,8 @@
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
+  // Fix grunt karma 
+  grunt.loadNpmTasks('grunt-karma');
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
