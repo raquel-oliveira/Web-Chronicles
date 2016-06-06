@@ -1,0 +1,4 @@
+<stories>
+  <story label="Minimal story" file="minimal_story.xml" />
+  <story label="Story 2" file="story-example.xml" />
+</stories>
