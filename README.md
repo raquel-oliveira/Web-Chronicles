@@ -4,8 +4,10 @@ Browser Chronicles - A browser-based gamebook platform. More info: https://d1b10
 
 ![alt tag](app/images/books.jpg?raw=true "Chronicles")
 
+
 ## Set up environment ##
 ------------------------
+
 Run `npm install`
 Run `bower install`
 
