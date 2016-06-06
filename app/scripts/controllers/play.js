@@ -4,8 +4,7 @@
  * @ngdoc function
  * @name cApp.controller:PlayCtrl
  * @description
- * # MainCtrl
- * Controller of the cApp
+ * # PlayCtrl
  */
 angular.module('cApp')
   .controller('PlayCtrl', function () {
