@@ -5,7 +5,6 @@
  * @name cApp.controller:AboutCtrl
  * @description
  * # AboutCtrl
- * Controller of the cApp
  */
 angular.module('cApp')
   .controller('AboutCtrl', function () {
