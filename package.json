@@ -34,7 +34,10 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "phantomjs-prebuilt": "^2.1.7",
     "time-grunt": "^1.0.0",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "postcss": "^5.0.21",
+    "time-grunt": "^1.0.0"
+
   },
   "engines": {
     "node": ">=0.10.0"
@@ -42,5 +45,9 @@
   "scripts": {
     "start" : "node server.js",
     "test": "karma start test/karma.conf.js"
+  },
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "postcss": "^5.0.21"
   }
 }
