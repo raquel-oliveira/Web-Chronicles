@@ -9,7 +9,8 @@
  * Main module of the application.
  */
 angular
-  .module('cApp', [
+    .module('cApp', [
+    'xml',
     'ngAnimate',
     'ngCookies',
     'ngResource',

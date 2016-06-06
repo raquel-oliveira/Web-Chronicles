@@ -33,6 +33,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
     "phantomjs-prebuilt": "^2.1.7",
+    "postcss": "^5.0.21",
     "time-grunt": "^1.0.0"
   },
   "engines": {
@@ -40,5 +41,9 @@
   },
   "scripts": {
     "test": "karma start test/karma.conf.js"
+  },
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "postcss": "^5.0.21"
   }
 }
