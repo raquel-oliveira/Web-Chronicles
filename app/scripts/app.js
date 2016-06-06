@@ -39,6 +39,11 @@ angular
         controller: 'PlayCtrl',
         controllerAs: 'play'
       })
+      .when('/show', {
+        templateUrl: 'views/show.html',
+        controller: 'ShowCtrl',
+        controllerAs: 'show'
+      })
       .otherwise({
         redirectTo: '/'
       });
