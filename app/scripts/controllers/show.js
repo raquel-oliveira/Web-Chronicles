@@ -17,7 +17,7 @@ angular.module('cApp')
 	var edges = new vis.DataSet([]);
 
 	for (var i = 0; i < story.step.length; ++i) {
-	  if (story.step[i].type == 'multiple_choice') {
+	  if (story.step[i].type === 'multiple_choice') {
 	    nodes.add({ id : parseInt(story.step[i]._id),
 			label : story.step[i]._title });
 
@@ -26,18 +26,18 @@ angular.module('cApp')
 	      edges.add({ from : parseInt(story.step[i]._id),
 			  to   : parseInt(story.step[i].nextStep[j])  });
 	    }
-	  } else if(story.step[i].type == 'end') {
-	    var color = (story.step[i].win == 'true')?
+	  } else if(story.step[i].type === 'end') {
+	    var color = (story.step[i].win === 'true')?
 		'#882222' : '#228822';
 
-	    nodes.add({ id : parseInt(story.step[i]['_id']),
-			label : story.step[i]['_title'],
+	    nodes.add({ id : parseInt(story.step[i]._id),
+			label : story.step[i]._title,
 			color : color,
 		        font: { color : "#FFFFFF" } });
 
 	  } else {
-	    nodes.add({ id : parseInt(story.step[i]['_id']),
-			label : story.step[i]['_title'] });
+	    nodes.add({ id : parseInt(story.step[i]._id),
+			label : story.step[i]._title });
 	  }
 	}
 
@@ -51,14 +51,14 @@ angular.module('cApp')
 	var options = { layout : { hierarchical : true } };
 
 	var network = new vis.Network(container, data, options);
-      }
+      };
       
       $scope.initStory = function(story_file) {
  	$http.get(story_file).success(function (data) {
 	  console.log(data.story);
-	  $scope.initGraph(data.story)
+	  $scope.initGraph(data.story);
 	});
-      }
+      };
       
       $scope.initStory('stories/minimal_story.xml');
     });
