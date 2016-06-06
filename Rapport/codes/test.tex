@@ -1,0 +1,12 @@
+\lstset{escapechar=@,style=customc}
+\label{bitconv}
+\begin{lstlisting}[frame=single]
+
+public void frequencyMessageTest() 
+{
+	MessageTreatment msg = new MessageTreatment();
+	String message = "aabccdee";
+	assertEquals(msg.getNbIterations(message), 
+	            "{b:1, d:1, a:2, c:2, e:2}");
+}
+\end{lstlisting}}
