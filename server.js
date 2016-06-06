@@ -22,7 +22,7 @@ app.get('/stories', function (req, res) {
         else {
             res.statusCode = 200;
             var resArray = [];
-            data.forEach(function(item) { resArray.push(item.split(".")[0])/* etc etc */ })
+            data.forEach(function(item) { resArray.push(item.split(".")[0])})
             res.send(resArray)
         }
 
@@ -44,7 +44,9 @@ app.get('/stories/:name', function (req, res) {
             res.send("story not found");
         }
         else {
+            res.set('Content-Type', 'text/xml');
             res.statusCode = 200;
+            console.log(data);
             res.send(data);
         }
     });
