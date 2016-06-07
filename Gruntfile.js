@@ -40,8 +40,8 @@ module.exports = function (grunt) {
     // Watches files for changes and runs tasks based on the changed files
     watch: {
         express: {
-            files: "<%= appFiles.serverJS %>",
-            tasks: "express:dev",
+            files: "server.js",
+            tasks: "express:server",
             options: {
                 nospawn: true
             }
@@ -502,8 +502,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
-
-    grunt.registerTask('se', ['build', 'express', 'watch']);
 
     grunt.registerTask('se', 'Compile then start a express web server', function (target) {
         if (target === 'dist') {
