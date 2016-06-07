@@ -8,9 +8,13 @@
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
-  // Fix grunt karma 
+
+  // Fix grunt karma
   grunt.loadNpmTasks('grunt-karma');
 
+  //We will replace connect server by express server
+  //npm install grunt-express-server --save-dev
+  grunt.loadNpmTasks('grunt-express-server');
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
@@ -35,6 +39,13 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+        express: {
+            files: "<%= appFiles.serverJS %>",
+            tasks: "express:dev",
+            options: {
+                nospawn: true
+            }
+        },
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
@@ -68,7 +79,16 @@ module.exports = function (grunt) {
         ]
       }
     },
+	//express server for rest API
 
+	express: {
+    server: {
+        options: {
+            port: 3000,
+            script: 'server.js'
+            // Override defaults here
+        }
+    }},
     // The actual grunt server settings
     connect: {
       options: {
@@ -482,4 +502,22 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+    grunt.registerTask('se', ['build', 'express', 'watch']);
+
+    grunt.registerTask('se', 'Compile then start a express web server', function (target) {
+        if (target === 'dist') {
+            return grunt.task.run(['build', 'connect:dist:keepalive']);
+        }
+
+        grunt.task.run([
+            'clean:server',
+            'wiredep',
+            'concurrent:server',
+            'postcss:server',
+            'express:server',
+            'connect:livereload',
+            'watch'
+        ]);
+    });
 };
