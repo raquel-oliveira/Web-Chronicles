@@ -39,7 +39,8 @@ app.get('/stories/:name', function (req, res) {
 
     var name = req.params.name;
 
-    fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
+    //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
+    fs.readFile('./app/stories/'+name, 'utf8',function(err,data) {
         if(err)
         {
             res.statusCode = 404;
@@ -63,7 +64,8 @@ app.get('/stories/:name/step/:step', function (req, res) {
     var name = req.params.name;
     var step = req.params.step;
 
-    fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
+    //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
+    fs.readFile('./app/stories/'+name, 'utf8',function(err,data) {
         if(err)
         {
             res.statusCode = 404;
@@ -103,12 +105,9 @@ app.get('/stories/:name/step/:step', function (req, res) {
  console.log(req.baseUrl);
  res.sendFile(__dirname+ app + path); // load the single view file (angular will handle the page changes on the front-end)
  });*/
+app.use(express.static(__dirname + '/app'));
+app.use(express.static(__dirname + '/'));
 
-app.get('*', function (req, res) {
-    var path = req.params[0] ? req.params[0] : 'index.html';
-
-    res.sendFile(__dirname+ "/../app/"+path);
-});
 
 app.listen(PORT);
 console.log('Running on http://localhost:' + PORT);
