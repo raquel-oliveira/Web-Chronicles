@@ -14,14 +14,11 @@ angular.module('cApp')
       $scope.selected = null;
       $scope.stories = null;
       $scope.network = null;
-      $scope.graphStyle = {
-	"height" : "400px"
-      };
-	
-      $scope.updateGraph = function(story) {
-	var nodes = new vis.DataSet([]);
+      $scope.graphStyle = { "height" : "400px"};
 
-	var edges = new vis.DataSet([]);
+      $scope.updateGraph = function(story) {
+        var nodes = new vis.DataSet([]);
+        var edges = new vis.DataSet([]);
 
 	for (var i = 0; i < story.step.length; ++i) {
 	  if (story.step[i].type === 'multiple_choice') {
@@ -60,7 +57,7 @@ angular.module('cApp')
 	  $scope.network = new vis.Network(container, data, options);
 	else
 	  $scope.network.setData(data);
-      
+
       };
 
       $scope.initStory = function(story_file) {
