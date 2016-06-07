@@ -1,4 +1,5 @@
 <stories>
   <story label="Minimal story" file="minimal_story.xml" />
   <story label="Story 2" file="xml-a.xml" />
+  <story label="Valley" file="big-story.xml" />
 </stories>

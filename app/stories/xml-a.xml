@@ -2,7 +2,7 @@
 <!DOCTYPE note SYSTEM "xml-a.dtd">
 <story name="Want to win ?" >
 
-    <step id="0" title="Welcome!">
+    <step id="0" title="step 0 - xml-a!">
         <nextStep label="Choice 1">1</nextStep>
         <nextStep label="Choice 2">3</nextStep>
         <description>First step !</description>

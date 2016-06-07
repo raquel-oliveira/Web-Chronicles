@@ -16,7 +16,7 @@
         ]>
 <story name="Want to win ?" >
 
-    <step id="0" title="Welcome!">
+    <step id="0" title="step 0 min-story!">
         <nextStep label="Choice 1">1</nextStep>
         <nextStep label="Choice 2">2</nextStep>
         <description>First step !</description>
