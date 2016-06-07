@@ -10,7 +10,6 @@
         <!ATTLIST nextStep
                 label CDATA #REQUIRED>
         <!ELEMENT description (#PCDATA)*>
-        <!ELEMENT fragment (#PCDATA)>
         <!ELEMENT type (#PCDATA)>
         <!ELEMENT win (#PCDATA)>
 

@@ -1,0 +1,14 @@
+<!DOCTYPE story [
+        <!ELEMENT story (step)*>
+        <!ATTLIST story
+            name CDATA #REQUIRED>
+        <!ELEMENT step (nextStep|description|type|win)*>
+        <!ATTLIST step
+                id CDATA #REQUIRED
+                title CDATA>
+        <!ELEMENT nextStep (#PCDATA)>
+        <!ELEMENT description (#PCDATA)*>
+        <!ELEMENT type (#PCDATA)>
+        <!ELEMENT win (#PCDATA)>
+
+]>

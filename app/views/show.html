@@ -1,10 +1,7 @@
 <div class="container">
   <h1>Stories</h1>
   <p>Choose a story</p>
-  <select ng-model="storyFile" ng-change="changeStory()">
-    <option value="{{ story._file }}" ng-repeat="story in stories">{{ story._label }}</option>
-  </select>
-  <div id="network-story">
+  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"></select>
+  <div id="network-story" ng-style="graphStyle">
   </div>
 </div>
-

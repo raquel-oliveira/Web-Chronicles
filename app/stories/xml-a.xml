@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE note SYSTEM "xml-a.dtd">
+<story name="Want to win ?" >
+
+    <step id="0" title="Welcome!">
+        <nextStep label="Choice 1">1</nextStep>
+        <nextStep label="Choice 2">3</nextStep>
+        <description>First step !</description>
+        <type>multiple_choice</type>
+    </step>
+
+    <step id="1" title="Welcome!">
+        <nextStep label="Choice A">2</nextStep>
+        <nextStep label="Choice B">3</nextStep>
+        <description>First step !</description>
+        <type>multiple_choice</type>
+    </step>
+    <step id="2" title="End! You loose">
+        <description>Dead :(</description>
+        <type>end</type>
+        <win>false</win>
+    </step>
+    <step id="3" title="End! You win">
+        <description>win !</description>
+        <type>end</type>
+        <win>true</win>
+    </step>
+</story>

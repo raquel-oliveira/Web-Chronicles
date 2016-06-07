@@ -2,6 +2,15 @@
 
 Browser Chronicles - A browser-based gamebook platform. More info: https://d1b10bmlvqabco.cloudfront.net/attach/iok9b721bcu3i/ijibz99cthmum/ip34gelvqiuo/Track.pdf
 
+![alt tag](app/images/books.jpg?raw=true "Chronicles")
+
+
+## Set up environment ##
+------------------------
+
+Run `npm install`
+Run `bower install`
+
 ## Build & development ##
 --------------------------
 
@@ -17,7 +26,8 @@ Running `grunt test` will run the unit tests with karma.
 
 ### 06 June 2016 ### 
 
-Set up initial.
+* Set up initial.
+* Implement Simple Rest API.
 
 ## Mainteneurs ##
 ------------------

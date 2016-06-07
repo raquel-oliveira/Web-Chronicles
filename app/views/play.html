@@ -1,1 +1,22 @@
-<p>Plaaaayyyy VIEW<p>
+<h1>Plaaaayyyy VIEW</h1>
+<h2>{{ title }}</h2>
+<div id="choose-story">
+  <p>Choose a story</p>
+  <select ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file" ng-model="selected"></select>
+</div>
+<div id="description">
+</div>
+<div id="description">
+  {{ description }}
+</div>
+<div id="end-status" ng-show="endStatusDisplayed">
+  Number of step:  {{ nbSteps }}<br/>
+  Minimum number of step : [not implemented];
+</div>
+<span ng-repeat="c in choices">
+  <button ng-click="goToStep(c)">
+    {{ c._label }}
+  </button>
+</span>
+
+
