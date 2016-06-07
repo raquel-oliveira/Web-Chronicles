@@ -45,6 +45,9 @@ angular
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
+      .when('/story', {
+        templateUrl: 'views/story.html',
+      })
       .otherwise({
         redirectTo: '/'
       });
