@@ -17,13 +17,13 @@
     <type>multiple_choice</type>
   </step>
 
-  <step id="2" title="You won !">
+  <step id="2" title="You lose !">
     <description>Dead :(</description>
     <type>end</type>
     <win>false</win>
   </step>
   
-  <step id="3" title="You lose !">
+  <step id="3" title="You won !">
     <description>win !</description>
     <type>end</type>
     <win>true</win>

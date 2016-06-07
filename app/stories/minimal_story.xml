@@ -7,6 +7,8 @@
                 id CDATA #REQUIRED
                 title CDATA #REQUIRED>
         <!ELEMENT nextStep (#PCDATA)>
+        <!ATTLIST nextStep
+                label CDATA #REQUIRED>
         <!ELEMENT description (#PCDATA)*>
         <!ELEMENT fragment (#PCDATA)>
         <!ELEMENT type (#PCDATA)>
@@ -16,8 +18,8 @@
 <story name="Want to win ?" >
 
     <step id="0" title="Welcome!">
-        <nextStep>1</nextStep>
-        <nextStep>2</nextStep>
+        <nextStep label="Choice 1">1</nextStep>
+        <nextStep label="Choice 2">2</nextStep>
         <description>First step !</description>
         <type>multiple_choice</type>
     </step>
@@ -27,7 +29,6 @@
         <win>false</win>
     </step>
     <step id="2" title="End! You win">
-        <nextStep></nextStep>
         <description>win !</description>
         <type>end</type>
         <win>true</win>

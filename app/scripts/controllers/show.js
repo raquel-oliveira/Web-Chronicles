@@ -70,16 +70,13 @@ angular.module('cApp')
 
       $http.get('stories/stories.xml').success(function (data) {
 	$scope.stories = data.stories.story;
-	console.log($scope.stories);
-	console.log($scope.story);
       });
 
       $scope.changeStory = function() {
 	$http.get('stories/' + $scope.storyFile).success(function (data) {
 	  $scope.updateGraph(data.story);
 	});
-
-	console.log($scope.storyFile);
 	
+	console.log($scope.storyFile);
       }
     });
