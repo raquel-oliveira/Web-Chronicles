@@ -4,7 +4,6 @@
             <id>0</id>
             <type>multiple_choice</type>
             <nextStep label="Choice 1">1</nextStep>
-            <nextStep label="Choice 2">2</nextStep>
             <description>First step !</description>
             <title>"step 0 min-story!"</title>
         </content>

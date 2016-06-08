@@ -12,7 +12,7 @@ angular.module('cApp')
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push('xmlHttpInterceptor');
     })
-    .controller('ShowCtrl', function ($scope, $http) {
+    .controller('ShowCtrl', ['$scope', '$http', 'ShortestPathService', function ($scope, $http, shortestPath) {
         $scope.selected = null;
         $scope.stories = null;
         $scope.network = null;
@@ -31,17 +31,23 @@ angular.module('cApp')
                         label: story.step[i].content.id
                     });
 
-                    for (var j = 0; j < story.step[i].content.nextStep.length; ++j) {
-                        edges.add({
-                            from: parseInt(story.step[i].content.id),
-                            to: parseInt(story.step[i].content.nextStep[j]),
-			    arrows: { to: true }
-                        });
-                    }
+		    if (Array.isArray(story.step[i].content.nextStep)) {
+			for (var j = 0; j < story.step[i].content.nextStep.length; ++j) {
+                            edges.add({
+				from: parseInt(story.step[i].content.id),
+				to: parseInt(story.step[i].content.nextStep[j]),
+				arrows: { to: true }
+                            });
+			}
+		    } else {
+			edges.add({
+			    from: parseInt(story.step[i].content.id),
+			    to: parseInt(story.step[i].content.nextStep)
+			});
+		    }
                 } else if (story.step[i].content.type === 'end') {
                     var color = (story.step[i].content.win === 'false') ?
                         '#882222' : '#228822';
-                    //console.log(story.step[i].content);
                     nodes.add({
                         id: parseInt(story.step[i].content.id),
                         label: story.step[i].content.id,
@@ -71,8 +77,6 @@ angular.module('cApp')
                         });
                     }
 
-                    console.log(story.step[i].hiden.answer);
-
                 } else {
                     nodes.add({
                         id: parseInt(story.step[i].content.id),
@@ -98,6 +102,11 @@ angular.module('cApp')
             else {
                 $scope.network.setData(data);
             }
+
+            shortestPath.get(nodes, edges);
+	    console.log($scope.network.getScale());
+	    $scope.network.focus("0", {scale: 3});
+	    console.log($scope.network.getScale());
 
 	    $scope.network.on("selectNode", function(params) {
 		$scope.$apply(function () {
@@ -139,4 +148,4 @@ angular.module('cApp')
                 $scope.updateGraph(data.story);
             });
         };
-    });
+    }]);

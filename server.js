@@ -2,14 +2,174 @@
 
 const express = require('express');
 const fs = require('fs');
-const xml2js = require('xml2js')
+const xml2js = require('xml2js');
 const multer = require('multer');
+const util = require('util');
 
 // Constants
 const PORT = 8080;
 
 // App
 const app = express();
+
+function unpack(graph,from)
+{
+    var route = [];
+    while(from!=0)
+    {
+        route.push(from);
+        from = graph[from].visited;
+    }
+    route.push("0");
+    return route.reverse();
+}
+
+function addVertex(graph,item)
+{
+    console.log('addVertex');
+    console.dir(item);
+    console.dir(item.content[0]);
+
+
+
+    var vertex = {
+        id: item.content[0].id[0],
+        end: false,
+        visited: 0,
+        to: []
+    };
+    console.dir(item.content[0].type[0]);
+    console.dir(item.content[0].end);
+    if(typeof item.content[0].win !== 'undefined' ) {
+        console.dir(item.content[0].win[0]);
+    }
+
+
+
+    if(item.content[0].type[0]==='end'&&typeof item.content[0].win !== 'undefined' && item.content[0].win[0]==='true')
+    {
+        console.log('found end');
+        vertex.end = true;
+    }
+    if(typeof item.content[0].nextStep !== 'undefined' && item.content[0].nextStep) {
+        console.log('adding EDGES');
+        console.log(item.content[0].nextStep);
+
+        item.content[0].nextStep.forEach(function (nextStepID) {
+            console.log('adding edge');
+            vertex.to.push(nextStepID._);
+            console.log(nextStepID._);
+        });
+    }
+    if(typeof item.hiden !== 'undefined' ) {
+        console.log('adding HIDDEN');
+        console.log(item.hiden[0].answer);
+        item.hiden[0].answer.forEach(function (nextStepID) {
+            console.log('next');
+            console.log(nextStepID.$.stepId);
+            vertex.to.push(nextStepID.$.stepId);
+        });
+
+    }
+    console.dir(vertex);
+    graph.push(vertex);
+}
+function shortestPath(graph,onlyLength) {
+    //graph is arrayVertex[ vertex{id:id, end: true, visited:id to:[ids]}]
+    //result is an array
+    console.log('Function');
+    console.log(graph);
+    var iDtoExplore = [];
+    iDtoExplore.push(0);
+
+
+
+    while (iDtoExplore.length>0) {
+        var indexCur = iDtoExplore.shift();
+
+        console.log('exploring');
+        console.log(indexCur);
+        console.log(graph[indexCur]);
+        //if (graph[indexCur].visited !== false){
+          //  continue;
+        // }
+        console.log('win?' );
+        console.log(graph[indexCur].end);
+
+        if(graph[indexCur].end === true)
+        {
+            console.log('path -------------------------------------0000000000000000000000000000000000000000 ');
+            console.log(unpack(graph,indexCur));
+            if(onlyLength === true)
+            {
+                return unpack(graph,indexCur).length;
+            }
+            return unpack(graph,indexCur);
+        }
+
+        graph[indexCur].to.forEach(function (item) {
+            if(graph[item].visited==false)
+            {
+                graph[item].visited = indexCur;
+                iDtoExplore.push(item);
+            }
+        });
+
+    }
+
+}
+
+
+app.get('/compute/:name/:length', function (req, res) {
+    console.log('shortestP');
+
+    var name = req.params.name;
+    var length = req.params.length;
+    console.log('shortestP');
+    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
+        if (err) {
+            res.statusCode = 404;
+            res.send("story not found");
+        }
+        else {
+            var parseString = xml2js.parseString;
+            parseString(data, function (err, result) {
+                if (err) {
+                    res.statusCode = 404;
+                    res.send("bad story");
+                }
+                //construct graph representation
+                var graph = [];
+                console.log(result);
+                console.log(result.story);
+                console.log(result.story.step);
+
+                result.story.step.forEach(function(item) {
+                    addVertex(graph,item);
+                });
+
+                console.log('graph');
+                console.log(graph);
+                var data = shortestPath(graph);
+
+                //res.set('Content-Type', 'text/xml');
+                res.statusCode = 200;
+                console.log(data);
+                console.log(length);
+                if(length === 'false'){
+                    res.send(data);
+                } else {
+
+                    res.send(data.length+'');
+                }
+            });
+        }
+    });
+
+
+
+});
+
 app.get('/stories', function (req, res) {
     fs.readdir('./app/stories', function (err, data) {
 
@@ -214,6 +374,8 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
         }
     });
 });
+
+
 var upload = multer({
     dest: './app/stories/',
     rename: function (fieldname, filename) {
@@ -245,6 +407,10 @@ var upload = multer({
     }
 });
 
+
+
+
+
 app.post('/stories/:name', upload.any(), function (req, res) {
 
     var name = req.params.name;
@@ -275,6 +441,7 @@ app.post('/stories/:name', upload.any(), function (req, res) {
     stream.end();
     console.log('Stream ended.');
 });
+
 
 app.use(express.static(__dirname + '/app'));
 app.use(express.static(__dirname + '/'));
