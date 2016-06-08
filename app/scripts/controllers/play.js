@@ -16,7 +16,7 @@ angular.module('cApp')
 
 		$scope.choices = null;
 		$scope.selected = null;
-
+		  $scope.answer = "";
 		$scope.nbSteps = 0;
 		$scope.stepId = 0;
 
@@ -67,17 +67,43 @@ angular.module('cApp')
 			$scope.choices = content.nextStep;
 			$scope.stepType = content.type;
 
-			console.log(content.nextStep);
+			//console.log(content.nextStep);
 			$scope.play = true;
 
 
 			console.log(content);
-			console.log($scope.choices);
+			//console.log($scope.choices);
 			++$scope.nbSteps;
 			$scope.update();
 		});
     };
+		  $scope.change= function(value)
+		  {
+			  console.log('change');
+			  console.log($scope.answer);
+			  $scope.answer = value;
+		  };
 
+		  $scope.verifyAnswer= function(answer)
+		  {
+			  console.log('verif');
+			  console.log($scope.answer);
+			  console.log(answer);
+			  $http.get('stories/'+$scope.storyName+'/step/'+$scope.currentStep.id+"/reponse/"+answer).then(function (reponse){
+				  if(reponse.status === 200)
+				  {
+					  console.log("good anwser");
+					  console.log(reponse.data);
+					  console.log("good anwser");
+					  $scope.goToStep(reponse.data.answer._stepId);
+				  }
+				  else {
+					  console.log(reponse.data);
+					  console.log("bad anwser");
+					  $scope.hint = 'Hint : '+reponse.data.hint;
+				  }
+			  });
+		  };
 
 	$scope.changeStory = function() {
 	  $scope.endStatusDisplayed = false;

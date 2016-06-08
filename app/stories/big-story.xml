@@ -1,41 +1,78 @@
-<?xml version="1.0"?>
-<!DOCTYPE note SYSTEM "xml-a.dtd">
 <story name="Valley of disappointment!" >
-  <step id="0">
+    <step>
+        <content>
+                <id>0</id>
       <nextStep label="know story">1</nextStep>
       <nextStep label="Ignore story">2</nextStep>
       <description>In the valley of disappointment people are always sad or really sad.
       Someone told you, there was a time this wasn't that sad... </description>
       <type>multiple_choice</type>
+        </content>
   </step>
   <step id="1">
+      <content>
+      <id>1</id>
       <description>They told you, a long time ago there was only happy people that live here, that received watter from the FORBIDDEN MOUNTAIN (in this time it was called HAPPY MOUNTAIN). </description>
       <nextStep label="Go to Forbidden mountain">4</nextStep>
       <nextStep label="Go sleep">5</nextStep>
       <nextStep label="Tell Roberto about the story">6</nextStep>
       <type>multiple_choice</type>
+      </content>
   </step>
   <step id="2">
+      <content>
+      <id>2</id>
       <description> And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person that always belived THIS time he wouldn't be dissapointed). </description>
 
       <hint label="Where is Roberto? (right/left)"></hint>
       <type>riddle</type>
-      <answer>left</answer>
-      <nextStep>6</nextStep>
+
+
+      </content>
+      <hiden>
+          <answer stepId="6">left</answer>
+          <hint>try the other directions</hint>
+      </hiden>
+
   </step>
+    <step id="3">
+        <content>
+            <id>2</id>
+            <description> And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person that always belived THIS time he wouldn't be dissapointed). </description>
+
+            <hint label="Where is Roberto? (right/left)"></hint>
+            <type>riddle</type>
+
+
+        </content>
+        <hiden>
+            <answer stepId="6">left</answer>
+            <hint>try the other directions</hint>
+        </hiden>
+
+    </step>
   <step id="4">
+      <content>
+      <id>4</id>
       <description> The route to get in the Happy mountain was dangerous and protected by the guardians, so he die by a shot from the major protector of the valley </description>
       <type>end</type>
       <win>false</win>
+      </content>
   </step>
   <step id="5">
+      <content>
+      <id>5</id>
       <description> He slept so deeply that he got in a coma </description>
       <type>end</type>
       <win>false</win>
+      </content>
   </step>
   <step id="6">
+      <content>
+      <id></id>
       <description> Roberto listen the story, got excited but his mother didn't let him go to the mountain. So everybody lived dreaming about a better day </description>
       <type>end</type>
       <win>true</win>
+      </content>
   </step>
 </story>

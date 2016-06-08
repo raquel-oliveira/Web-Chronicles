@@ -90,23 +90,18 @@ app.get('/stories/:name/step/:step', function (req, res) {
             var parseString = xml2js.parseString;
 
             parseString(data, function (err, result) {
-/*                console.dir(err);
-                console.log("OKZZZZZZZZZ");
-                console.dir(result);
-                console.log("OKZZZZZZZZZ");
-                console.dir(result.story);
-                console.log("OKZZZZZZZZZ");
-                console.dir(result.step);
-                console.log("OKZZZZZZZZZ");
-                console.dir(step);
 
-                console.log("OKZZZZZZZZZ");
-                console.dir(result.story.step[step]);*/
 
                 var builder = new xml2js.Builder({rootName: 'content'});
+                try{
                 var xml2 = builder.buildObject(result.story.step[step].content[0]);
                 console.dir(xml2);
                 res.send(xml2);
+                }
+                catch (e){
+                    console.log("error");
+                    console.log(step);
+                }
             });
         }
     });
@@ -116,6 +111,7 @@ app.get('/stories/:name/step/:step', function (req, res) {
 app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
     var name = req.params.name;
     var step = req.params.step;
+    var reponse = req.params.reponse;
 
     fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
         if (err) {
@@ -123,26 +119,44 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
             res.send("story not found");
         }
         else {
-            res.set('Content-Type', 'text/xml');
+
 
             res.statusCode = 200;
 
             var parseString = xml2js.parseString;
             var xml = data;
+
             parseString(xml, function (err, result) {
-                console.dir(result);
+                if (err) {
+                    res.statusCode = 404;
+                    res.send("bad story");
+                }
 
+                res.set('Content-Type', 'text/xml');
 
-                var answer = result.story.step[step].answer;
-                if(answer == reponse){
+                var answer = result.story.step[step].hiden[0].answer[0];
+                console.dir("answerSS");
+                console.dir(answer);
+                console.dir("answerSS");
+                console.dir(answer._);
+                console.dir("answerSS");
+                console.dir(reponse);
+                console.dir("answerSS");
+                if(answer._ == reponse){
                     var builder = new xml2js.Builder({rootName: 'answer'});
-                    var xml2 = builder.buildObject(result.story.step[step].hiden.answer);
+                    var xml2 = builder.buildObject(answer);
                     console.dir(xml2);
+                    res.statusCode = 200;
                     res.send(xml2);
                 }
                 else {
                     var builder = new xml2js.Builder({rootName: 'hint'});
-                    var xml2 = builder.buildObject(result.story.step[step].hiden.hint);
+                    try{
+                    var xml2 = builder.buildObject(result.story.step[step].hiden[0].hint[0]);
+
+                    }
+                    catch(e){}
+                    res.statusCode = 210;
                     console.dir(xml2);
                     res.send(xml2);
                 }
