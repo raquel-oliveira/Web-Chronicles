@@ -133,7 +133,8 @@ angular.module('cApp')
 		console.dir($scope.stories);
 		console.dir($scope.stories[0]);
 
-	  $scope.selected = $scope.stories[0];
+	    $scope.selected = $scope.stories[0];
+	    $scope.title = $scope.stories[0]._label;
 	});
 
 
