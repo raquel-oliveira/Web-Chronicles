@@ -119,6 +119,8 @@
         <content>
             <id>9</id>
             <description> Maze</description>
+	    <rows>5</rows>
+	    <columns>5</columns>
             <nextStep label="Crochetage réussit !">8</nextStep>
         </content>
     </step>

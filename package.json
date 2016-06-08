@@ -37,7 +37,6 @@
     "phantomjs-prebuilt": "^2.1.7",
     "postcss": "^5.0.21",
     "time-grunt": "^1.0.0"
-
   },
   "engines": {
     "node": ">=0.10.0"
@@ -47,10 +46,10 @@
     "test": "karma start test/karma.conf.js"
   },
   "dependencies": {
+    "aureooms-js-fixed-disjoint-set": "^3.0.0",
     "grunt": "^0.4.5",
+    "multer": "^1.1.0",
     "postcss": "^5.0.21",
-    "xml2js": "^0.4.16",
-    "multer": "^1.1.0"
-
+    "xml2js": "^0.4.16"
   }
 }

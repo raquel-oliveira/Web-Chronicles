@@ -1,0 +1,21 @@
+<story name="maze test">
+  <step>
+    <content>
+      <id>0</id>
+      <type>maze</type>
+      <description>A Maze</description>
+      <rows>23</rows>
+      <columns>47</columns>
+      <nextStep label="Ok !">1</nextStep>
+    </content>
+  </step>
+  <step>
+    <content>
+      <id>1</id>
+      <description>win !</description>
+      <type>end</type>
+      <win>true</win>
+      <title>"End! You win"</title>
+    </content>
+  </step>
+</story>

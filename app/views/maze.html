@@ -1,0 +1,11 @@
+<div ng-controller="MazeCtrl"
+     ng-style="mazeStyle"
+     ng-keydown="handleKey($event)"
+     tabindex="1">
+  <table id="maze" style="border:1px solid black;">
+    <tr ng-repeat="r in grid">
+      <td ng-repeat="c in r" ng-style="getStyle(c)"></td>
+    </tr>
+  </table>
+  <button ng-click="goToStep(currentStep.nextStep.__text)" ng-disabled="! endReached"> Next</button>
+</div>
