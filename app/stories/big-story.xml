@@ -4,6 +4,7 @@
       <id>0</id>
       <nextStep label="know story">1</nextStep>
       <nextStep label="Ignore story">2</nextStep>
+
       <description>In the valley of disappointment people are always sad or really sad.
         Someone told you, there was a time this wasn't that sad... </description>
       <type>multiple_choice</type>
