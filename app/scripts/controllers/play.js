@@ -47,11 +47,12 @@ angular.module('cApp')
         };
 
 
-
         $scope.goToStep = function (step) {
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
+                console.log('stories/' + $scope.storyPath + '/step/' + step)
                 var content = data.content;
                 console.log(data);
+
                 $scope.currentStep = content;
                 $scope.currentStep.url = 'views/' + content.type + '.html';
                 $scope.choices = content.nextStep;
@@ -108,6 +109,4 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
         });
 
-
     });
-

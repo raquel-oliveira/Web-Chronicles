@@ -14,7 +14,7 @@
             <id>1</id>
             <type>end</type>
             <win>false</win>
-            <titre>"End! You loose"</titre>
+            <title>"End! You loose"</title>
             <description>Dead :(</description>
 
         </content>
@@ -28,7 +28,7 @@
             <question>How many is 10 in binary?</question>
         </content>
         <hiden>
-            <answer stepId="4">2</answer>
+          <answer stepId="4">2</answer>
             <hint> 01 => 1, 11 => 3</hint>
         </hiden>
 
