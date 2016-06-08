@@ -9,7 +9,7 @@
             <title>"step 0 min-story!"</title>
         </content>
     </step>
-    <step id="1">
+    <step>
         <content>
             <id>1</id>
             <type>end</type>
@@ -19,7 +19,7 @@
 
         </content>
     </step>
-    <step id="2">
+    <step>
         <content>
             <title>"Riddle"</title>
             <id>2</id>
@@ -33,7 +33,7 @@
         </hiden>
 
     </step>
-    <step id="3">
+    <step>
     <content>
         <id>3</id>
         <type>maze</type>
@@ -42,7 +42,7 @@
     </content>
 
     </step>
-    <step id="4">
+    <step>
         <content>
             <id>4</id>
             <description>win !</description>
