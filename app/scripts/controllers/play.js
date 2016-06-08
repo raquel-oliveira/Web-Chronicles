@@ -7,51 +7,56 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http) {
+    .controller('PlayCtrl', function ($scope, $http){
+        $scope.nbSteps = 0;
         $scope.stories = null;
         $scope.storyName = null;
         $scope.storyPath = null;
-
-        $scope.currentStep = null;
-
-        $scope.choices = null;
+        $scope.choices =  null; // list of nextSteps of the step
         $scope.selected = null;
         $scope.answer = "";
-        $scope.nbSteps = 0;
-        $scope.stepId = 0;
-
         $scope.title = '<Titre>';
         $scope.description = '<Description>';
-
-
+        $scope.stepId = 0;
+        //Var in step.html
+        $scope.currentStep = null;
+        //Divs of type ng-show in play.html
+        $scope.choose = true ; // Choose a story to start
+        $scope.play = false; // Body of the story based on the step.html
         $scope.endStatusDisplayed = false;
-        $scope.choose = true;
-        $scope.play = false;
-        $scope.choosed = false;
-
+        // Create function
+        /* Update the view to the current step*/
         $scope.update = function () {
-
-            $scope.description = $scope.currentStep.description;
-            if ($scope.currentStep.win === 'true') {
+            //update title of step if available
+            $scope.description = $scope.currentStep.description; //update description of step if available
+            if ($scope.currentStep.win === 'true') { //maybe change this to controller 'EndCtrl'
                 $scope.endStatusDisplayed = true;
             }
         };
 
-        $scope.startStory = function () {
-            $scope.choose = false;
-            $scope.play = true;
-            $scope.storyName = $scope.selected.name;
-            $scope.storyPath = $scope.selected._file;
-
-            $scope.goToStep(0);
+        /**/
+        $scope.changeStory = function () {
+            //$scope.endStatusDisplayed = false;
+            //console.log($scope.selected);
+            $scope.title = $scope.selected._label; //change to get the title of the story
         };
 
+        /*After a story is choosed*/
+        $scope.startStory = function () {
+                    $scope.choose = false; //disable view to choose a story
+                    $scope.play = true;
+                    $scope.storyName = $scope.selected.name; //put the default one.
+                    $scope.storyPath = $scope.selected._file;
 
+                    $scope.goToStep(0); // start from root
+        };
+
+        /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-                console.log('stories/' + $scope.storyPath + '/step/' + step)
+                //console.log('stories/' + $scope.storyPath + '/step/' + step)
                 var content = data.content;
-                console.log(data);
+                //console.log(data);
 
                 $scope.currentStep = content;
                 $scope.currentStep.url = 'views/' + content.type + '.html';
@@ -69,33 +74,6 @@ angular.module('cApp')
             });
         };
 
-        $scope.change = function (value) {
-            $scope.answer = value;
-        };
-
-        $scope.verifyAnswer = function (answer) {
-            $http.get('stories/' + $scope.storyName + '/step/' + $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
-                if (reponse.status === 200) {
-                    console.log("good anwser");
-                    console.log(reponse.data);
-                    console.log("good anwser");
-                    $scope.goToStep(reponse.data.answer._stepId);
-                }
-                else {
-                    console.log(reponse.data);
-                    console.log("bad anwser");
-                    $scope.hint = 'Hint : ' + reponse.data.hint;
-                }
-            });
-        };
-
-        $scope.changeStory = function () {
-            //$scope.endStatusDisplayed = false;
-            console.log($scope.selected);
-            $scope.title = $scope.selected._label;
-
-        };
-
         var x2js = new X2JS();
         $http.get('stories/').success(function (data) {
 
@@ -109,4 +87,23 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
         });
 
+        $scope.change = function (value) {
+            $scope.answer = value;
+        };
+
+        $scope.verifyAnswer = function (answer) {
+            $http.get('stories/' + $scope.storyPath + '/step/' + $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+                if (reponse.status === 200) {
+                    console.log("good anwser");
+                    console.log(reponse.data);
+                    console.log("good anwser");
+                    $scope.goToStep(reponse.data.answer._stepId);
+                }
+                else {
+                    console.log(reponse.data);
+                    console.log("bad anwser");
+                    $scope.hint = 'Hint : ' + reponse.data.hint;
+                }
+            });
+        };
     });

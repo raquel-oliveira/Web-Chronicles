@@ -6,8 +6,7 @@
   <div class = "choose-story" ng-show="choose">
     <h2>Choose a story: </h2>
     <select ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file" ng-model="selected"></select>
-  <!--<h2><a class="btn btn-lg" ng-href="#/story"> Start story: {{ title }}  <span class="glyphicon glyphicon-play"></span></a></h2>-->
-  <!--<h2><a id="start_story" class="btn btn-lg" onclick="showStory();"> Start story: {{ title }}  <span class="glyphicon glyphicon-play"></span></a></h2>-->
+
   <h2><a ng-click="startStory()" class="btn btn-lg"> Start story: {{ title }}  <span class="glyphicon glyphicon-play"></span></a></h2>
   </div>
 
