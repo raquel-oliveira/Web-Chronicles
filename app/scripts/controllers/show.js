@@ -19,7 +19,7 @@ angular.module('cApp')
         $scope.graphStyle = {"height": "400px",
 			     "border": "1px solid grey"};
 	$scope.showDatas = false;
-	
+
         $scope.updateGraph = function (story) {
             var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
@@ -104,9 +104,9 @@ angular.module('cApp')
             }
 
             shortestPath.get(nodes, edges);
-	    console.log($scope.network.getScale());
+	    //console.log($scope.network.getScale());
 	    $scope.network.focus("0", {scale: 3});
-	    console.log($scope.network.getScale());
+	    //console.log($scope.network.getScale());
 
 	    $scope.network.on("selectNode", function(params) {
 		$scope.$apply(function () {
@@ -115,7 +115,7 @@ angular.module('cApp')
 
 		var id = params.nodes[0];
 		var step;
-		
+
 		for (var i = 0; i < story.step.length; ++i) {
 		    if (story.step[i].content.id == id) {
 			step = story.step[i];
