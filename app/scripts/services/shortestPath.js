@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('cApp').service('ShortestPathService', function(){
     this.get = function(nodes, edge) {
         console.log(nodes);
@@ -10,6 +12,6 @@ angular.module('cApp').service('ShortestPathService', function(){
             known.push(false);
             weight.push(nodes.length);
         }
-        
+
     }
 });

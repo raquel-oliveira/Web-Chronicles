@@ -37,3 +37,17 @@ myApp.controller('EndCtrl', function ($scope) {
          $scope.winStyle = { 'font-size': '100px', 'color': 'red'};
      }
  });
+
+ /*myApp.controller('MCCtrl', function ($scope) {
+   $scope.optionsRadio = false;
+   $scope.showRadio = function (){
+        if ($scope.currentStep.type === 'multiple_choice'){
+          if ( $scope.currentStep.nextStep.length === 1){
+            $scope.optionsRadio = false;
+          }else{
+            $scope.optionsRadio = true;
+          }
+          console.log("aaaaaa"+ $scope.currentStep.nextStep.length);
+        }
+      };
+  });*/

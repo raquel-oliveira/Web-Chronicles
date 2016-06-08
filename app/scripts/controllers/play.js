@@ -12,7 +12,7 @@ angular.module('cApp')
         $scope.stories = null;
         $scope.storyName = null;
         $scope.storyPath = null;
-        $scope.choices =  null; // list of nextSteps of the step
+        $scope.optionsRadio = false; //put in the controller MCCtrl
         $scope.selected = null;
         $scope.showPlayButton = false;
         $scope.answer = "";
@@ -74,6 +74,7 @@ angular.module('cApp')
             $scope.choose = true;
             $scope.selected = $scope.stories[0];
         });
+        //Change this to controller RiddleCtrl
         $scope.verifyAnswer = function (answer) {
               $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
                 if (reponse.status === 200) {
@@ -89,9 +90,21 @@ angular.module('cApp')
                 }
             });
         };
+
         $scope.change = function (value) {
             $scope.answer = value;
         };
+        //put in the controller MCCtrl
+        $scope.showRadio = function (){
+             if ($scope.currentStep.type === 'multiple_choice'){
+               if (!Array.isArray($scope.currentStep.nextStep)){
+                 $scope.optionsRadio = false;
+                 $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
+               }else{
+                 $scope.optionsRadio = true;
+              }
+             }
+           };
 });
 
 /*angular.module('cApp').service('sharedProperties', function (){
