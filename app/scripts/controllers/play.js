@@ -10,7 +10,7 @@ angular.module('cApp')
     .controller('PlayCtrl', function ($scope, $http) {
         $scope.stories = null;
         $scope.storyName = null;
-
+        $scope.storyPath = null;
 
         $scope.currentStep = null;
 
@@ -40,18 +40,16 @@ angular.module('cApp')
         $scope.startStory = function () {
             $scope.choose = false;
             $scope.play = true;
-            $scope.storyName = $scope.selected._file;
-            $scope.initStory($scope.title);
-        };
+            $scope.storyName = $scope.selected.name;
+            $scope.storyPath = $scope.selected._file;
 
-        $scope.initStory = function (story_file) {
-
-            $scope.storyName = story_file;
             $scope.goToStep(0);
         };
 
+
+
         $scope.goToStep = function (step) {
-            $http.get('stories/' + $scope.storyName + '/step/' + step).success(function (data) {
+            $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
                 var content = data.content;
                 console.log(data);
                 $scope.currentStep = content;
@@ -91,7 +89,7 @@ angular.module('cApp')
         };
 
         $scope.changeStory = function () {
-            $scope.endStatusDisplayed = false;
+            //$scope.endStatusDisplayed = false;
             console.log($scope.selected);
             $scope.title = $scope.selected._label;
 
@@ -112,3 +110,4 @@ angular.module('cApp')
 
 
     });
+

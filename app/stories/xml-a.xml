@@ -1,26 +1,41 @@
 <story name="Want to win ?" >
-
-    <step id="0" title="step 0 - xml-a!">
+  <step>
+      <content>
+        <id>0</id>
+        <title>sure</title>
         <nextStep label="Choice 1">1</nextStep>
         <nextStep label="Choice 2">3</nextStep>
-        <description>First step !</description>
+        <description>Do you really want to win?</description>
         <type>multiple_choice</type>
-    </step>
+      </content>
+  </step>
 
-    <step id="1" title="Welcome!">
-        <nextStep label="Choice A">2</nextStep>
-        <nextStep label="Choice B">3</nextStep>
-        <description>First step !</description>
-        <type>multiple_choice</type>
-    </step>
-    <step id="2" title="End! You loose">
-        <description>Dead :(</description>
-        <type>end</type>
-        <win>false</win>
-    </step>
-    <step id="3" title="End! You win">
-        <description>win !</description>
-        <type>end</type>
-        <win>true</win>
-    </step>
+  <step>
+    <content>
+      <id>1</id>
+      <title>Welcome!</title>
+      <nextStep label="Choice A">2</nextStep>
+      <nextStep label="Choice B">3</nextStep>
+      <description>Are you sure about it?</description>
+      <type>multiple_choice</type>
+    </content>
+  </step>
+  <step>
+    <content>
+      <id>2</id>
+      <title>Bad choice</title>
+      <description>Dead :(</description>
+      <type>end</type>
+      <win>false</win>
+    </content>
+  </step>
+  <step>
+    <content>
+      <id>3</id>
+      <title>Good choice</title>
+      <description>win !</description>
+      <type>end</type>
+      <win>true</win>
+    </content>
+  </step>
 </story>
