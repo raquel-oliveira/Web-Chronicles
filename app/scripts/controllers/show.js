@@ -1,5 +1,7 @@
 'use strict';
 
+var x2js = new X2JS();
+
 /**
  * @ngdoc function
  * @name cApp.controller:PlayCtrl
@@ -20,63 +22,74 @@ angular.module('cApp')
         var nodes = new vis.DataSet([]);
         var edges = new vis.DataSet([]);
 
-	for (var i = 0; i < story.step.length; ++i) {
-	  if (story.step[i].type === 'multiple_choice') {
-	    nodes.add({ id : parseInt(story.step[i]._id),
-			label : story.step[i]._id });
+		for (var i = 0; i < story.step.length; ++i) {
+		  if (story.step[i].content.type === 'multiple_choice') {
+			nodes.add({ id : parseInt(story.step[i].content.id),
+				label : story.step[i].content.id });
 
-	    for (var j = 0; j < story.step[i].nextStep.length; ++j) {
-	      edges.add({ from : parseInt(story.step[i]._id),
-			  to   : parseInt(story.step[i].nextStep[j])  });
-	    }
-	  } else if(story.step[i].type === 'end') {
-	    var color = (story.step[i].win === 'false')?
-		'#882222' : '#228822';
+			for (var j = 0; j < story.step[i].content.nextStep.length; ++j) {
+			  edges.add({ from : parseInt(story.step[i].content.id),
+				  to   : parseInt(story.step[i].content.nextStep[j])  });
+			}
+		  } else if(story.step[i].content.type === 'end') {
+			var color = (story.step[i].content.win === 'false')?
+			'#882222' : '#228822';
+			console.log(story.step[i].content);
+			nodes.add({ id : parseInt(story.step[i].content.id),
+				label : story.step[i].content.id,
+				color : color,
+					font: { color : "#FFFFFF" } });
 
-	    nodes.add({ id : parseInt(story.step[i]._id),
-			label : story.step[i]._id,
-			color : color,
-		        font: { color : "#FFFFFF" } });
+		  } else {
+			nodes.add({ id : parseInt(story.step[i].content.id),
+				label : story.step[i].content.title });
+		  }
+		}
 
-	  } else {
-	    nodes.add({ id : parseInt(story.step[i]._id),
-			label : story.step[i]._title });
-	  }
-	}
+		var container = document.getElementById('network-story');
 
-	var container = document.getElementById('network-story');
+		var data = {
+		  nodes: nodes,
+		  edges: edges
+		};
 
-	var data = {
-	  nodes: nodes,
-	  edges: edges
-	};
+		var options = { layout : { hierarchical : true } };
 
-	var options = { layout : { hierarchical : true } };
+		if ($scope.network === null) {
+			$scope.network = new vis.Network(container, data, options);
+		}
+		else{
+			$scope.network.setData(data);
+		}
 
-	if ($scope.network === null)
-	  $scope.network = new vis.Network(container, data, options);
-	else
-	  $scope.network.setData(data);
 
       };
 
       $scope.initStory = function(story_file) {
- 	$http.get(story_file).success(function (data) {
-	  console.log(data.story);
-	  $scope.updateGraph(data.story);
+
+		$http.get(story_file).success(function (data) {
+			console.log('dok');
+			console.dir(data);
+			console.log('dataok');
+			console.log(data.story);
+			$scope.updateGraph(data.story);
 	});
       };
 
-      $scope.initStory('stories/minimal_story.xml');
+      $scope.initStory('show/stories/minimal_story');
 
-      $http.get('stories/stories.xml').success(function (data) {
-	$scope.stories = data.stories.story;
-	$scope.selected = $scope.stories[0];
+      $http.get('stories/').success(function (data) {
+
+		var raw = x2js.xml_str2json(data);
+
+		//console.dir(data);
+		$scope.stories = raw.stories.story;
+		$scope.selected = $scope.stories[0];
       });
 
       $scope.changeStory = function() {
-	$http.get('stories/' + $scope.selected._file).success(function (data) {
-	  $scope.updateGraph(data.story);
+		$http.get('show/stories/' + $scope.selected._file).success(function (data) {
+		$scope.updateGraph(data.story);
 	});
-      }
+      };
     });
