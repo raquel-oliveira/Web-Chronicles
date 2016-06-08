@@ -33,7 +33,15 @@ angular.module('cApp')
 	  $scope.description = $scope.currentStep.description;
 	  if ( $scope.currentStep.win === 'true') {
 	    $scope.endStatusDisplayed = true;
-	  }
+      $scope.showStory = true;
+      $scope.tryAgain = false;
+      $scope.win = "You win";
+	  }else{
+      $scope.showStory = false;
+      $scope.tryAgain = true;
+      $scope.win = "You lose";
+
+    }
 	};
 
   $scope.startStory = function() {
