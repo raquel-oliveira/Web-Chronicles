@@ -74,7 +74,7 @@ angular.module('cApp')
         };
 
         $scope.verifyAnswer = function (answer) {
-            $http.get('stories/' + $scope.storyName + '/step/' + $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+            $http.get('stories/' + $scope.storyPath + '/step/' + $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
                 if (reponse.status === 200) {
                     console.log("good anwser");
                     console.log(reponse.data);
