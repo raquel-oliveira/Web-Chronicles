@@ -63,7 +63,10 @@ angular.module('cApp')
 			var content = data.content;
 			console.log(data);
 			$scope.currentStep = content;
+			$scope.currentStep.url = 'views/'+content.type+'.html';
 			$scope.choices = content.nextStep;
+			$scope.stepType = content.type;
+
 			console.log(content.nextStep);
 			$scope.play = true;
 
@@ -98,5 +101,6 @@ angular.module('cApp')
 
 	  $scope.selected = $scope.stories[0];
 	});
+
 
   });

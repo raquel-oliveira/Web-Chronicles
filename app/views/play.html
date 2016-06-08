@@ -20,10 +20,15 @@
         End !
         Number of step:  {{ nbSteps }}<br/>
       </div>
-      <span ng-repeat="c in choices">
-        <button ng-click="goToStep(c)">
-          {{ c._label }}
-        </button>
-      </span>
+
+    <div id="page-content-wrapper">
+      <div class="page-content">
+        <ng-include src="currentStep.url"></ng-include>
+      </div>
+    </div>
+
+
+    </div>
+
 </div>
 </div>
