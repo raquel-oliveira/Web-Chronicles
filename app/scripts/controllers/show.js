@@ -18,7 +18,8 @@ angular.module('cApp')
         $scope.network = null;
         $scope.graphStyle = {"height": "400px",
 			     "border": "1px solid grey"};
-
+	$scope.showDatas = false;
+	
         $scope.updateGraph = function (story) {
             var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
@@ -97,16 +98,30 @@ angular.module('cApp')
             else {
                 $scope.network.setData(data);
             }
-	    console.log($scope.network.getScale());
-	    $scope.network.focus("0", {scale: 3});
-	    console.log($scope.network.getScale());
 
+	    $scope.network.on("selectNode", function(params) {
+		$scope.$apply(function () {
+		    if (! $scope.showDatas) $scope.showDatas = true;
+		});
+
+		var id = params.nodes[0];
+		var step;
+		
+		for (var i = 0; i < story.step.length; ++i) {
+		    if (story.step[i].content.id == id) {
+			step = story.step[i];
+		    }
+		}
+
+		$scope.$apply(function () {
+		    $scope.step = step;
+		    $scope.url = 'views/show-' + step.content.type + '.html';
+		});
+	    });
         };
 
         $scope.initStory = function (story_file) {
-
             $http.get(story_file).success(function (data) {
-
                 $scope.updateGraph(data.story);
             });
         };
