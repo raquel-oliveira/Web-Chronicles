@@ -7,74 +7,78 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http) {
+    .controller('PlayCtrl', function ($scope, $http){
+        $scope.nbSteps = 0;
         $scope.stories = null;
         $scope.storyName = null;
         $scope.storyPath = null;
-
-        $scope.currentStep = null;
-
-        $scope.choices = null;
+        $scope.optionsRadio = false; //put in the controller MCCtrl
         $scope.selected = null;
+        $scope.showPlayButton = false;
         $scope.answer = "";
-        $scope.nbSteps = 0;
-        $scope.stepId = 0;
-
-        $scope.title = '<Titre>';
         $scope.description = '<Description>';
-
-
+        $scope.stepId = 0;
+        //Var in step.html
+        $scope.currentStep = null;
+        //Divs of type ng-show in play.html
+        $scope.choose = false ; // Choose a story to start
+        $scope.play = false; // Body of the story based on the step.html
         $scope.endStatusDisplayed = false;
-        $scope.choose = true;
-        $scope.play = false;
-        $scope.choosed = false;
-
+        // Create function
+        /* Update the view to the current step*/
         $scope.update = function () {
-
-            $scope.description = $scope.currentStep.description;
-            if ($scope.currentStep.win === 'true') {
+            $scope.description = $scope.currentStep.description; //update description of step if available
+            if ($scope.currentStep.win === 'true') { //maybe change this to controller 'EndCtrl'
                 $scope.endStatusDisplayed = true;
             }
         };
 
-        $scope.startStory = function () {
-            $scope.choose = false;
-            $scope.play = true;
-            $scope.storyName = $scope.selected.name;
-            $scope.storyPath = $scope.selected._file;
-
-            $scope.goToStep(0);
+        /**/
+        $scope.changeStory = function () {
+            //$scope.endStatusDisplayed = false;
+            //console.log($scope.selected);
         };
 
+        /*After a story is choosed*/
+        $scope.startStory = function (sharedProperties) {
+                    $scope.choose = false; //disable view to choose a story
+                    $scope.play = true;
+                    $scope.storyName = $scope.selected.name;
+                    $scope.storyPath = $scope.selected._file;
+                    //setStoryPath($scope.selected._file);
 
+                    $scope.goToStep(0); // start from root
+        };
+
+        /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-                console.log('stories/' + $scope.storyPath + '/step/' + step)
                 var content = data.content;
-                console.log(data);
-
-                $scope.currentStep = content;
-                $scope.currentStep.url = 'views/' + content.type + '.html';
-                $scope.choices = content.nextStep;
-                $scope.stepType = content.type;
-
-                //console.log(content.nextStep);
-                $scope.play = true;
-
-
                 console.log(content);
-                //console.log($scope.choices);
+                $scope.currentStep = content;
+                //setCurrentStep(content);
+                $scope.currentStep.url = 'views/' + content.type + '.html';
+                $scope.stepType = content.type;
+                $scope.play = true;
                 ++$scope.nbSteps;
                 $scope.update();
             });
         };
 
-        $scope.change = function (value) {
-            $scope.answer = value;
-        };
+        var x2js = new X2JS();
+        $http.get('stories/').success(function (data) {
 
+            var raw = x2js.xml_str2json(data);
+            $scope.stories = raw.stories.story;
+
+            $scope.choose = true;
+            $scope.selected = $scope.stories[0];
+        });
+        //Change this to controller RiddleCtrl
         $scope.verifyAnswer = function (answer) {
-            $http.get('stories/' + $scope.storyPath + '/step/' + $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+
+              $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+
                 if (reponse.status === 200) {
                     console.log("good anwser");
                     console.log(reponse.data);
@@ -89,24 +93,38 @@ angular.module('cApp')
             });
         };
 
-        $scope.changeStory = function () {
-            //$scope.endStatusDisplayed = false;
-            console.log($scope.selected);
-            $scope.title = $scope.selected._label;
-
+        $scope.change = function (value) {
+            $scope.answer = value;
         };
+        //put in the controller MCCtrl
+        $scope.showRadio = function (){
+             if ($scope.currentStep.type === 'multiple_choice'){
+               if (!Array.isArray($scope.currentStep.nextStep)){
+                 $scope.optionsRadio = false;
+                 $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
+               }else{
+                 $scope.optionsRadio = true;
+              }
+             }
+           };
+});
 
-        var x2js = new X2JS();
-        $http.get('stories/').success(function (data) {
+/*angular.module('cApp').service('sharedProperties', function (){
+  var storyPath = {};
+  var currentStep = {};
 
-            var raw = x2js.xml_str2json(data);
-            $scope.stories = raw.stories.story;
-            console.log(data);
-            console.log(raw);
-            console.dir($scope.stories);
-            console.dir($scope.stories[0]);
-
-            $scope.selected = $scope.stories[0];
-        });
-
-    });
+  return {
+    getStoryPath : function(){
+      return storyPath;
+    },
+    getCurrentStep : function(){
+      return currentStep;
+    },
+    setStoryPath : function(value){
+      storyPath = value;
+    },
+    setCurrentStep : function(value){
+      currentStep = value;
+    }
+  };
+});*/
