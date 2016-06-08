@@ -108,7 +108,7 @@ angular.module('cApp')
         $http.get('stories/').success(function (data) {
 
             var raw = x2js.xml_str2json(data);
-            $scope.initStory('show/stories/' + raw.stories.story[0]._label);
+            $scope.initStory('show/stories/' + raw.stories.story[0]._file);
             $scope.stories = raw.stories.story;
             $scope.selected = $scope.stories[0];
         });
@@ -120,7 +120,3 @@ angular.module('cApp')
             });
         };
     });
-
-
-
-

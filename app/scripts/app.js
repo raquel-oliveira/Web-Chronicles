@@ -45,7 +45,7 @@ angular
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
-      
+
       .otherwise({
         redirectTo: '/'
       });
