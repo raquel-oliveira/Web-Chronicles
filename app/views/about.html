@@ -1,7 +1,16 @@
-<p>"A gamebook is a fiction book, where the reader can influence 1 the the story by
+<!-- build:css(.tmp) styles/main.css -->
+<link rel="stylesheet" href="styles/main.css">
+<!-- endbuild -->
+<div class="about">
+  <p>"A gamebook is a fiction book, where the reader can influence 1 the the story by
 making choices.</p>
-<p>Usually, after a section of text, different possible actions are presented. Each of
+  <p>Usually, after a section of text, different possible actions are presented. Each of
 them is associated to a number, pointing to the text section corresponding to
 the player’s action (i.e. talk with the frog ─ go to page 1234 ).
 Eventually, the story arrives to an end, and depending on his choices, the player
 wins or loses."</p>
+<p>Ready to play?
+  <a class="btn btn-lg" ng-href="#/play"> Yes! <span class="glyphicon glyphicon-play"></span></a>
+  <a class="btn btn-lg" ng-href="#/">No <span class="glyphicon glyphicon-eye-open"></span></a> <!-- change href to how to play -->
+</p>
+</div>
