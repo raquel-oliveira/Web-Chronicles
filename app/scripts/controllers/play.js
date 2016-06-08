@@ -40,11 +40,12 @@ angular.module('cApp')
         };
 
         /*After a story is choosed*/
-        $scope.startStory = function () {
+        $scope.startStory = function (sharedProperties) {
                     $scope.choose = false; //disable view to choose a story
                     $scope.play = true;
                     $scope.storyName = $scope.selected.name;
                     $scope.storyPath = $scope.selected._file;
+                    //setStoryPath($scope.selected._file);
 
                     $scope.goToStep(0); // start from root
         };
@@ -55,10 +56,10 @@ angular.module('cApp')
                 var content = data.content;
                 console.log(content);
                 $scope.currentStep = content;
+                //setCurrentStep(content);
                 $scope.currentStep.url = 'views/' + content.type + '.html';
                 $scope.stepType = content.type;
                 $scope.play = true;
-                
                 ++$scope.nbSteps;
                 $scope.update();
             });
@@ -73,4 +74,42 @@ angular.module('cApp')
             $scope.choose = true;
             $scope.selected = $scope.stories[0];
         });
+        $scope.verifyAnswer = function (answer) {
+              $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+                if (reponse.status === 200) {
+                    console.log("good anwser");
+                    console.log(reponse.data);
+                    console.log("good anwser");
+                    $scope.goToStep(reponse.data.answer._stepId);
+                }
+                else {
+                    console.log(reponse.data);
+                    console.log("bad anwser");
+                    $scope.hint = 'Hint : ' + reponse.data.hint;
+                }
+            });
+        };
+        $scope.change = function (value) {
+            $scope.answer = value;
+        };
 });
+
+/*angular.module('cApp').service('sharedProperties', function (){
+  var storyPath = {};
+  var currentStep = {};
+
+  return {
+    getStoryPath : function(){
+      return storyPath;
+    },
+    getCurrentStep : function(){
+      return currentStep;
+    },
+    setStoryPath : function(value){
+      storyPath = value;
+    },
+    setCurrentStep : function(value){
+      currentStep = value;
+    }
+  };
+});*/

@@ -1,19 +1,28 @@
 'use strict';
 var myApp = angular.module('cApp');
 
-myApp.controller('RiddleCtrl', function ($scope, $http) {
+/*myApp.controller('RiddleCtrl', function ($scope, $http) {
   $scope.verifyAnswer = function (answer) {
-      $http.get('stories/' + $scope.storyPath + '/step/' + $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+      $http.get('stories/' + getStoryPath() + '/step/' + getCurrentStep().id + "/reponse/" + answer).then(function (reponse) {
           if (reponse.status === 200) {
+              console.log("good anwser");
+              console.log(reponse.data);
+              console.log("good anwser");
               $scope.goToStep(reponse.data.answer._stepId);
           }
           else {
+              console.log(reponse.data);
+              console.log("bad anwser");
               $scope.hint = 'Hint : ' + reponse.data.hint;
           }
       });
   };
-});
 
+  $scope.change = function (value) {
+      $scope.answer = value;
+  };
+});
+*/
 
 myApp.controller('EndCtrl', function ($scope) {
        if ( $scope.currentStep.win === 'true') {
