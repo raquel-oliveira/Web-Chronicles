@@ -1,11 +1,9 @@
-<form novalidate>
-
-    <input ng-model="answer"
-           ng-change="change(answer)"
-           type="text"/>
+<div ng-controller="RiddleCtrl">
+  <form novalidate>
+    <input ng-model="answer" type="text"/>
     <p>Your guess {{answer}}</p>
 
     <button ng-click="verifyAnswer(answer)">Try</button>
     {{hint}}
-
-</form>
+  </form>
+</div>
