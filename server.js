@@ -22,13 +22,23 @@ app.get('/stories', function (req, res) {
         else {
             //res.statusCode = 200;
             var stories = [];
-            var finished = 0;
+            var toDoS = 0;
             data.forEach(function (item) {
 
                 var paths = item.split(".");
+
                 if (paths[1] == 'xml') {
+                    toDoS++;
+                }
+            });
+            data.forEach(function (item) {
+                console.log('foreach');
+                console.log(item);
+                var paths = item.split(".");
+                if (paths[1] == 'xml') {
+
                     //lire ficier pour name
-                    fs.readFile('./app/stories/' + item, 'utf8', function (err, data) {
+                    fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
                         if (err) {
                             console.log('error get story xml');
                         }
@@ -36,7 +46,7 @@ app.get('/stories', function (req, res) {
 
                             var parseString = xml2js.parseString;
 
-                            parseString(data, function (err, result) {
+                            parseString(data2, function (err, result) {
                                 if (err) {
                                     console.log('error get story xml parseString');
                                     return;
@@ -51,7 +61,24 @@ app.get('/stories', function (req, res) {
                                     }
                                 };
                                 stories.push(story);
-                                finished++;
+
+                                if(toDoS==stories.length)
+                                {
+                                    console.log("ok");
+                                    var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
+                                    var wrap = {story: stories};
+
+                                    var xml2 = builder.buildObject(wrap);
+                                    console.dir(xml2);
+
+                                    res.send(xml2);
+                                }
+                                else
+                                {
+                                    console.log('notFinished');
+                                    console.log(stories.length);
+                                    console.log(data.length);
+                                }
                             });
 
 
@@ -59,26 +86,8 @@ app.get('/stories', function (req, res) {
                     });
 
                 }
-                if(data.length==stories.length)
-                {
-                    sendReponse();
-                }
-                else
-                {
 
-                }
             });
-
-
-            setTimeout(function (done) {
-                var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
-                var wrap = {story: stories};
-
-                var xml2 = builder.buildObject(wrap);
-                console.dir(xml2);
-
-                res.send(xml2);
-            },3000);
 
 
 
