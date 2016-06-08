@@ -1,6 +1,10 @@
-<h1>This is the end !</h1>
 <div id="end-status">
-    End !
-    Number of step:  {{ nbSteps }}<br/>
-    Win:  {{ currentStep.win }}
-</div>
+  <span ng-style="{'font-size': '100px', 'color': (win.value === 'You lose') ? 'green' : 'red'}"> {{ win }}</span> <!--chage the verification of win-->
+  <p>Number of step:  {{ nbSteps }}<p/>
+  <div ng-show= "tryAgain">
+    <a ng-href="#/" >Try again?</a> <!-- #/play use ng-click or another to update the page without save previews data -->
+  </div><!--<div ng-show= "tryAgain">-->
+  <div ng-show= "showStory">
+    <a ng-href="#/show">Show</a> <!-- change to use by default the story used in 'play' and data(chemin) created.
+  </div><!--<div ng-show= "showStory">-->
+</div><!--<div id="end-status">-->
