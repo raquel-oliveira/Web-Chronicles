@@ -11,36 +11,77 @@ const PORT = 8080;
 // App
 const app = express();
 app.get('/stories', function (req, res) {
-    fs.readdir('./app/stories', function(err,data) {
+    fs.readdir('./app/stories', function (err, data) {
 
-        if(err)
-        {
+        if (err) {
             console.log("err");
             console.log(err);
             res.statusCode = 404;
             res.send('error\n');
         }
         else {
-            res.statusCode = 200;
+            //res.statusCode = 200;
             var stories = [];
-            data.forEach(function(item) {
+            var finished = 0;
+            data.forEach(function (item) {
+
                 var paths = item.split(".");
-                if(paths[1]=='xml') {
-                    var story = {
-                        $: {
-                            file: paths[0],
-                            label: paths[0]
+                if (paths[1] == 'xml') {
+                    //lire ficier pour name
+                    fs.readFile('./app/stories/' + item, 'utf8', function (err, data) {
+                        if (err) {
+                            console.log('error get story xml');
                         }
-                    };
-                    stories.push(story);
+                        else {
+
+                            var parseString = xml2js.parseString;
+
+                            parseString(data, function (err, result) {
+                                if (err) {
+                                    console.log('error get story xml parseString');
+                                    return;
+                                }
+                                console.log('parsing name');
+
+                                console.log(result.story.$.name);
+                                var story = {
+                                    $: {
+                                        file: paths[0],
+                                        label: result.story.$.name
+                                    }
+                                };
+                                stories.push(story);
+                                finished++;
+                            });
+
+
+                        }
+                    });
+
+                }
+                if(data.length==stories.length)
+                {
+                    sendReponse();
+                }
+                else
+                {
+
                 }
             });
-            var builder = new xml2js.Builder({rootName: 'stories',explicitArray : true});
-            var wrap ={ story: stories};
 
-            var xml2 = builder.buildObject(wrap);
-            console.dir(xml2);
-            res.send(xml2);
+
+            setTimeout(function (done) {
+                var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
+                var wrap = {story: stories};
+
+                var xml2 = builder.buildObject(wrap);
+                console.dir(xml2);
+
+                res.send(xml2);
+            },3000);
+
+
+
 
         }
 
@@ -48,13 +89,13 @@ app.get('/stories', function (req, res) {
 
 });
 
+
 app.get('/show/stories/:name', function (req, res) {
 
     var name = req.params.name;
     //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
-    fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
-        if(err)
-        {
+    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
+        if (err) {
             res.statusCode = 404;
             res.send("story not found");
         }
@@ -69,16 +110,14 @@ app.get('/show/stories/:name', function (req, res) {
 });
 
 
-
 app.get('/stories/:name/step/:step', function (req, res) {
 
     var name = req.params.name;
     var step = req.params.step;
 
     //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
-    fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
-        if(err)
-        {
+    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
+        if (err) {
             res.statusCode = 404;
             res.send("story not found");
         }
@@ -93,12 +132,12 @@ app.get('/stories/:name/step/:step', function (req, res) {
 
 
                 var builder = new xml2js.Builder({rootName: 'content'});
-                try{
-                var xml2 = builder.buildObject(result.story.step[step].content[0]);
-                console.dir(xml2);
-                res.send(xml2);
+                try {
+                    var xml2 = builder.buildObject(result.story.step[step].content[0]);
+                    console.dir(xml2);
+                    res.send(xml2);
                 }
-                catch (e){
+                catch (e) {
                     console.log("error");
                     console.log(step);
                 }
@@ -113,7 +152,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
     var step = req.params.step;
     var reponse = req.params.reponse;
 
-    fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
+    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
         if (err) {
             res.statusCode = 404;
             res.send("story not found");
@@ -142,7 +181,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                 console.dir("answerSS");
                 console.dir(reponse);
                 console.dir("answerSS");
-                if(answer._ == reponse){
+                if (answer._ == reponse) {
                     var builder = new xml2js.Builder({rootName: 'answer'});
                     var xml2 = builder.buildObject(answer);
                     console.dir(xml2);
@@ -151,11 +190,12 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                 }
                 else {
                     var builder = new xml2js.Builder({rootName: 'hint'});
-                    try{
-                    var xml2 = builder.buildObject(result.story.step[step].hiden[0].hint[0]);
+                    try {
+                        var xml2 = builder.buildObject(result.story.step[step].hiden[0].hint[0]);
 
                     }
-                    catch(e){}
+                    catch (e) {
+                    }
                     res.statusCode = 210;
                     console.dir(xml2);
                     res.send(xml2);
@@ -167,28 +207,28 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 });
 var upload = multer({
     dest: './app/stories/',
-    rename: function(fieldname, filename) {
+    rename: function (fieldname, filename) {
         return filename;
     },
     inMemory: true //This is important. It's what populates the buffer.
     ,
-    onFileUploadStart: function(file) {
+    onFileUploadStart: function (file) {
         console.log('Starting ' + file.fieldname);
     },
-    onFileUploadData: function(file, data) {
+    onFileUploadData: function (file, data) {
         console.log('Got a chunk of data!');
     },
-    onFileUploadComplete: function(file) {
+    onFileUploadComplete: function (file) {
         console.log('Completed file!');
     },
-    onParseStart: function() {
+    onParseStart: function () {
         console.log('Starting to parse request!');
     },
-    onParseEnd: function(req, next) {
+    onParseEnd: function (req, next) {
         console.log('Done parsing!');
         next();
     },
-    onError: function(e, next) {
+    onError: function (e, next) {
         if (e) {
             console.log(e.stack);
         }
@@ -196,16 +236,16 @@ var upload = multer({
     }
 });
 
-app.post('/stories/:name', upload.any(), function(req, res){
+app.post('/stories/:name', upload.any(), function (req, res) {
 
     var name = req.params.name;
     console.log("gotpost");
     //console.log(req);
-    console.log('fileName'+req.files);
+    console.log('fileName' + req.files);
     var file = req.files.file[0];
 
     var path = './app/stories/';
-    console.log("path"+file);
+    console.log("path" + file);
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
@@ -213,13 +253,13 @@ app.post('/stories/:name', upload.any(), function(req, res){
     var fileName = file.name;
     var stream = fs.createWriteStream(path + fileName);
     stream.write(buffer);
-    stream.on('error', function(err) {
+    stream.on('error', function (err) {
         console.log('Could not write file to memory.');
         res.status(400).send({
             message: 'Problem saving the file. Please try again.'
         });
     });
-    stream.on('finish', function() {
+    stream.on('finish', function () {
 
         res.status(204);
     });
