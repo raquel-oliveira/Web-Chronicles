@@ -514,7 +514,6 @@ module.exports = function (grunt) {
             'concurrent:server',
             'postcss:server',
             'express:server',
-            'connect:livereload',
             'watch'
         ]);
     });
