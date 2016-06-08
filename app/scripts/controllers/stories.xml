@@ -1,5 +1,5 @@
 <stories>
   <story label="Minimal story" file="minimal_story.xml" />
-  <story label="Story 2" file="minimal_story.xml">
-  <story label="valley of disappointment" file="stories/big-story.xml">
+  <story label="Story 2" file="minimal_story.xml"/>
+  <story label="valley of disappointment" file="stories/big-story.xml"/>
 </stories>

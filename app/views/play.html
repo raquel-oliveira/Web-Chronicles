@@ -12,13 +12,13 @@
   </div>
 
   <div class="story-play" ng-show="play">
-    <h1>{{title}}</h2>
+    <h2>{{title}}</h2>
       <div id="description">
         {{ description }}
       </div>
       <div id="end-status" ng-show="endStatusDisplayed">
+        End !
         Number of step:  {{ nbSteps }}<br/>
-        Minimum number of step : [not implemented];
       </div>
       <span ng-repeat="c in choices">
         <button ng-click="goToStep(c)">

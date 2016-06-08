@@ -9,6 +9,7 @@
  */
 angular.module('cApp')
   .controller('MainCtrl', function () {
+      console.log("was in main");
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',

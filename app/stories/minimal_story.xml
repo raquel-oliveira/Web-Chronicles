@@ -1,35 +1,54 @@
-<!DOCTYPE story [
-        <!ELEMENT story (step)*>
-        <!ATTLIST story
-            name CDATA #REQUIRED>
-        <!ELEMENT step (nextStep|description|type|win)*>
-        <!ATTLIST step
-                id CDATA #REQUIRED
-                title CDATA #REQUIRED>
-        <!ELEMENT nextStep (#PCDATA)>
-        <!ATTLIST nextStep
-                label CDATA #REQUIRED>
-        <!ELEMENT description (#PCDATA)*>
-        <!ELEMENT type (#PCDATA)>
-        <!ELEMENT win (#PCDATA)>
-
-        ]>
-<story name="Want to win ?" >
-
-    <step id="0" title="step 0 min-story!">
-        <nextStep label="Choice 1">1</nextStep>
-        <nextStep label="Choice 2">2</nextStep>
-        <description>First step !</description>
-        <type>multiple_choice</type>
+<story name="Minimal story 1" >
+    <step>
+        <content>
+            <id>0</id>
+            <type>multiple_choice</type>
+            <nextStep label="Choice 1">1</nextStep>
+            <nextStep label="Choice 2">2</nextStep>
+            <description>First step !</description>
+            <title>"step 0 min-story!"</title>
+        </content>
     </step>
-    <step id="1" title="End! You loose">
-        <description>Dead :(</description>
-        <type>end</type>
-        <win>false</win>
+    <step id="1">
+        <content>
+            <id>1</id>
+            <type>end</type>
+            <win>false</win>
+            <titre>"End! You loose"</titre>
+            <description>Dead :(</description>
+
+        </content>
     </step>
-    <step id="2" title="End! You win">
-        <description>win !</description>
-        <type>end</type>
-        <win>true</win>
+    <step id="2">
+        <content>
+            <title>"Riddle"</title>
+            <id>2</id>
+            <description>How many is 10 in binary?</description>
+            <type>riddle</type>
+            <question>How many is 10 in binary?</question>
+        </content>
+        <hiden>
+            <answer stepId="3">2</answer>
+            <hint> 01 => 1, 11 => 3</hint>
+        </hiden>
+
+    </step>
+    <step id="3">
+    <content>
+        <id>3</id>
+        <type>maze</type>
+        <size l="3" c="4"/>
+
+    </content>
+
+    </step>
+    <step id="4">
+        <content>
+            <id>4</id>
+            <description>win !</description>
+            <type>end</type>
+            <win>true</win>
+            <title>"End! You win"</title>
+        </content>
     </step>
 </story>

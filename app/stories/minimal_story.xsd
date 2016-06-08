@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="story" type="storyType"/>
+  <xs:complexType name="sizeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="l"/>
+        <xs:attribute type="xs:string" name="c"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="hidenType">
+    <xs:sequence>
+      <xs:element type="answerType" name="answer"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="stepType">
+    <xs:sequence>
+      <xs:element type="contentType" name="content"/>
+      <xs:element type="hidenType" name="hiden" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="nextStepType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="label" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="answerType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="stepId"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="storyType">
+    <xs:sequence>
+      <xs:element type="stepType" name="step" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name"/>
+  </xs:complexType>
+  <xs:complexType name="contentType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element name="id">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="multiple_choice"/>
+            <xs:enumeration value="end"/>
+            <xs:enumeration value="riddle"/>
+            <xs:enumeration value="maze"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="nextStepType" name="nextStep"/>
+      <xs:element name="win">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="false"/>
+            <xs:enumeration value="true"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:string" name="titre"/>
+      <xs:element name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="First step !"/>
+            <xs:enumeration value="Dead :("/>
+            <xs:enumeration value="How many is 10 in binary?"/>
+            <xs:enumeration value="win !"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="title">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="&quot;step 0 min-story!&quot;"/>
+            <xs:enumeration value="&quot;Riddle&quot;"/>
+            <xs:enumeration value="&quot;End! You win&quot;"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="sizeType" name="size"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:schema>

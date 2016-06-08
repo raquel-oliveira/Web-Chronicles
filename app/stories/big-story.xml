@@ -17,9 +17,11 @@
   </step>
   <step id="2">
       <description> And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person that always belived THIS time he wouldn't be dissapointed). </description>
-      <nextStep>6</nextStep>
+
       <hint label="Where is Roberto? (right/left)"></hint>
       <type>riddle</type>
+      <answer>left</answer>
+      <nextStep>6</nextStep>
   </step>
   <step id="4">
       <description> The route to get in the Happy mountain was dangerous and protected by the guardians, so he die by a shot from the major protector of the valley </description>
