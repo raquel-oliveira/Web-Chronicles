@@ -8,15 +8,13 @@
  */
 angular.module('cApp')
       .controller('PlayCtrl', function ($scope, $http) {
+        //General
 		$scope.stories = null;
-    	$scope.storyName = null;
-
-
-		$scope.currentStep = null;
-
+    $scope.storyName = null;
+    $scope.currentStep = null;
 		$scope.choices = null;
 		$scope.selected = null;
-		  $scope.answer = "";
+		$scope.answer = "";
 		$scope.nbSteps = 0;
 		$scope.stepId = 0;
 
@@ -33,14 +31,7 @@ angular.module('cApp')
 	  $scope.description = $scope.currentStep.description;
 	  if ( $scope.currentStep.win === 'true') {
 	    $scope.endStatusDisplayed = true;
-      $scope.showStory = true;
-      $scope.tryAgain = false;
-      $scope.win = "You win";
-	  }else{
-      $scope.showStory = false;
-      $scope.tryAgain = true;
-      $scope.win = "You lose";
-
+      
     }
 	};
 
