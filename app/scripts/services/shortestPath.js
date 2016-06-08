@@ -2,8 +2,8 @@
 
 angular.module('cApp').service('ShortestPathService', function(){
     this.get = function(nodes, edge) {
-        console.log(nodes);
-        console.log(edge);
+        //console.log(nodes);
+        //console.log(edge);
         var known = [];
         var weight = [];
         known.push(true);

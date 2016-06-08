@@ -54,7 +54,6 @@ angular.module('cApp')
         $scope.goToStep = function (step) {
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
                 var content = data.content;
-                console.log(content);
                 $scope.currentStep = content;
                 //setCurrentStep(content);
                 $scope.currentStep.url = 'views/' + content.type + '.html';
@@ -80,14 +79,9 @@ angular.module('cApp')
               $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
 
                 if (reponse.status === 200) {
-                    console.log("good anwser");
-                    console.log(reponse.data);
-                    console.log("good anwser");
                     $scope.goToStep(reponse.data.answer._stepId);
                 }
                 else {
-                    console.log(reponse.data);
-                    console.log("bad anwser");
                     $scope.hint = 'Hint : ' + reponse.data.hint;
                 }
             });
