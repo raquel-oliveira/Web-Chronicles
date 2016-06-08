@@ -1,13 +1,9 @@
 <div>
   <form novalidate>
-
-    <input ng-model="answer"
-           ng-change="change(answer)"
-           type="text"/>
+    <input ng-model="answer" type="text"/>
     <p>Your guess {{answer}}</p>
 
     <button ng-click="verifyAnswer(answer)">Try</button>
     {{hint}}
-
   </form>
 </div>

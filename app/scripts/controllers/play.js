@@ -53,21 +53,13 @@ angular.module('cApp')
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-                //console.log('stories/' + $scope.storyPath + '/step/' + step)
                 var content = data.content;
-                //console.log(data);
-
+                console.log(content);
                 $scope.currentStep = content;
                 //setCurrentStep(content);
                 $scope.currentStep.url = 'views/' + content.type + '.html';
-                $scope.choices = content.nextStep;
                 $scope.stepType = content.type;
-
-                //console.log(content.nextStep);
                 $scope.play = true;
-
-                console.log(content);
-                //console.log($scope.choices);
                 ++$scope.nbSteps;
                 $scope.update();
             });
@@ -78,10 +70,6 @@ angular.module('cApp')
 
             var raw = x2js.xml_str2json(data);
             $scope.stories = raw.stories.story;
-            console.log(data);
-            console.log(raw);
-            console.dir($scope.stories);
-            console.dir($scope.stories[0]);
 
             $scope.choose = true;
             $scope.selected = $scope.stories[0];

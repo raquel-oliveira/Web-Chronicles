@@ -16,7 +16,8 @@ angular.module('cApp')
         $scope.selected = null;
         $scope.stories = null;
         $scope.network = null;
-        $scope.graphStyle = {"height": "400px"};
+        $scope.graphStyle = {"height": "400px",
+			     "border": "1px solid grey"};
 
         $scope.updateGraph = function (story) {
             var nodes = new vis.DataSet([]);
@@ -32,7 +33,8 @@ angular.module('cApp')
                     for (var j = 0; j < story.step[i].content.nextStep.length; ++j) {
                         edges.add({
                             from: parseInt(story.step[i].content.id),
-                            to: parseInt(story.step[i].content.nextStep[j])
+                            to: parseInt(story.step[i].content.nextStep[j]),
+			    arrows: { to: true }
                         });
                     }
                 } else if (story.step[i].content.type === 'end') {
@@ -56,13 +58,15 @@ angular.module('cApp')
                         for (var j = 0; j < story.step[i].hiden.answer.length; ++j) {
                             edges.add({
                                 from: parseInt(story.step[i].content.id),
-                                to: parseInt(story.step[i].hiden.answer[j].__text)
+                                to: parseInt(story.step[i].hiden.answer[j].__text),
+				arrows: { to: true }
                             });
                         }
                     } else {
                         edges.add({
                             from: parseInt(story.step[i].content.id),
-                            to: parseInt(story.step[i].hiden.answer._stepId)
+                            to: parseInt(story.step[i].hiden.answer._stepId),
+			    arrows: { to: true }
                         });
                     }
 
@@ -93,7 +97,9 @@ angular.module('cApp')
             else {
                 $scope.network.setData(data);
             }
-
+	    console.log($scope.network.getScale());
+	    $scope.network.focus("0", {scale: 3});
+	    console.log($scope.network.getScale());
 
         };
 
@@ -112,7 +118,6 @@ angular.module('cApp')
             $scope.stories = raw.stories.story;
             $scope.selected = $scope.stories[0];
         });
-
 
         $scope.changeStory = function () {
             $http.get('show/stories/' + $scope.selected._file).success(function (data) {
