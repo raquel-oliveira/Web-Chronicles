@@ -1,4 +1,5 @@
-<form novalidate>
+<div ng-controller="RiddleCtrl">
+  <form novalidate>
 
     <input ng-model="answer"
            ng-change="change(answer)"
@@ -8,4 +9,5 @@
     <button ng-click="verifyAnswer(answer)">Try</button>
     {{hint}}
 
-</form>
+  </form>
+</div>

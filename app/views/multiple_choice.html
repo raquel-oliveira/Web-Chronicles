@@ -1,5 +1,6 @@
-<ng-repeat ng-repeat="c in currentStep.nextStep">
-    <input type="radio" ng-model="selectedAnswer" value="c">{{ c._label }}
-</ng-repeat>
-
+<div ng-init="selectedAnswer=currentStep.nextStep[0].__text">
+    <label ng-repeat="c in currentStep.nextStep">
+        <input type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{c.__text}}">{{ c._label }}
+    </label>
+</div>
 <button ng-click="goToStep(selectedAnswer)">Next</button>

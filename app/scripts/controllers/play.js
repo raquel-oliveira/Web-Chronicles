@@ -16,7 +16,6 @@ angular.module('cApp')
         $scope.selected = null;
         $scope.showPlayButton = false;
         $scope.answer = "";
-        $scope.title = '<Titre>';
         $scope.description = '<Description>';
         $scope.stepId = 0;
         //Var in step.html
@@ -28,7 +27,6 @@ angular.module('cApp')
         // Create function
         /* Update the view to the current step*/
         $scope.update = function () {
-            //update title of step if available
             $scope.description = $scope.currentStep.description; //update description of step if available
             if ($scope.currentStep.win === 'true') { //maybe change this to controller 'EndCtrl'
                 $scope.endStatusDisplayed = true;
@@ -38,14 +36,14 @@ angular.module('cApp')
         /**/
         $scope.changeStory = function () {
             //$scope.endStatusDisplayed = false;
-            $scope.title = $scope.selected._label; //change to get the title of the story
+            //console.log($scope.selected);
         };
 
         /*After a story is choosed*/
         $scope.startStory = function () {
                     $scope.choose = false; //disable view to choose a story
                     $scope.play = true;
-                    $scope.storyName = $scope.selected.name; //put the default one.
+                    $scope.storyName = $scope.selected.name;
                     $scope.storyPath = $scope.selected._file;
 
                     $scope.goToStep(0); // start from root
@@ -75,4 +73,4 @@ angular.module('cApp')
             $scope.choose = true;
             $scope.selected = $scope.stories[0];
         });
-    });
+});
