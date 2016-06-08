@@ -12,7 +12,7 @@ angular.module('cApp')
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push('xmlHttpInterceptor');
     })
-    .controller('ShowCtrl', function ($scope, $http) {
+    .controller('ShowCtrl', ['$scope', '$http', 'ShortestPathService', function ($scope, $http, shortestPath) {
         $scope.selected = null;
         $scope.stories = null;
         $scope.network = null;
@@ -38,7 +38,6 @@ angular.module('cApp')
                 } else if (story.step[i].content.type === 'end') {
                     var color = (story.step[i].content.win === 'false') ?
                         '#882222' : '#228822';
-                    //console.log(story.step[i].content);
                     nodes.add({
                         id: parseInt(story.step[i].content.id),
                         label: story.step[i].content.id,
@@ -66,8 +65,6 @@ angular.module('cApp')
                         });
                     }
 
-                    console.log(story.step[i].hiden.answer);
-
                 } else {
                     nodes.add({
                         id: parseInt(story.step[i].content.id),
@@ -93,7 +90,7 @@ angular.module('cApp')
             else {
                 $scope.network.setData(data);
             }
-
+            shortestPath.get(nodes, edges);
 
         };
 
@@ -119,4 +116,4 @@ angular.module('cApp')
                 $scope.updateGraph(data.story);
             });
         };
-    });
+    }]);
