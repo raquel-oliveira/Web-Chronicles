@@ -5,7 +5,7 @@
 <div class="play">
     <div class="choose-story" ng-show="choose">
         <h2>Choose a story: </h2>
-        <select ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"
+        <select ng-options="story as story._label for story in stories track by story._file"
                 ng-model="selected"></select>
         <h2>
             <a ng-click="startStory()" class="btn btn-lg">
@@ -16,6 +16,7 @@
     </div>
 
     <div class="story-play" ng-show="play">
+        <ng-include src="'views/step.html'"></ng-include>
         <ng-include src="currentStep.url"></ng-include>
     </div>
 
