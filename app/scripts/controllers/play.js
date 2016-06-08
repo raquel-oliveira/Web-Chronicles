@@ -14,6 +14,7 @@ angular.module('cApp')
         $scope.storyPath = null;
         $scope.choices =  null; // list of nextSteps of the step
         $scope.selected = null;
+        $scope.showPlayButton = false;
         $scope.answer = "";
         $scope.title = '<Titre>';
         $scope.description = '<Description>';
@@ -21,7 +22,7 @@ angular.module('cApp')
         //Var in step.html
         $scope.currentStep = null;
         //Divs of type ng-show in play.html
-        $scope.choose = true ; // Choose a story to start
+        $scope.choose = false ; // Choose a story to start
         $scope.play = false; // Body of the story based on the step.html
         $scope.endStatusDisplayed = false;
         // Create function
@@ -84,6 +85,7 @@ angular.module('cApp')
             console.dir($scope.stories);
             console.dir($scope.stories[0]);
 
+            $scope.choose = true;
             $scope.selected = $scope.stories[0];
         });
 
