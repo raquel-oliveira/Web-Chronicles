@@ -82,11 +82,11 @@ angular.module('cApp')
 	    var style = { 'height' : '20px',
 			  'width'  : '20px' };
 	    var hasRight = false, hasBottom = false;
-
+/*
 	    if ($scope.translate($scope.end.x, $scope.end.y)  === cell) {
 		style['background-color'] = 'green';
 	    }
-
+*/
 	    if ($scope.translate($scope.player.x, $scope.player.y)  === cell) {
 		style['background-color'] = 'red';
 	    }
