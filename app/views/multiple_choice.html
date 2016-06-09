@@ -1,8 +1,8 @@
-<div class="riddle" ng-controller="showRadio">
-  <div ng-show="optionsRadio">
+<div class="multiple_choice" ng-controller="MCCtrl">
+  <div ng-show="optionsRadio" >
     <label ng-repeat="c in currentStep.nextStep">
         <input type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{c.__text}}">  {{ c._label }} </br></br></input>
     </label>
-  </div>
+  </div><!-- div ng-show="optionsRadio" > -->
   <a class="btn btn-lg btn-app" ng-click="goToStep(selectedAnswer)"> Next </a>
 </div>
