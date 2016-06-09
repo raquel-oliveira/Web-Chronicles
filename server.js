@@ -13,22 +13,20 @@ const PORT = 8080;
 // App
 const app = express();
 
-
 app.get('/hello/',function (req, res) {
     sp.hello2();
     res.send('say');
+
 });
 
 app.get('/compute/:name/:sizez', function (req, res) {
-
     var name = req.params.name;
     var lengthAsked = req.params.sizez;
-    
     fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
         if (err) {
             res.statusCode = 404;
-
             res.send("story not found");
+
         }
         else {
             var parseString = xml2js.parseString;
@@ -38,32 +36,28 @@ app.get('/compute/:name/:sizez', function (req, res) {
 
                     res.send("bad story");
                 }
-                //construct graph representation
-                
-                sp.fillgraph(result.story.step);
 
+                
+                //construct graph representation
+                sp.fillgraph(result.story.step);
                 var data = sp.shortestPath(lengthAsked);
 
                 //res.set('Content-Type', 'text/xml');
-
                 res.statusCode = 200;
                 res.send(data);
 
             });
         }
     });
-
-
-
 });
 
 app.get('/stories', function (req, res) {
     fs.readdir('./app/stories', function (err, data) {
-
         if (err) {
-            
             res.statusCode = 404;
             res.send('error\n');
+
+
         }
         else {
             //res.statusCode = 200;
@@ -113,15 +107,7 @@ app.get('/stories', function (req, res) {
                                     var wrap = {story: stories};
 
                                     var xml2 = builder.buildObject(wrap);
-                                    
-
                                     res.send(xml2);
-                                }
-                                else
-                                {
-                                    
-                                    
-                                    
                                 }
                             });
                         }
@@ -134,6 +120,7 @@ app.get('/stories', function (req, res) {
 
 
 app.get('/show/stories/:name', function (req, res) {
+
 
     var name = req.params.name;
     //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
@@ -200,7 +187,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
         }
         else {
 
-            
+
             var parseString = xml2js.parseString;
             var xml = data;
             parseString(xml, function (err, result) {
