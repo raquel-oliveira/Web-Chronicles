@@ -40,7 +40,7 @@ module.exports = function (grunt) {
     // Watches files for changes and runs tasks based on the changed files
     watch: {
         express: {
-            files: "server.js",
+            files: ["server.js","app/scripts/shortestpath2.js"],
             tasks: "express:server",
             options: {
                 nospawn: true

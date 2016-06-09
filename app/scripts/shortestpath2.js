@@ -29,7 +29,7 @@ function addVertex(item)
     var vertex = {
         id: item.content[0].id[0],
         end: false,
-        visited: 0,
+        visited: -1,
         to: []
     };
 
@@ -78,21 +78,18 @@ function shortestPath(onlyLength) {
     var iDtoExplore = [];
     iDtoExplore.push(0);
 
+    console.log(graph);
 
     while (iDtoExplore.length>0) {
         var indexCur = iDtoExplore.shift();
+        console.log('exploring');
+        console.log(indexCur);
+        console.log(graph[indexCur]);
+        console.log(graph[indexCur].end);
 
-
-
-
-        if (graph[indexCur].visited !== false){
-            continue;
-        }
-
-
-
-        if(graph[indexCur].end === true)
+        if(graph[indexCur].end === true || graph[indexCur].end ==='true')
         {
+            console.log('end');
             if(onlyLength === 'true')
             {
                 var len = unpack(indexCur).length+'';
@@ -104,9 +101,10 @@ function shortestPath(onlyLength) {
         graph[indexCur].to.forEach(function(item) {
 
 
-            if(graph[item].visited===0)
+            if(graph[item].visited===-1)
             {
-
+                console.log('add');
+                console.log(item);
                 graph[item].visited = indexCur;
                 iDtoExplore.push(item);
 
@@ -116,6 +114,7 @@ function shortestPath(onlyLength) {
 
     }
 
+    console.log('not found');
 
     var data = [];
 
