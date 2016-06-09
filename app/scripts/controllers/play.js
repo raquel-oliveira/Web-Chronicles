@@ -82,7 +82,7 @@ angular.module('cApp')
 
         $scope.change = function (value) {
             $scope.answer = value;
-        }
+        };
 
         //put in the controller MCCtrl
         $scope.showRadio = function (){
