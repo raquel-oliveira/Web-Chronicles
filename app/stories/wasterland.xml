@@ -37,6 +37,7 @@
             <description> Vous êtes sur la carte du monde, ou voulez vous aller ?</description>
             <hint label="Carte du monde"></hint>
             <type>riddle</type>
+
         </content>
         <hiden>
             <answer stepId="4">abri13</answer>

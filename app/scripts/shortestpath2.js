@@ -85,23 +85,17 @@ function shortestPath(onlyLength) {
 
 
 
-        //if (graph[indexCur].visited !== false){
-        //  continue;
-        // }
+        if (graph[indexCur].visited !== false){
+            continue;
+        }
 
 
 
         if(graph[indexCur].end === true)
         {
-
-
-
             if(onlyLength === 'true')
             {
-
-
                 var len = unpack(indexCur).length+'';
-
                 return len;
             }
             return unpack(indexCur);
