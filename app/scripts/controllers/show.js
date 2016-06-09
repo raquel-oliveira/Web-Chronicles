@@ -18,8 +18,14 @@ angular.module('cApp')
         $scope.network = null;
         $scope.graphStyle = {"height": "400px",
 			     "border": "1px solid grey"};
+	$scope.infoStyle = { "color" : "red",
+			     "font-weight" : 'bold',
+			     "font-size" : "30px"
+			   };
+	
 	$scope.showDatas = false;
-
+	$scope.hasShortestPath = true;
+	
 	function addEdge(edges, from, to) {
             edges.add({
 		id: edges.length,
@@ -87,6 +93,11 @@ angular.module('cApp')
             }
 
 	    $http.get('compute/' + $scope.selected._file + '/false').then(function (spData) {
+		if (spData.data.length > 0)
+		    $scope.hasShortestPath = true;
+		else
+		    $scope.hasShortestPath = false;
+
 		for (var i = 0; i < spData.data.length - 1; ++i) {
 		    edges.forEach(function (edge) {
 			if (spData.data[i] == edge.from &&
