@@ -2,18 +2,17 @@
 var myApp = angular.module('cApp');
 
 /*myApp.controller('RiddleCtrl', function ($scope, $http) {
-  $scope.verifyAnswer = function (answer) {
-      $http.get('stories/' + getStoryPath() + '/step/' + getCurrentStep().id + "/reponse/" + answer).then(function (reponse) {
+  $scope.verifyAnswer = function (answer, sharedStory) {
+
+      $http.get('stories/' + sharedStory.getStoryPath() + '/step/' + sharedStory.getCurrentStep().id + "/reponse/" + answer).then(function (reponse) {
           if (reponse.status === 200) {
-              console.log("good anwser");
-              console.log(reponse.data);
-              console.log("good anwser");
+
               $scope.goToStep(reponse.data.answer._stepId);
           }
           else {
-              console.log(reponse.data);
-              console.log("bad anwser");
+
               $scope.hint = 'Hint : ' + reponse.data.hint;
+
           }
       });
   };
@@ -21,20 +20,20 @@ var myApp = angular.module('cApp');
   $scope.change = function (value) {
       $scope.answer = value;
   };
-});
-*/
+});*/
+
 
 myApp.controller('EndCtrl', function ($scope) {
        if ( $scope.currentStep.win === 'true') {
          $scope.showStory = true;
          $scope.tryAgain = false;
          $scope.win = "You win";
-         $scope.winStyle = { 'font-size': '100px', 'color': 'green'};
+         $scope.winStyle = { 'font-size': '100px', 'text-align': 'center', 'color': 'green'};
        } else{
          $scope.showStory = false;
          $scope.tryAgain = true;
          $scope.win = "You lose";
-         $scope.winStyle = { 'font-size': '100px', 'color': 'red'};
+         $scope.winStyle = { 'font-size': '100px','text-align': 'center', 'color': 'red'};
      }
  });
 
