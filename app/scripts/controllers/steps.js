@@ -1,17 +1,42 @@
 'use strict';
 var myApp = angular.module('cApp');
 
-/*myApp.controller('RiddleCtrl', function ($scope, $http) {
-  $scope.verifyAnswer = function (answer, sharedStory) {
+myApp.controller('RiddleCtrl', function ($scope, $http) {
+  $scope.verifyAnswer = function (answer) {
 
-      $http.get('stories/' + sharedStory.getStoryPath() + '/step/' + sharedStory.getCurrentStep().id + "/reponse/" + answer).then(function (reponse) {
+        $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+
           if (reponse.status === 200) {
-
+              $scope.showhint = false;
               $scope.goToStep(reponse.data.answer._stepId);
           }
           else {
+              $scope.showhint = true;
+              $scope.hint = reponse.data.hint;
+              console.log( reponse.data.hint);
+              console.log($scope.hint);
+              $scope.hint.close = 'Not even close';
 
-              $scope.hint = 'Hint : ' + reponse.data.hint;
+              if($scope.hint._distance <2)
+              {
+                  $scope.hint.close = 'Hot as the sun';
+              }
+              else if($scope.hint._distance <4)
+              {
+                  $scope.hint.close = 'Warm';
+              }
+              else if($scope.hint._distance <6)
+              {
+                  $scope.hint.close = 'Try harder';
+              }
+              else if($scope.hint._distance <10)
+              {
+                  $scope.hint.close = 'Cold';
+              }
+              else if($scope.hint._distance <15)
+              {
+                  $scope.hint.close = 'Frozen';
+              }
 
           }
       });
@@ -20,7 +45,7 @@ var myApp = angular.module('cApp');
   $scope.change = function (value) {
       $scope.answer = value;
   };
-});*/
+});
 
 
 myApp.controller('EndCtrl', function ($scope, $http) {
@@ -45,16 +70,18 @@ myApp.controller('EndCtrl', function ($scope, $http) {
     });
  });
 
- /*myApp.controller('MCCtrl', function ($scope) {
-   $scope.optionsRadio = false;
-   $scope.showRadio = function (){
-        if ($scope.currentStep.type === 'multiple_choice'){
-          if ( $scope.currentStep.nextStep.length === 1){
-            $scope.optionsRadio = false;
-          }else{
-            $scope.optionsRadio = true;
-          }
-          console.log("aaaaaa"+ $scope.currentStep.nextStep.length);
-        }
-      };
-  });*/
+ myApp.controller('MCCtrl', function ($scope) {
+   $scope.optionsRadio = true;
+   console.log("in the controller");
+  if ($scope.currentStep.type === 'multiple_choice'){ //just to confirm
+    console.log("is multiple");
+    if (!Array.isArray($scope.currentStep.nextStep)){
+      $scope.optionsRadio = false;
+      $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
+      console.log("is object");
+    }else{
+      $scope.optionsRadio = true;
+      console.log("is array of size:"+ $scope.currentStep.nextStep.length);
+    }
+  }
+});

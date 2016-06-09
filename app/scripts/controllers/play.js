@@ -9,21 +9,19 @@
 angular.module('cApp')
     .controller('PlayCtrl', function ($scope, $http){
         $scope.nbSteps = 0;
-        $scope.stories = null;
-        $scope.storyPath = null;
-        $scope.optionsRadio = false; //put in the controller MCCtrl
-        $scope.selected = null;
-        $scope.showPlayButton = false;
-        $scope.answer = "";
-        $scope.description = '<Description>';
-        $scope.stepId = 0;
-        $scope.showhint = false;
-        //Var in step.html
+        // Story
+        $scope.stories = null; // list of stories
+        $scope.storyPath = null; // path of story selected
+
+        // Current step
         $scope.currentStep = null;
+        $scope.description = '<Description>'; // description of the current step
+
         //Divs of type ng-show in play.html
         $scope.choose = false ; // Choose a story to start
         $scope.play = false; // Body of the story based on the step.html
         $scope.endStatusDisplayed = false;
+
         // Create function
         /* Update the view to the current step*/
         $scope.update = function () {
@@ -36,25 +34,29 @@ angular.module('cApp')
 
         /*After a story is choosed*/
         $scope.startStory = function () {
-                    $scope.choose = false; //disable view to choose a story
-                    $scope.play = true;
-                    $scope.storyPath = $scope.selected._file;
-                    //sharedStory.setStoryPath($scope.storyPath);
-                    $scope.goToStep(0); // start from root
+          $scope.choose = false; //disable view to choose a story
+          $scope.play = true;
+          $scope.storyPath = $scope.selected._file;
+          $scope.goToStep(0); // start from root
         };
 
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
-            $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-                var content = data.content;
-                $scope.currentStep = content;
-                //sharedStory.setCurrentStep($scope.currentStep);
-                $scope.currentStep.url = 'views/' + content.type + '.html';
-                $scope.stepType = content.type;
-                $scope.play = true;
-                ++$scope.nbSteps;
-                $scope.update();
+          $scope.cleanLastStep();
+          $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
+            var content = data.content;
+            $scope.currentStep = content;
+            $scope.currentStep.url = 'views/play_step/' + content.type + '.html';$scope.stepType = content.type;
+            $scope.play = true;
+            ++$scope.nbSteps;
+            $scope.update();
             });
+        };
+
+        // Clean data related to last step
+        $scope.cleanLastStep = function () {
+          $scope.currentStep = null;
+
         };
 
         var x2js = new X2JS();
@@ -67,60 +69,5 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
             $scope.play = false;
         });
-        //Change this to controller RiddleCtrl
-        $scope.verifyAnswer = function (answer) {
 
-              $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
-
-                if (reponse.status === 200) {
-                    $scope.showhint = false;
-                    $scope.goToStep(reponse.data.answer._stepId);
-                }
-                else {
-                    $scope.showhint = true;
-                    $scope.hint = reponse.data.hint;
-                    console.log( reponse.data.hint);
-                    console.log($scope.hint);
-                    $scope.hint.close = 'Not even close';
-
-                    if($scope.hint._distance <2)
-                    {
-                        $scope.hint.close = 'Hot as the sun';
-                    }
-                    else if($scope.hint._distance <4)
-                    {
-                        $scope.hint.close = 'Warm';
-                    }
-                    else if($scope.hint._distance <6)
-                    {
-                        $scope.hint.close = 'Try harder';
-                    }
-                    else if($scope.hint._distance <10)
-                    {
-                        $scope.hint.close = 'Cold';
-                    }
-                    else if($scope.hint._distance <15)
-                    {
-                        $scope.hint.close = 'Frozen';
-                    }
-
-                }
-            });
-        };
-
-        $scope.change = function (value) {
-            $scope.answer = value;
-        };
-
-        //put in the controller MCCtrl
-        $scope.showRadio = function (){
-             if ($scope.currentStep.type === 'multiple_choice'){
-               if (!Array.isArray($scope.currentStep.nextStep)){
-                 $scope.optionsRadio = false;
-                 $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
-               }else{
-                 $scope.optionsRadio = true;
-              }
-             }
-           };
 });
