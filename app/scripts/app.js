@@ -45,6 +45,12 @@ angular
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
+      .when('/edit', {
+        templateUrl: 'views/403.html',
+      })
+      .when('/help', {
+        templateUrl: 'views/403.html',
+      })
       .otherwise({
         redirectTo: '/'
       });
