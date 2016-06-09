@@ -10,7 +10,6 @@ angular.module('cApp')
     .controller('PlayCtrl', function ($scope, $http){
         $scope.nbSteps = 0;
         $scope.stories = null;
-        $scope.storyName = null;
         $scope.storyPath = null;
         $scope.optionsRadio = false; //put in the controller MCCtrl
         $scope.selected = null;
@@ -33,19 +32,13 @@ angular.module('cApp')
             }
         };
 
-        /**/
-        $scope.changeStory = function () {
-            //$scope.endStatusDisplayed = false;
-            //console.log($scope.selected);
-        };
 
         /*After a story is choosed*/
-        $scope.startStory = function (sharedProperties) {
+        $scope.startStory = function () {
                     $scope.choose = false; //disable view to choose a story
                     $scope.play = true;
-                    $scope.storyName = $scope.selected.name;
                     $scope.storyPath = $scope.selected._file;
-                    //setStoryPath($scope.selected._file);
+                    //sharedStory.setStoryPath($scope.storyPath);
 
                     $scope.goToStep(0); // start from root
         };
@@ -55,7 +48,7 @@ angular.module('cApp')
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
                 var content = data.content;
                 $scope.currentStep = content;
-                //setCurrentStep(content);
+                //sharedStory.setCurrentStep($scope.currentStep);
                 $scope.currentStep.url = 'views/' + content.type + '.html';
                 $scope.stepType = content.type;
                 $scope.play = true;
@@ -90,6 +83,7 @@ angular.module('cApp')
         $scope.change = function (value) {
             $scope.answer = value;
         };
+
         //put in the controller MCCtrl
         $scope.showRadio = function (){
              if ($scope.currentStep.type === 'multiple_choice'){
@@ -102,23 +96,3 @@ angular.module('cApp')
              }
            };
 });
-
-/*angular.module('cApp').service('sharedProperties', function (){
-  var storyPath = {};
-  var currentStep = {};
-
-  return {
-    getStoryPath : function(){
-      return storyPath;
-    },
-    getCurrentStep : function(){
-      return currentStep;
-    },
-    setStoryPath : function(value){
-      storyPath = value;
-    },
-    setCurrentStep : function(value){
-      currentStep = value;
-    }
-  };
-});*/
