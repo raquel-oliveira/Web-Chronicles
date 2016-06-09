@@ -12,7 +12,7 @@ angular.module('cApp')
     .config(function ($httpProvider) {
         $httpProvider.interceptors.push('xmlHttpInterceptor');
     })
-    .controller('ShowCtrl', ['$scope', '$http', 'ShortestPathService', function ($scope, $http, shortestPath) {
+    .controller('ShowCtrl', ['$scope', '$http', 'ShortestPathService', function ($scope, $http) {
         $scope.selected = null;
         $scope.stories = null;
         $scope.network = null;
@@ -47,7 +47,7 @@ angular.module('cApp')
                     });
 
 		    if (Array.isArray(story.step[i].content.nextStep)) {
-			for (var j = 0; j < story.step[i].content.nextStep.length; ++j) {
+			for (let j = 0; j < story.step[i].content.nextStep.length; ++j) {
 			    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].content.nextStep[j]));
 			}
 		    } else {
@@ -70,7 +70,7 @@ angular.module('cApp')
                     });
 
                     if (Array.isArray(story.step[i].hiden.answer)) {
-                        for (var j = 0; j < story.step[i].hiden.answer.length; ++j) {
+                        for (let j = 0; j < story.step[i].hiden.answer.length; ++j) {
 			    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].hiden.answer[j]._stepId));
                         }
                     } else {
@@ -93,18 +93,20 @@ angular.module('cApp')
             }
 
 	    $http.get('compute/' + $scope.selected._file + '/false').then(function (spData) {
-		if (spData.data.length > 0)
+		if (spData.data.length > 0) {
 		    $scope.hasShortestPath = true;
-		else
+		} else {
 		    $scope.hasShortestPath = false;
+		}
 
+		var edgesData = edges.get();
 		for (var i = 0; i < spData.data.length - 1; ++i) {
-		    edges.forEach(function (edge) {
-			if (spData.data[i] == edge.from &&
-			    spData.data[i + 1] == edge.to) {
-			    edges.update({ id : edge.id, color : 'green', 'width' : 3});
+		    for (var j = 0; j < edgesData.length; ++j) {
+			if (spData.data[i] === edgesData[j].from &&
+			    spData.data[i + 1] === edgesData[j].to) {
+			    edges.update({ id : edgesData[j].id, color : 'green', 'width' : 3});
 			}
-		    });
+		    }
 		}
 		
 		var container = document.getElementById('network-story');
@@ -126,19 +128,17 @@ angular.module('cApp')
 
 		$scope.network.on("selectNode", function(params) {
 		    $scope.$apply(function () {
-			if (! $scope.showDatas) $scope.showDatas = true;
+			if (! $scope.showDatas) { $scope.showDatas = true; }
 		    });
 
 		    var id = params.nodes[0];
 		    var step;
 
 		    for (var i = 0; i < story.step.length; ++i) {
-			if (story.step[i].content.id == id) {
+			if (story.step[i].content.id === id) {
 			    step = story.step[i];
 			}
 		    }
-
-		    console.log(step);
 
 		    $scope.$apply(function () {
 			$scope.step = step;
