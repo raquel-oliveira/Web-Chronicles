@@ -15,22 +15,10 @@ angular.module('cApp')
 
         // Current step
         $scope.currentStep = null;
-        $scope.description = '<Description>'; // description of the current step
-
         //Divs of type ng-show in play.html
         $scope.choose = false ; // Choose a story to start
         $scope.play = false; // Body of the story based on the step.html
         $scope.endStatusDisplayed = false;
-
-        // Create function
-        /* Update the view to the current step*/
-        $scope.update = function () {
-            $scope.description = $scope.currentStep.description; //update description of step if available
-            if ($scope.currentStep.win === 'true') { //maybe change this to controller 'EndCtrl'
-                $scope.endStatusDisplayed = true;
-            }
-        };
-
 
         /*After a story is choosed*/
         $scope.startStory = function () {
@@ -42,15 +30,18 @@ angular.module('cApp')
 
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
-          $scope.cleanLastStep();
-          $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-            var content = data.content;
-            $scope.currentStep = content;
-            $scope.currentStep.url = 'views/play_step/' + content.type + '.html';$scope.stepType = content.type;
-            $scope.play = true;
-            ++$scope.nbSteps;
-            $scope.update();
+          if (undefined != step) {
+            $scope.cleanLastStep();
+            $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
+              var content = data.content;
+              $scope.currentStep = content;
+              $scope.currentStep.url = 'views/play_step/' + content.type + '.html';$scope.stepType = content.type;
+              $scope.play = true;
+              ++$scope.nbSteps;
             });
+          } else {
+            alert("Choose an option");
+          }
         };
 
         // Clean data related to last step
@@ -69,5 +60,4 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
             $scope.play = false;
         });
-
 });

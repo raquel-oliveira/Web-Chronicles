@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 <div class="show">
-  <h1>Stories</h1>
+  <h1>{{selected._label}}</h1>
   <p>Choose a story: </p>
   <select ng-model="selected" ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"></select>
   <div id="network-story" ng-style="graphStyle"></div>
