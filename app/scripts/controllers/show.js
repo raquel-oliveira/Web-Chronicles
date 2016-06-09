@@ -135,7 +135,7 @@ angular.module('cApp')
 		    var step;
 
 		    for (var i = 0; i < story.step.length; ++i) {
-			if (story.step[i].content.id === id) {
+			if (parseInt(story.step[i].content.id) === id) {
 			    step = story.step[i];
 			}
 		    }
