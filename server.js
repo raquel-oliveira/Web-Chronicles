@@ -5,6 +5,7 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 const multer = require('multer');
 const util = require('util');
+const Levenshtein = require('levenshtein');
 
 // Constants
 const PORT = 8080;
@@ -26,20 +27,13 @@ function unpack(graph,from)
 
 function addVertex(graph,item)
 {
-    console.log('addVertex');
-    console.dir(item);
-    console.dir(item.content[0]);
-
-
-
-    var vertex = {
+ var vertex = {
         id: item.content[0].id[0],
         end: false,
         visited: 0,
         to: []
     };
-    console.dir(item.content[0].type[0]);
-    console.dir(item.content[0].end);
+
     if(typeof item.content[0].win !== 'undefined' ) {
         console.dir(item.content[0].win[0]);
     }
@@ -197,7 +191,7 @@ app.get('/stories', function (req, res) {
                 var paths = item.split(".");
                 if (paths[1] == 'xml') {
 
-                    //lire ficier pour name
+                    //lire fichier pour name
                     fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
                         if (err) {
                             console.log('error get story xml');
@@ -328,12 +322,8 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
         }
         else {
 
-
-            res.statusCode = 200;
-
             var parseString = xml2js.parseString;
             var xml = data;
-
             parseString(xml, function (err, result) {
                 if (err) {
                     res.statusCode = 404;
@@ -342,33 +332,57 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 
                 res.set('Content-Type', 'text/xml');
 
-                var answer = result.story.step[step].hiden[0].answer[0];
-                console.dir("answerSS");
-                console.dir(answer);
-                console.dir("answerSS");
-                console.dir(answer._);
-                console.dir("answerSS");
-                console.dir(reponse);
-                console.dir("answerSS");
-                if (answer._ == reponse) {
-                    var builder = new xml2js.Builder({rootName: 'answer'});
-                    var xml2 = builder.buildObject(answer);
-                    console.dir(xml2);
-                    res.statusCode = 200;
-                    res.send(xml2);
-                }
-                else {
-                    var builder = new xml2js.Builder({rootName: 'hint'});
-                    try {
-                        var xml2 = builder.buildObject(result.story.step[step].hiden[0].hint[0]);
 
+                var answerS = result.story.step[step].hiden[0].answer;
+                var minLevDist = 100;
+                console.log("answers");
+                console.log(answerS);
+                console.log("answers");
+                console.log(answerS[0]);
+
+                answerS.forEach(function (answer) {
+                    if (answer._ == reponse) {
+                        var builder = new xml2js.Builder({rootName: 'answer'});
+                        var xml2 = builder.buildObject(answer);
+                        console.dir(xml2);
+                        res.statusCode = 200;
+                        res.send(xml2);
                     }
-                    catch (e) {
-                    }
-                    res.statusCode = 210;
+                    var lComp = Levenshtein( answer._, reponse );
+                    console.dir("distance between"+answer._+" and "+reponse);
+                    console.dir(lComp);
+                    if(lComp < minLevDist)
+                        minLevDist=lComp;
+
+                });
+
+                console.log(answerS[0]);
+
+                try {
+
+                    console.log(minLevDist);
+
+                    var hint = {
+                        _: result.story.step[step].hiden[0].hint[0],
+                        $: {
+                            distance: minLevDist
+                        }
+                    };
+                    var builder = new xml2js.Builder({rootName: 'hint'});
+                    var xml2 = builder.buildObject(hint);
                     console.dir(xml2);
-                    res.send(xml2);
+                    console.log("OK");
+                    console.dir(result.story.step[step].hiden[0].hint[0]);
+
+                    
                 }
+                catch (e) {
+                    console.log("err");
+                }
+                res.statusCode = 210;
+                console.dir(xml2);
+                res.send(xml2);
+
 
             });
         }

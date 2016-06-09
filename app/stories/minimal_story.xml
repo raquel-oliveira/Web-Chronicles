@@ -4,8 +4,10 @@
             <id>0</id>
             <type>multiple_choice</type>
             <nextStep label="Choice 1">1</nextStep>
+            <nextStep label="Choice 2">2</nextStep>
+            <nextStep label="Choice 3">3</nextStep>
             <description>First step !</description>
-            <title>"step 0 min-story!"</title>
+            <title>step 0 min-story!</title>
         </content>
     </step>
     <step>
@@ -13,14 +15,14 @@
             <id>1</id>
             <type>end</type>
             <win>false</win>
-            <title>"End! You loose"</title>
+            <title>End! You loose</title>
             <description>Dead :(</description>
 
         </content>
     </step>
     <step>
         <content>
-            <title>"Riddle"</title>
+            <title>Riddle</title>
             <id>2</id>
             <description>How many is 10 in binary?</description>
             <type>riddle</type>
@@ -33,12 +35,15 @@
 
     </step>
     <step>
-    <content>
-        <id>3</id>
-        <type>maze</type>
-        <size l="3" c="4"/>
-
-    </content>
+        <content>
+            <id>3</id>
+            <type>maze</type>
+            <description>Find your way out ...</description>
+            <title>Escape !</title>
+            <rows>5</rows>
+            <columns>4</columns>
+            <nextStep label="Ok !">4</nextStep>
+        </content>
 
     </step>
     <step>

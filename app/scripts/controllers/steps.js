@@ -37,7 +37,7 @@ myApp.controller('EndCtrl', function ($scope, $http) {
          $scope.winStyle = { 'font-size': '100px', 'color': 'red'};
        }
 
-    $http.get('compute/' + $scope.storyPath + '/true').success(function (data) {
+    $http.get('compute/' + $scope.storyPath + '/true').success(function (data) { //I like it
 	$scope.minSteps = data;
     });
  });
