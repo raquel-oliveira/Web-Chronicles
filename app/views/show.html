@@ -6,7 +6,7 @@
   <p>Choose a story: </p>
   <select ng-model="selected" ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"></select>
   <div id="network-story" ng-style="graphStyle"></div>
-  <p ng-hide="hasShortestPath" ng-style="infoStyle">No path from start to end</p>
+  <p class="error" ng-hide="hasShortestPath" >No path from start to end</p>
 
   <div ng-show="showDatas">
     <h2>Step datas</h2>

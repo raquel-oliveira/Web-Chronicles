@@ -112,4 +112,10 @@ body {
     height:60px;   /* Height of the footer */
     bottom:0;
   }
+
+  .error{
+    color : red;
+    font-weight : bold;
+    font-size : 30px
+  }
 }
