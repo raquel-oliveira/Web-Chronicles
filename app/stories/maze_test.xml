@@ -4,8 +4,8 @@
       <id>0</id>
       <type>maze</type>
       <description>A Maze</description>
-      <rows>23</rows>
-      <columns>47</columns>
+      <rows>5</rows>
+      <columns>2</columns>
       <nextStep label="Ok !">1</nextStep>
     </content>
   </step>
