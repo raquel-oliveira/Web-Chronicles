@@ -2,9 +2,9 @@
   <step>
       <content>
         <id>0</id>
-        <title>sure</title>
-        <nextStep label="Choice 1">1</nextStep>
-        <nextStep label="Choice 2">3</nextStep>
+        <title>Be sure</title>
+        <nextStep label="Yes">1</nextStep>
+        <nextStep label="No">3</nextStep>
         <description>Do you really want to win?</description>
         <type>multiple_choice</type>
       </content>
