@@ -17,6 +17,7 @@ angular.module('cApp')
         $scope.answer = "";
         $scope.description = '<Description>';
         $scope.stepId = 0;
+        $scope.showhint = false;
         //Var in step.html
         $scope.currentStep = null;
         //Divs of type ng-show in play.html
@@ -72,10 +73,37 @@ angular.module('cApp')
               $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
 
                 if (reponse.status === 200) {
+                    $scope.showhint = false;
                     $scope.goToStep(reponse.data.answer._stepId);
                 }
                 else {
-                    $scope.hint = 'Hint : ' + reponse.data.hint;
+                    $scope.showhint = true;
+                    $scope.hint = reponse.data.hint;
+                    console.log( reponse.data.hint);
+                    console.log($scope.hint);
+                    $scope.hint.close = 'Not even close';
+
+                    if($scope.hint._distance <2)
+                    {
+                        $scope.hint.close = 'Hot as the sun';
+                    }
+                    else if($scope.hint._distance <4)
+                    {
+                        $scope.hint.close = 'Warm';
+                    }
+                    else if($scope.hint._distance <6)
+                    {
+                        $scope.hint.close = 'Try harder';
+                    }
+                    else if($scope.hint._distance <10)
+                    {
+                        $scope.hint.close = 'Cold';
+                    }
+                    else if($scope.hint._distance <15)
+                    {
+                        $scope.hint.close = 'Frozen';
+                    }
+
                 }
             });
         };

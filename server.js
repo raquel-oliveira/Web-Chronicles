@@ -339,7 +339,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                 console.log(answerS);
                 console.log("answers");
                 console.log(answerS[0]);
-
+                var found = false;
                 answerS.forEach(function (answer) {
                     if (answer._ == reponse) {
                         var builder = new xml2js.Builder({rootName: 'answer'});
@@ -347,6 +347,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                         console.dir(xml2);
                         res.statusCode = 200;
                         res.send(xml2);
+                        found = true;
                     }
                     var lComp = Levenshtein( answer._, reponse );
                     console.dir("distance between"+answer._+" and "+reponse);
@@ -356,33 +357,32 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 
                 });
 
-                console.log(answerS[0]);
+                if(!found) {
+                    try {
 
-                try {
+                        console.log(minLevDist);
 
-                    console.log(minLevDist);
+                        var hint = {
+                            _: result.story.step[step].hiden[0].hint[0],
+                            $: {
+                                distance: minLevDist
+                            }
+                        };
+                        var builder = new xml2js.Builder({rootName: 'hint'});
+                        var xml2 = builder.buildObject(hint);
+                        console.dir(xml2);
+                        console.log("OK");
+                        console.dir(result.story.step[step].hiden[0].hint[0]);
 
-                    var hint = {
-                        _: result.story.step[step].hiden[0].hint[0],
-                        $: {
-                            distance: minLevDist
-                        }
-                    };
-                    var builder = new xml2js.Builder({rootName: 'hint'});
-                    var xml2 = builder.buildObject(hint);
+
+                    }
+                    catch (e) {
+                        console.log("err");
+                    }
+                    res.statusCode = 210;
                     console.dir(xml2);
-                    console.log("OK");
-                    console.dir(result.story.step[step].hiden[0].hint[0]);
-
-                    
+                    res.send(xml2);
                 }
-                catch (e) {
-                    console.log("err");
-                }
-                res.statusCode = 210;
-                console.dir(xml2);
-                res.send(xml2);
-
 
             });
         }
