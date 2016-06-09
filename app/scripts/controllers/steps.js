@@ -27,10 +27,12 @@ myApp.controller('EndCtrl', function ($scope, $http) {
        if ( $scope.currentStep.win === 'true') {
          $scope.showStory = true;
          $scope.tryAgain = false;
+         $scope.winT = true;
          $scope.win = "You win";
          $scope.winStyle = { 'font-size': '100px', 'text-align': 'center', 'color': 'green'};
        } else{
          $scope.showStory = false;
+         $scope.winT = false;
          $scope.tryAgain = true;
          $scope.win = "You lose";
          $scope.winStyle = { 'font-size': '100px','text-align': 'center', 'color': 'red'};
