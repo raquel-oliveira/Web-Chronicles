@@ -128,7 +128,7 @@ app.get('/compute/:name/:sizez', function (req, res) {
     
     if(req.params.sizez === 'true')
     {
-        res.send(data.length);
+        res.send(data.length+'');
     }
     else {
         res.send(data);
@@ -167,6 +167,23 @@ app.get('/stories/:name/step/:step', function (req, res) {
     res.send(json.story.step[step].content[0]);
 
 
+});
+
+app.get('/stories/:name/haveHappyEnd', function (req, res) {
+
+    var json = myCache.get(req.params.name+'.json');
+    var found = false;
+    json.story.step.forEach(function(item){
+        if(item.content[0].type[0]==='end'&&typeof item.content[0].win!== 'undefined' && item.content[0].win[0]==='true')
+        {
+
+            res.send(true+'');
+            found = true;
+            return;
+        }
+    })
+    if(!found)
+    res.send(false+'');
 });
 
 app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
