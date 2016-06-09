@@ -40,7 +40,6 @@ angular.module('cApp')
                     $scope.play = true;
                     $scope.storyPath = $scope.selected._file;
                     //sharedStory.setStoryPath($scope.storyPath);
-
                     $scope.goToStep(0); // start from root
         };
 
@@ -66,6 +65,7 @@ angular.module('cApp')
 
             $scope.choose = true;
             $scope.selected = $scope.stories[0];
+            $scope.play = false;
         });
         //Change this to controller RiddleCtrl
         $scope.verifyAnswer = function (answer) {

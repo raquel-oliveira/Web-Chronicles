@@ -7,5 +7,5 @@
       <td ng-repeat="c in r" ng-style="getStyle(c)"></td>
     </tr>
   </table>
-  <button ng-click="goToStep(currentStep.nextStep.__text)" ng-disabled="! endReached"> Next</button>
+  <button ng-click="goToStep(currentStep.nextStep.__text)" ng-hide="! endReached"> Next</button>
 </div>
