@@ -64,5 +64,4 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
             $scope.play = false;
         });
-
     });
