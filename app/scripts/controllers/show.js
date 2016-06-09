@@ -102,8 +102,8 @@ angular.module('cApp')
 		var edgesData = edges.get();
 		for (var i = 0; i < spData.data.length - 1; ++i) {
 		    for (var j = 0; j < edgesData.length; ++j) {
-			if (spData.data[i] === edgesData[j].from &&
-			    spData.data[i + 1] === edgesData[j].to) {
+			if (parseInt(spData.data[i]) == edgesData[j].from &&
+			    parseInt(spData.data[i + 1]) == edgesData[j].to) {
 			    edges.update({ id : edgesData[j].id, color : 'green', 'width' : 3});
 			}
 		    }
