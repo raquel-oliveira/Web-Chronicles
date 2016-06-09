@@ -46,7 +46,7 @@ angular.module('cApp')
           $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
             var content = data.content;
             $scope.currentStep = content;
-            $scope.currentStep.url = 'views/' + content.type + '.html';$scope.stepType = content.type;
+            $scope.currentStep.url = 'views/play_step/' + content.type + '.html';$scope.stepType = content.type;
             $scope.play = true;
             ++$scope.nbSteps;
             $scope.update();
@@ -56,7 +56,6 @@ angular.module('cApp')
         // Clean data related to last step
         $scope.cleanLastStep = function () {
           $scope.currentStep = null;
-          $scope.answer = null; //to riddle
 
         };
 
@@ -70,5 +69,5 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
             $scope.play = false;
         });
-        
+
 });
