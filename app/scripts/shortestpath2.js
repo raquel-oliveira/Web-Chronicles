@@ -70,7 +70,7 @@ function fillgraph(steps){
         addVertex(item);
     });
 }
-function shortestPath(onlyLength) {
+function shortestPath() {
     //graph is arrayVertex[ vertex{id:id, end: true, visited:id to:[ids]}]
     //result is an array
 
@@ -90,11 +90,6 @@ function shortestPath(onlyLength) {
         if(graph[indexCur].end === true || graph[indexCur].end ==='true')
         {
             console.log('end');
-            if(onlyLength === 'true')
-            {
-                var len = unpack(indexCur).length+'';
-                return len;
-            }
             return unpack(indexCur);
         }
 
