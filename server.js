@@ -26,7 +26,6 @@ app.get('/compute/:name/:sizez', function (req, res) {
         if (err) {
             res.statusCode = 404;
             res.send("story not found");
-
         }
         else {
             var parseString = xml2js.parseString;
@@ -37,11 +36,13 @@ app.get('/compute/:name/:sizez', function (req, res) {
                     res.send("bad story");
                 }
 
-                
+
                 //construct graph representation
                 sp.fillgraph(result.story.step);
-                var data = sp.shortestPath(lengthAsked);
 
+
+                var data = sp.shortestPath(lengthAsked);
+                console.log(data);
                 //res.set('Content-Type', 'text/xml');
                 res.statusCode = 200;
                 res.send(data);
@@ -56,6 +57,7 @@ app.get('/stories', function (req, res) {
         if (err) {
             res.statusCode = 404;
             res.send('error\n');
+            
 
 
         }
@@ -186,8 +188,6 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
             res.send("story not found");
         }
         else {
-
-
             var parseString = xml2js.parseString;
             var xml = data;
             parseString(xml, function (err, result) {

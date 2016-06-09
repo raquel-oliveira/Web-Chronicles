@@ -84,14 +84,10 @@ function shortestPath(onlyLength) {
         var indexCur = iDtoExplore.shift();
         console.log('exploring');
         console.log(indexCur);
-        if (graph[indexCur].visited !== -1){
-            console.log('continue');
-            continue;
-        }
+        console.log(graph[indexCur]);
+        console.log(graph[indexCur].end);
 
-        console.log(graph[indexCur].end);
-        console.log(graph[indexCur].end);
-        if(graph[indexCur].end === true)
+        if(graph[indexCur].end === true || graph[indexCur].end ==='true')
         {
             console.log('end');
             if(onlyLength === 'true')
@@ -118,6 +114,7 @@ function shortestPath(onlyLength) {
 
     }
 
+    console.log('not found');
 
     var data = [];
 
