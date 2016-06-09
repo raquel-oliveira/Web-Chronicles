@@ -91,7 +91,7 @@ angular.module('cApp')
 		    edges.forEach(function (edge) {
 			if (spData.data[i] == edge.from &&
 			    spData.data[i + 1] == edge.to) {
-			    edges.update({ id : edge.id, color : 'orange', 'width' : 3});
+			    edges.update({ id : edge.id, color : 'green', 'width' : 3});
 			}
 		    });
 		}
