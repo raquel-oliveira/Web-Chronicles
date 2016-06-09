@@ -15,19 +15,19 @@ const app = express();
 
 
 app.get('/hello/',function (req, res) {
-    console.log('say');
+    
     sp.hello2();
 
     res.send('say');
 });
 
 app.get('/compute/:name/:sizez', function (req, res) {
-    console.log('shortestP');
+    
 
     var name = req.params.name;
     var lengthAsked = req.params.sizez;
 
-    console.log('shortestP');
+    
     fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
         if (err) {
             res.statusCode = 404;
@@ -44,7 +44,7 @@ app.get('/compute/:name/:sizez', function (req, res) {
                     res.send("bad story");
                 }
                 //construct graph representation
-                console.log(result.story.step);
+                
                 sp.fillgraph(result.story.step);
 
                 var data = sp.shortestPath(lengthAsked);
@@ -67,7 +67,7 @@ app.get('/stories', function (req, res) {
     fs.readdir('./app/stories', function (err, data) {
 
         if (err) {
-            console.log(err);
+            
             res.statusCode = 404;
             res.send('error\n');
         }
@@ -84,15 +84,15 @@ app.get('/stories', function (req, res) {
                 }
             });
             data.forEach(function (item) {
-                console.log('foreach');
-                console.log(item);
+                
+                
                 var paths = item.split(".");
                 if (paths[1] == 'xml') {
 
                     //lire fichier pour name
                     fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
                         if (err) {
-                            console.log('error get story xml');
+                            
                         }
                         else {
 
@@ -100,12 +100,12 @@ app.get('/stories', function (req, res) {
 
                             parseString(data2, function (err, result) {
                                 if (err) {
-                                    console.log('error get story xml parseString');
+                                    
                                     return;
                                 }
-                                console.log('parsing name');
+                                
 
-                                console.log(result.story.$.name);
+                                
                                 var story = {
                                     $: {
                                         file: paths[0],
@@ -116,7 +116,7 @@ app.get('/stories', function (req, res) {
 
                                 if(toDoS==stories.length)
                                 {
-                                    console.log("ok");
+                                    
                                     var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
                                     var wrap = {story: stories};
 
@@ -127,9 +127,9 @@ app.get('/stories', function (req, res) {
                                 }
                                 else
                                 {
-                                    console.log('notFinished');
-                                    console.log(stories.length);
-                                    console.log(data.length);
+                                    
+                                    
+                                    
                                 }
                             });
 
@@ -163,7 +163,7 @@ app.get('/show/stories/:name', function (req, res) {
         else {
             res.set('Content-Type', 'text/xml');
             res.statusCode = 200;
-            console.log(data);
+            
             res.send(data);
         }
     });
@@ -199,8 +199,8 @@ app.get('/stories/:name/step/:step', function (req, res) {
                     res.send(xml2);
                 }
                 catch (e) {
-                    console.log("error");
-                    console.log(step);
+                    
+                    
                 }
             });
         }
@@ -233,10 +233,10 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 
                 var answerS = result.story.step[step].hiden[0].answer;
                 var minLevDist = 100;
-                console.log("answers");
-                console.log(answerS);
-                console.log("answers");
-                console.log(answerS[0]);
+                
+                
+                
+                
                 var found = false;
                 answerS.forEach(function (answer) {
                     if (answer._ == reponse) {
@@ -258,7 +258,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                 if(!found) {
                     try {
 
-                        console.log(minLevDist);
+                        
 
                         var hint = {
                             _: result.story.step[step].hiden[0].hint[0],
@@ -269,13 +269,13 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                         var builder = new xml2js.Builder({rootName: 'hint'});
                         var xml2 = builder.buildObject(hint);
                         console.dir(xml2);
-                        console.log("OK");
+                        
                         console.dir(result.story.step[step].hiden[0].hint[0]);
 
 
                     }
                     catch (e) {
-                        console.log("err");
+                        
                     }
                     res.statusCode = 210;
                     console.dir(xml2);
@@ -296,24 +296,24 @@ var upload = multer({
     inMemory: true //This is important. It's what populates the buffer.
     ,
     onFileUploadStart: function (file) {
-        console.log('Starting ' + file.fieldname);
+        
     },
     onFileUploadData: function (file, data) {
-        console.log('Got a chunk of data!');
+        
     },
     onFileUploadComplete: function (file) {
-        console.log('Completed file!');
+        
     },
     onParseStart: function () {
-        console.log('Starting to parse request!');
+        
     },
     onParseEnd: function (req, next) {
-        console.log('Done parsing!');
+        
         next();
     },
     onError: function (e, next) {
         if (e) {
-            console.log(e.stack);
+            
         }
         next();
     }
@@ -327,13 +327,13 @@ var upload = multer({
 app.post('/stories/:name', upload.any(), function (req, res) {
 
     var name = req.params.name;
-    console.log("gotpost");
-    //console.log(req);
-    console.log('fileName' + req.files);
+    
+    //
+    
     var file = req.files.file[0];
 
     var path = './app/stories/';
-    console.log("path" + file);
+    
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
@@ -342,7 +342,7 @@ app.post('/stories/:name', upload.any(), function (req, res) {
     var stream = fs.createWriteStream(path + fileName);
     stream.write(buffer);
     stream.on('error', function (err) {
-        console.log('Could not write file to memory.');
+        
         res.status(400).send({
             message: 'Problem saving the file. Please try again.'
         });
@@ -352,7 +352,7 @@ app.post('/stories/:name', upload.any(), function (req, res) {
         res.status(204);
     });
     stream.end();
-    console.log('Stream ended.');
+    
 });
 
 
@@ -361,4 +361,3 @@ app.use(express.static(__dirname + '/'));
 
 
 app.listen(PORT);
-console.log('Running on http://localhost:' + PORT);
