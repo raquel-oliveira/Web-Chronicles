@@ -7,7 +7,7 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http) {
+    .controller('PlayCtrl', function ($scope, $http){
         $scope.nbSteps = 0;
         // Story
         $scope.stories = null; // list of stories
@@ -15,43 +15,39 @@ angular.module('cApp')
 
         // Current step
         $scope.currentStep = null;
-        $scope.description = '<Description>'; // description of the current step
-
         //Divs of type ng-show in play.html
-        $scope.choose = false; // Choose a story to start
+        $scope.choose = false ; // Choose a story to start
         $scope.play = false; // Body of the story based on the step.html
         $scope.endStatusDisplayed = false;
 
-        // Create function
-        /* Update the view to the current step*/
-        $scope.update = function () {
-            $scope.description = $scope.currentStep.description; //update description of step if available
-            if ($scope.currentStep.win === 'true') { //maybe change this to controller 'EndCtrl'
-                $scope.endStatusDisplayed = true;
-            }
-        };
-
-
         /*After a story is choosed*/
         $scope.startStory = function () {
-            $scope.choose = false; //disable view to choose a story
-            $scope.play = true;
-            $scope.storyPath = $scope.selected._file;
-            $scope.goToStep(0); // start from root
+          $scope.choose = false; //disable view to choose a story
+          $scope.play = true;
+          $scope.storyPath = $scope.selected._file;
+          $scope.goToStep(0); // start from root
         };
 
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
-            $scope.currentStep = null; //remove current step and empty the ng-include
+          if (undefined != step) {
+            $scope.cleanLastStep();
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-                var content = data.content;
-                $scope.currentStep = content;
-                $scope.currentStep.url = 'views/play_step/' + content.type + '.html';
-                $scope.stepType = content.type;
-                $scope.play = true;
-                ++$scope.nbSteps;
-                $scope.update();
+              var content = data.content;
+              $scope.currentStep = content;
+              $scope.currentStep.url = 'views/play_step/' + content.type + '.html';$scope.stepType = content.type;
+              $scope.play = true;
+              ++$scope.nbSteps;
             });
+          } else {
+            alert("Choose an option");
+          }
+        };
+
+        // Clean data related to last step
+        $scope.cleanLastStep = function () {
+          $scope.currentStep = null;
+
         };
 
         var x2js = new X2JS();
@@ -64,5 +60,4 @@ angular.module('cApp')
             $scope.selected = $scope.stories[0];
             $scope.play = false;
         });
-
-    });
+});

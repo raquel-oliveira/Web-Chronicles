@@ -18,14 +18,10 @@ angular.module('cApp')
         $scope.network = null;
         $scope.graphStyle = {"height": "400px",
 			     "border": "1px solid grey"};
-	$scope.infoStyle = { "color" : "red",
-			     "font-weight" : 'bold',
-			     "font-size" : "30px"
-			   };
-	
+
 	$scope.showDatas = false;
 	$scope.hasShortestPath = true;
-	
+
 	function addEdge(edges, from, to) {
             edges.add({
 		id: edges.length,
@@ -34,11 +30,11 @@ angular.module('cApp')
 		arrows: { to: true }
             });
 	}
-	
+
         $scope.updateGraph = function (story) {
             var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
-	    
+
             for (var i = 0; i < story.step.length; ++i) {
                 if (story.step[i].content.type === 'multiple_choice') {
                     nodes.add({
@@ -108,7 +104,7 @@ angular.module('cApp')
 			}
 		    }
 		}
-		
+
 		var container = document.getElementById('network-story');
 
 		var data = {
@@ -146,7 +142,7 @@ angular.module('cApp')
 		    });
 		});
 
-		
+
 	    });
 
         };
