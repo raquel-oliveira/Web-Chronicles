@@ -24,7 +24,7 @@ var myApp = angular.module('cApp');
 });
 */
 
-myApp.controller('EndCtrl', function ($scope) {
+myApp.controller('EndCtrl', function ($scope, $http) {
        if ( $scope.currentStep.win === 'true') {
          $scope.showStory = true;
          $scope.tryAgain = false;
@@ -35,7 +35,11 @@ myApp.controller('EndCtrl', function ($scope) {
          $scope.tryAgain = true;
          $scope.win = "You lose";
          $scope.winStyle = { 'font-size': '100px', 'color': 'red'};
-     }
+       }
+
+    $http.get('compute/' + $scope.storyPath + '/true').success(function (data) {
+	$scope.minSteps = data;
+    });
  });
 
  /*myApp.controller('MCCtrl', function ($scope) {

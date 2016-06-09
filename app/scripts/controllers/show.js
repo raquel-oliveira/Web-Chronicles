@@ -20,10 +20,19 @@ angular.module('cApp')
 			     "border": "1px solid grey"};
 	$scope.showDatas = false;
 
+	function addEdge(edges, from, to) {
+            edges.add({
+		id: edges.length,
+		from: from,
+		to: to,
+		arrows: { to: true }
+            });
+	}
+	
         $scope.updateGraph = function (story) {
             var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
-
+	    
             for (var i = 0; i < story.step.length; ++i) {
                 if (story.step[i].content.type === 'multiple_choice') {
                     nodes.add({
@@ -33,17 +42,10 @@ angular.module('cApp')
 
 		    if (Array.isArray(story.step[i].content.nextStep)) {
 			for (var j = 0; j < story.step[i].content.nextStep.length; ++j) {
-                            edges.add({
-				from: parseInt(story.step[i].content.id),
-				to: parseInt(story.step[i].content.nextStep[j]),
-				arrows: { to: true }
-                            });
+			    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].content.nextStep[j]));
 			}
 		    } else {
-			edges.add({
-			    from: parseInt(story.step[i].content.id),
-			    to: parseInt(story.step[i].content.nextStep)
-			});
+			addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].content.nextStep));
 		    }
                 } else if (story.step[i].content.type === 'end') {
                     var color = (story.step[i].content.win === 'false') ?
@@ -58,75 +60,82 @@ angular.module('cApp')
                 } else if (story.step[i].content.type === 'riddle') {
                     nodes.add({
                         id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.title
+                        label: story.step[i].content.id
                     });
 
                     if (Array.isArray(story.step[i].hiden.answer)) {
                         for (var j = 0; j < story.step[i].hiden.answer.length; ++j) {
-                            edges.add({
-                                from: parseInt(story.step[i].content.id),
-                                to: parseInt(story.step[i].hiden.answer[j].__text),
-				arrows: { to: true }
-                            });
+			    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].hiden.answer[j].__text));
                         }
                     } else {
-                        edges.add({
-                            from: parseInt(story.step[i].content.id),
-                            to: parseInt(story.step[i].hiden.answer._stepId),
-			    arrows: { to: true }
-                        });
+			addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].hiden.answer._stepId));
                     }
 
-                } else {
+                } else if (story.step[i].content.type === 'maze') {
                     nodes.add({
                         id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.title
+                        label: story.step[i].content.id
                     });
 
+		    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].content.nextStep));
+		} else {
+                    nodes.add({
+                        id: parseInt(story.step[i].content.id),
+                        label: story.step[i].content.id
+                    });
                 }
             }
 
-            var container = document.getElementById('network-story');
+	    $http.get('compute/' + $scope.selected._file + '/false').then(function (spData) {
+		for (var i = 0; i < spData.data.length - 1; ++i) {
+		    edges.forEach(function (edge) {
+			if (spData.data[i] == edge.from &&
+			    spData.data[i + 1] == edge.to) {
+			    edges.update({ id : edge.id, color : 'orange', 'width' : 3});
+			}
+		    });
+		}
+		
+		var container = document.getElementById('network-story');
 
-            var data = {
-                nodes: nodes,
-                edges: edges
-            };
+		var data = {
+                    nodes: nodes,
+                    edges: edges
+		};
 
 
-            var options = {layout: {hierarchical: true}};
+		var options = {layout: {hierarchical: true}};
 
-            if ($scope.network === null) {
-                $scope.network = new vis.Network(container, data, options);
-            }
-            else {
-                $scope.network.setData(data);
-            }
-
-            shortestPath.get(nodes, edges);
-	    //console.log($scope.network.getScale());
-	    $scope.network.focus("0", {scale: 3});
-	    //console.log($scope.network.getScale());
-
-	    $scope.network.on("selectNode", function(params) {
-		$scope.$apply(function () {
-		    if (! $scope.showDatas) $scope.showDatas = true;
-		});
-
-		var id = params.nodes[0];
-		var step;
-
-		for (var i = 0; i < story.step.length; ++i) {
-		    if (story.step[i].content.id == id) {
-			step = story.step[i];
-		    }
+		if ($scope.network === null) {
+                    $scope.network = new vis.Network(container, data, options);
+		}
+		else {
+                    $scope.network.setData(data);
 		}
 
-		$scope.$apply(function () {
-		    $scope.step = step;
-		    $scope.url = 'views/show-' + step.content.type + '.html';
+		$scope.network.on("selectNode", function(params) {
+		    $scope.$apply(function () {
+			if (! $scope.showDatas) $scope.showDatas = true;
+		    });
+
+		    var id = params.nodes[0];
+		    var step;
+
+		    for (var i = 0; i < story.step.length; ++i) {
+			if (story.step[i].content.id == id) {
+			    step = story.step[i];
+			}
+		    }
+
+		    $scope.$apply(function () {
+			$scope.step = step;
+			$scope.url = 'views/show-' + step.content.type + '.html';
+		    });
 		});
+
+		
 	    });
+
         };
 
         $scope.initStory = function (story_file) {
@@ -136,7 +145,6 @@ angular.module('cApp')
         };
 
         $http.get('stories/').success(function (data) {
-
             var raw = x2js.xml_str2json(data);
             $scope.initStory('show/stories/' + raw.stories.story[0]._file);
             $scope.stories = raw.stories.story;
