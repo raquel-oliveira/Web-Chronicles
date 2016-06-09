@@ -42,9 +42,9 @@
             <answer stepId="4">abri13</answer>
             <answer stepId="4">abri 13</answer>
             <answer stepId="10">sables ombragés</answer>
-            <answer stepId="20">cathedrale</answer>
-            <answer stepId="29">base des super mutants</answer>
-            <answer stepId="28">confrérie de l'acier</answer>
+            <answer stepId="11">cathedrale</answer>
+            <answer stepId="11">base des super mutants</answer>
+            <answer stepId="11">confrérie de l'acier</answer>
             <hint>On vous à parlé de l'abri 13</hint>
         </hiden>
 
@@ -133,6 +133,7 @@
             <id>10</id>
             <description> Sables ombragés. On vous apprend la position de ... todo </description>
 	    <type>end</type>
+            <end>false</end>
         </content>
     </step>
     <step>
@@ -157,158 +158,4 @@
             <win>true</win>
         </content>
     </step>
-    <step>
-        <content>
-            <id>12</id>
-            <description>nope </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-        <content>
-            <id>13</id>
-            <description> </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-        <content>
-            <id>14</id>
-            <description> </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-        <content>
-            <id>15</id>
-            <description> </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-    <content>
-        <id>16</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-</step>
-    <step>
-        <content>
-            <id>17</id>
-            <description> </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-        <content>
-            <id>18</id>
-            <description> </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-        <content>
-            <id>19</id>
-            <description> </description>
-	    <type>end</type>
-	    <win>false</win>
-        </content>
-    </step>
-    <step>
-    <content>
-        <id>20</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>21</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>22</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>23</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>24</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>25</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>26</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>27</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>28</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>29</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-    </step>
-    <step>
-    <content>
-        <id>30</id>
-        <description> </description>
-	<type>end</type>
-	<win>false</win>
-    </content>
-</step>
-
-
 </story>

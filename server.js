@@ -200,6 +200,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
         }
         else {
 
+            
             var parseString = xml2js.parseString;
             var xml = data;
             parseString(xml, function (err, result) {
