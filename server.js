@@ -15,18 +15,14 @@ const app = express();
 
 
 app.get('/hello/',function (req, res) {
-    
     sp.hello2();
-
     res.send('say');
 });
 
 app.get('/compute/:name/:sizez', function (req, res) {
-    
 
     var name = req.params.name;
     var lengthAsked = req.params.sizez;
-
     
     fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
         if (err) {
@@ -36,7 +32,6 @@ app.get('/compute/:name/:sizez', function (req, res) {
         }
         else {
             var parseString = xml2js.parseString;
-
             parseString(data, function (err, result) {
                 if (err) {
                     res.statusCode = 404;
@@ -52,7 +47,6 @@ app.get('/compute/:name/:sizez', function (req, res) {
                 //res.set('Content-Type', 'text/xml');
 
                 res.statusCode = 200;
-
                 res.send(data);
 
             });
@@ -78,14 +72,12 @@ app.get('/stories', function (req, res) {
             data.forEach(function (item) {
 
                 var paths = item.split(".");
-
                 if (paths[1] == 'xml') {
                     toDoS++;
                 }
             });
             data.forEach(function (item) {
-                
-                
+
                 var paths = item.split(".");
                 if (paths[1] == 'xml') {
 
@@ -121,7 +113,7 @@ app.get('/stories', function (req, res) {
                                     var wrap = {story: stories};
 
                                     var xml2 = builder.buildObject(wrap);
-                                    console.dir(xml2);
+                                    
 
                                     res.send(xml2);
                                 }
@@ -132,22 +124,12 @@ app.get('/stories', function (req, res) {
                                     
                                 }
                             });
-
-
                         }
                     });
-
                 }
-
             });
-
-
-
-
         }
-
     });
-
 });
 
 
@@ -195,12 +177,10 @@ app.get('/stories/:name/step/:step', function (req, res) {
                 var builder = new xml2js.Builder({rootName: 'content'});
                 try {
                     var xml2 = builder.buildObject(result.story.step[step].content[0]);
-                    console.dir(xml2);
+                    
                     res.send(xml2);
                 }
                 catch (e) {
-                    
-                    
                 }
             });
         }
@@ -235,21 +215,19 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                 var minLevDist = 100;
                 
                 
-                
-                
                 var found = false;
                 answerS.forEach(function (answer) {
                     if (answer._ == reponse) {
                         var builder = new xml2js.Builder({rootName: 'answer'});
                         var xml2 = builder.buildObject(answer);
-                        console.dir(xml2);
+                        
                         res.statusCode = 200;
                         res.send(xml2);
                         found = true;
                     }
                     var lComp = Levenshtein( answer._, reponse );
-                    console.dir("distance between"+answer._+" and "+reponse);
-                    console.dir(lComp);
+                    
+                    
                     if(lComp < minLevDist)
                         minLevDist=lComp;
 
@@ -268,9 +246,9 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                         };
                         var builder = new xml2js.Builder({rootName: 'hint'});
                         var xml2 = builder.buildObject(hint);
-                        console.dir(xml2);
                         
-                        console.dir(result.story.step[step].hiden[0].hint[0]);
+                        
+                        
 
 
                     }
@@ -278,7 +256,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
                         
                     }
                     res.statusCode = 210;
-                    console.dir(xml2);
+                    
                     res.send(xml2);
                 }
 

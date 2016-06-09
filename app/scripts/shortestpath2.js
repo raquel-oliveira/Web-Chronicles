@@ -65,7 +65,7 @@ function addVertex(item)
 
 function fillgraph(steps){
     graph = [];
-    console.log(steps);
+    
     steps.forEach(function(item) {
         addVertex(item);
     });
@@ -121,7 +121,7 @@ function shortestPath(onlyLength) {
         console.log('ddd');
 
     }
-    console.explore('bad ending :/');
+
     console.log(iDtoExplore.length);
     var data = [];
 
