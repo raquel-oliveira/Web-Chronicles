@@ -81,7 +81,6 @@ angular.module('cApp')
 	$scope.getStyle = function(cell) {
 	    var style = { 'height' : '20px',
 			  'width'  : '20px' };
-	    var hasRight = false, hasBottom = false;
 /*
 	    if ($scope.translate($scope.end.x, $scope.end.y)  === cell) {
 		style['background-color'] = 'green';
@@ -94,19 +93,19 @@ angular.module('cApp')
 	    // display borders
 	    for (var i = 0; i < $scope.maze.length; ++i) {
 		if ($scope.maze[i].x === cell) {
-		    if ($scope.maze[i].y === cell + 1)
+		    if ($scope.maze[i].y === cell + 1) {
 			style['border-right'] = '1px dashed black';
-
-		    if ($scope.maze[i].y === cell + $scope.nbCols)
+		    } if ($scope.maze[i].y === cell + $scope.nbCols) {
 			style['border-bottom'] = '1px dashed black';
+		    }
 		}
 	    }
 
 	    return style;
-	}
+	};
 
 	$scope.handleKey = function($event) {
-	    if ($scope.endReached) return;
+	    if ($scope.endReached) { return; }
 
 	    if ($event.keyCode === 40) {
 		if ($scope.player.y < $scope.nbRows - 1 &&
@@ -135,26 +134,28 @@ angular.module('cApp')
 	    }
 
 	    if ($scope.player.x === $scope.end.x &&
-	        $scope.player.y === $scope.end.y)
+	        $scope.player.y === $scope.end.y) {
 		$scope.endReached = true;
-	}
+	    }
+	};
 
 	$scope.isWall = function(x, y) {
 	    for (var i = 0; i < $scope.maze.length; ++i) {
-		if (($scope.maze[i].x === x && $scope.maze[i].y == y) ||
-		    ($scope.maze[i].x === y && $scope.maze[i].y == x))
+		if (($scope.maze[i].x === x && $scope.maze[i].y === y) ||
+		    ($scope.maze[i].x === y && $scope.maze[i].y === x)) {
 		    return true;
+		}
 	    }
 
 	    return false;
-	}
+	};
 
 	$scope.translate = function(x, y) {
 	    return y * $scope.nbCols + x;
-	}
+	};
 
 	$scope.nextStep = function() {
 	    //console.log();
 	    $scope.goToStep();
-	}
+	};
     });
