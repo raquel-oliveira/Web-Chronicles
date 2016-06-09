@@ -71,7 +71,7 @@ angular.module('cApp')
 
                     if (Array.isArray(story.step[i].hiden.answer)) {
                         for (var j = 0; j < story.step[i].hiden.answer.length; ++j) {
-			    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].hiden.answer[j].__text));
+			    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].hiden.answer[j]._stepId));
                         }
                     } else {
 			addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].hiden.answer._stepId));
