@@ -138,6 +138,8 @@ angular.module('cApp')
 			}
 		    }
 
+		    console.log(step);
+
 		    $scope.$apply(function () {
 			$scope.step = step;
 			$scope.url = 'views/show-' + step.content.type + '.html';
@@ -163,6 +165,7 @@ angular.module('cApp')
         });
 
         $scope.changeStory = function () {
+	    $scope.network.off('selectNode');
             $http.get('show/stories/' + $scope.selected._file).success(function (data) {
                 $scope.updateGraph(data.story);
             });
