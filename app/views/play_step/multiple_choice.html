@@ -1,4 +1,4 @@
-<div class="multiple_choice" ng-controller="MCCtrl">
+<div class="multiple_choice" ng-controller='MCCtrl'>
   <div ng-show="optionsRadio" >
     <label ng-repeat="c in currentStep.nextStep">
         <input type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{c._}}">  {{ c.$.label }} </br></br></input>
