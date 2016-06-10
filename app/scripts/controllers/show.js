@@ -10,15 +10,13 @@ var x2js = new X2JS();
  */
 angular.module('cApp')
     .directive('storyNetwork', function() {
-	return { template: '<div id="network-story" ng-style="graphStyle"></div>',
-		 link: function(scope) {
-		     
-		 }
-	       };
+      return {
+        template: '<div id="network-story" ng-style="graphStyle"></div>',link: function(scope) {
+      }
+    };
     })
     .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
-        $scope.selected = null;
-        $scope.stories = null;
+        $scope.storyName = null;
         $scope.network = null;
         $scope.graphStyle = {
             "height": "400px",
@@ -42,7 +40,7 @@ angular.module('cApp')
 	    if (typeof fontColor === "undefined") { fontColor = "#343434"; }
 
 	    var shape = (nodes.length == 0)? 'box': 'ellipse';
-		
+
             nodes.add({
                 id: id,
                 label: id,
@@ -52,12 +50,11 @@ angular.module('cApp')
             });
 	}
 
-	
+
         $scope.updateGraph = function (data) {
 	    var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
             var story = data.story;
-	    console.log($scope.selected);
             for (var i = 0; i < story.step.length; ++i) {
                 if (story.step[i].content[0].type[0] === 'multiple_choice') {
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
@@ -83,8 +80,8 @@ angular.module('cApp')
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
                 }
             }
-	    
-            $http.get('compute/' + $scope.selected.file + '/false').then(function (spData) {
+
+            $http.get('compute/' + $routeParams.story + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
                     $scope.hasShortestPath = true;
                 } else {
@@ -130,7 +127,7 @@ angular.module('cApp')
             }
 
 	    var step;
-	    
+
             for (var i = 0; i < story.step.length; ++i) {
                 if (parseInt(story.step[i].content[0].id) === node) {
                     step = story.step[i];
@@ -141,25 +138,10 @@ angular.module('cApp')
             $scope.url = 'views/show-' + step.content[0].type[0] + '.html';
 	};
 
-        $scope.initStory = function (story_file) {
-            $http.get(story_file).success(function (data) {
-                $scope.updateGraph(data);
-            });
-        };
-
-        $scope.changeStory = function () {
-	    $scope.network.off('selectNode');
-	    $scope.showDatas = false;
-            $http.get('show/stories/' + $scope.selected.file).success(function (data) {
-                $scope.updateGraph(data);
-            });
-        };
-
-	console.log($routeParams.story);
-
-	$http.get('stories/').success(function (data) {
-            $scope.initStory('show/stories/' + data[0].file);
-            $scope.stories = data;
-            $scope.selected = $scope.stories[0];
-        });
-    }]);
+    if($routeParams.story !== undefined){
+      $http.get('show/stories/'+ $routeParams.story).success(function (data) {
+                  $scope.updateGraph(data);
+                  $scope.storyName = data.story.$.name;
+              });
+    }
+}]);

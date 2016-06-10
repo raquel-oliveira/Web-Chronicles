@@ -40,21 +40,20 @@ angular
         controller: 'PlayCtrl',
         controllerAs: 'play'
       })
-      .when('/show', {
-        templateUrl: 'views/show.html',
-        controller: 'ShowCtrl',
-        controllerAs: 'show'
-      })
       .when('/show/:story', {
         templateUrl: 'views/show.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
-
+      .when('/show', {
+        templateUrl: 'views/403.html',
+        controller: 'ShowCtrl',
+        controllerAs: 'show'
+      })
       .when('/edit', {
         templateUrl: 'views/edit-step.html',
-	  controller: 'EditCtrl',
-	  controllerAs: 'edit'
+        controller: 'EditCtrl',
+        controllerAs: 'edit'
       })
       .when('/help', {
         templateUrl: 'views/403.html',
