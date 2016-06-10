@@ -2,6 +2,7 @@
 var myApp = angular.module('cApp');
 
 myApp.controller('RiddleCtrl', function ($scope, $http) {
+
   $scope.verifyAnswer = function (answer) {
 
         $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
@@ -69,6 +70,9 @@ myApp.controller('EndCtrl', function ($scope, $http) {
 
     });
  });
+
+
+
 
  myApp.controller('MCCtrl', function ($scope) {
    $scope.optionsRadio = true;
