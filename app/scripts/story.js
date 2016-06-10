@@ -7,16 +7,26 @@ myApp.controller('SetStory', function ($scope, $http, story){
   $http.get('stories/').success(function (data) {
             $scope.stories = data;
             $scope.selected = $scope.stories[0];
-            story = $scope.selected;
-            console.log(story);
+            story.setStory($scope.selected);
+            console.log(story.get());
         });
 
     $scope.changeStory = function () {
       $http.get('show/stories/' + $scope.selected.file).success(function (data) {
-               story = $scope.selected;
-               console.log(story);
+               story.setStory($scope.selected);
+               console.log(story.get());
            });
        };
 });
 
-myApp.value('story', 0);
+myApp.factory('story', function(){
+  var story;
+  return {
+    setStory: function (st){
+      story = st;
+    },
+    get: function(){
+      return story;
+    }
+  }
+});

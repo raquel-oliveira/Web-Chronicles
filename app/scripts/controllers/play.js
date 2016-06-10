@@ -8,8 +8,6 @@
  */
 angular.module('cApp')
     .controller('PlayCtrl', function ($scope, $http, $sce, story){
-      console.log("Play");
-      console.log(story);
         $scope.nbSteps = 0;
 
         // Current step
@@ -21,30 +19,25 @@ angular.module('cApp')
 
         /*After a story is choosed*/
         $scope.startStory = function () {
-          console.log("start story");
-          console.log(story);
-
           $scope.choose = false; //disable view to choose a story
           $scope.play = true;
           $scope.goToStep(0); // start from root
+          $scope.storyName = story.get().label;
         };
 
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
-          console.log("go to step");
-          console.log(story);
           if (undefined != step) {
             $scope.cleanLastStep();
-            $http.get('stories/' + story.file + '/step/' + step).success(function (data) {
+            $http.get('stories/' + story.get().file + '/step/' + step).success(function (data) {
 
               console.dir(data);
               $scope.currentStep = data;
               $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
               $scope.stepType = data.type[0];
               $scope.play = true;
-                $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
-
-                ++$scope.nbSteps;
+              $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
+              ++$scope.nbSteps;
             });
           } else {
             alert("Choose an option");
@@ -59,4 +52,5 @@ angular.module('cApp')
 
         $scope.choose = true;
         $scope.play = false;
+
 });
