@@ -2,12 +2,8 @@
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 <div class="show">
-  <h1>{{selected.label}}</h1>
-  <p>Choose a story: </p>
-  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
-  <story-network></story-network>
-
-  <!--div id="network-story" ng-style="graphStyle"></div-->
+  <h1>{{storyName}}</h1>
+  <div id="network-story" ng-style="graphStyle"></div>
   <p class="error" ng-hide="hasShortestPath" >No path from start to end</p>
 
   <div ng-show="showDatas">
