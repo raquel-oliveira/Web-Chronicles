@@ -72,12 +72,11 @@ myApp.controller('EndCtrl', function ($scope, $http) {
 
  myApp.controller('MCCtrl', function ($scope) {
    $scope.optionsRadio = true;
-  if (!Array.isArray($scope.currentStep.nextStep)){
+   if ($scope.currentStep.nextStep.length === 1){
     $scope.optionsRadio = false;
-    $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
+    $scope.selectedAnswer = $scope.currentStep.nextStep[0]._;
   }
   else{
     $scope.optionsRadio = true;
-
   }
 });
