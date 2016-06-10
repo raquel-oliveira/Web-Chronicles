@@ -83,10 +83,12 @@ function createEndStep(step, stepData){
 
 function createMazeStep(step, stepData){
     step.outcomes = [];
-    for (var i = 0; i < stepData.maze.outcome.length; ++i) {
+    step.rows = stepData.maze[0].rows[0];
+    step.columns = stepData.maze[0].columns[0];
+    for (var i = 0; i < stepData.maze[0].outcome.length; ++i) {
         step.outcomes.push({
-            text: stepData.maze.outcome[i].text[0],
-            nextStep: stepData.maze.outcome[i].nextStep[0]
+            text: stepData.maze[0].outcome[i].text[0],
+            nextStep: stepData.maze[0].outcome[i].nextStep[0]
         });
     }
     
@@ -98,8 +100,8 @@ function createMazeStep(step, stepData){
             id: step.id,
             title: step.title,
             description: step.description,
-	    rows: step.maze.rows;
-	    columns: step.maze.columns;
+            rows: step.rows,
+            columns: step.columns,
             outcomes: step.outcomes,
             nextStep: []
         };
@@ -183,6 +185,44 @@ function readStory(story_file) {
     });
 }
 
+app.get('/show/story/:name',function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(getShowStory(req.params.name + '.xml'));
+});
+
+function getShowStory(storyName){
+    var storyRaw = getStory(storyName);
+    var story = {
+        name: storyRaw.name,
+        steps: []
+    };
+    for (var i = 0; i < storyRaw.steps.length; ++i){
+        story.steps.push(storyRaw.steps[i].getShowInfos());
+    }
+
+    return story;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> da747919b34b3cb07df8b8eb5a0ea70e822ec785
 function filterStep(step, filter) {
     var result = step.content[0];
 
