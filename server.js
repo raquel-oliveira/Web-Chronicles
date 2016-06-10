@@ -15,9 +15,9 @@ const STORY_PATH = './app/stories/';
 // App
 const app = express();
 
-function toXML(result)
+function toXML(result,rootNameParam)
 {
-    var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
+    var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
     var xml2 = builder.buildObject(result);
     return builder.buildObject(result);
 }
@@ -66,7 +66,7 @@ function initCache(fileName) {
                                 result.file = name;
                                // stories.push(story);
                                 myCache.set(name+'.json',result);
-                                myCache.set(name+'.xml', toXML(result));
+                                myCache.set(name+'.xml', toXML(result,'stories'));
                                 console.log("added "+name+" to cache");
 
                             });
@@ -311,7 +311,7 @@ app.post('/stories/', function (req, res) {
 
     console.log(req.body);
 
-    var xmltoStore = toXML(req.body);
+    var xmltoStore = toXML(req.body.story,'story');
     //console.dir(req);
     var path = './app/stories/';
 
@@ -326,7 +326,8 @@ app.post('/stories/', function (req, res) {
                     });
                 }
                 else {
-
+                    console.log("Write");
+                    console.log(xmltoStore);
                     res.redirect("back");
 
                 }

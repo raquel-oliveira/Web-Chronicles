@@ -7,9 +7,9 @@
  </div>
 <form  ng-submit="submitMyForm()">
 
-    <label>Titre : </label><input ng-model="story.currentStep.content.title" type="text"/>
-    <label>text : </label><textarea ng-model="story.currentStep.content.description"/></textarea>
-    <label>Nom : </label><input ng-model="story.currentStep.content.id" type="number"/>
+    <label>Titre : </label><input ng-model="currentStep.content.title" type="text"/>
+    <label>Desc : </label><textarea ng-model="currentStep.content.description"/></textarea>
+    <label>id : </label><input ng-model="currentStep.content.id" type="number"/>
 
     <input type="radio" ng-model="stem.content.type" value="multiple_choice">multiple_choice
     <input type="radio" ng-model="stem.content.type" value="riddle">riddle
