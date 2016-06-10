@@ -65,7 +65,20 @@ function createMultipleChoiceStep(step, stepData){
 }
 
 function createEndStep(step, stepData){
+    step.win = stepData.end[0].win[0] === "true";
 
+    step.getPlayInfos = function(){
+        return step;
+    };
+    step.getShowInfos = function(){
+        return {
+            id: step.id,
+            title: step.title,
+            description: step.description,
+            win: step.win,
+            nextStep: []
+        };
+    };
 }
 
 function createMazeStep(step, stepData){
@@ -98,7 +111,39 @@ function createMazeStep(step, stepData){
 }
 
 function createRiddleStep(step, stepData){
-    
+    step.question = stepData.riddle[0].question[0];
+    step.hint = stepData.riddle[0].hint[0];
+    step.outcomes = [];
+    for (var i = 0; i < stepData.riddle[0].outcome.length; ++i){
+        step.outcomes.push({
+            text: stepDat.riddle[0].outcome[i].text,
+            nextStep: stepDat.riddle[0].outcome[i].text
+        });
+    }
+
+    step.getPlayInfos = function(){
+        return {
+            id: step.id,
+            title: step.title,
+            description: step.description,
+            question: step.question
+        }
+    };
+
+    step.getShowInfos = function(){
+        var r = {
+            id: step.id,
+            title: step.title,
+            description: step.description,
+            question: step.question,
+            hint: step.hint,
+            nextStep: []
+        };
+        for (var i = 0; i < step.outcomes.length; ++i){
+            r.nextStep.push(step.outcomes[i].nextStep);
+        }
+        return r;
+    }
 }
 
 var stories = [];
