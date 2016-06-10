@@ -14,6 +14,68 @@ const STORY_PATH = './app/stories/';
 // App
 const app = express();
 
+function createStep(stepData){
+    var step = {};
+    step.id = stepData.id[0];
+    step.title = stepData.title[0];
+    if (stepData.hasOwnProperty("desc"))
+        step.description = stepData.desc[0];
+    else
+        step.description = "";
+
+    if(stepData.hasOwnProperty("multiple_choice")){
+        step = createMultipleChoiceStep(step, stepData);
+    }else if (stepData.hasOwnProperty("end")){
+        step = createEndStep(step, stepData);
+    }else if (stepData.hasOwnProperty("maze")){
+        step = createMazeStep(step, stepData);
+    }else if (stepData.hasOwnProperty("riddle")){
+        step = createRiddleStep(step, stepData);
+    }
+
+    return step;
+}
+
+function createMultipleChoiceStep(step, stepData){
+    step.outcomes = [];
+    for (var i = 0; i < stepData.multiple_choice.outcome.length; ++i) {
+        step.outcomes.push({
+            text: stepData.multiple_choice.outcome[i].text[0],
+            nextStep: stepData.multiple_choice.outcome[i].nextStep[0]
+        });
+    }
+
+    step.getPlayInfos = function(){
+        return step;
+    };
+    step.getShowInfos = function(){
+        var r = {
+            id: step.id,
+            title: step.title,
+            description: step.description,
+            outcomes: step.outcomes,
+            nextStep: []
+        };
+        for (var i = 0; i < step.outcomes.length; ++i){
+            r.nextStep.push(step.outcomes[i].nextStep);
+        }
+        return r;
+    }
+}
+
+function createEndStep(step, stepData){
+
+}
+
+function createMazeStep(step, stepData){
+
+}
+
+function createRiddleStep(step, stepData){
+
+}
+
+
 function filterStep(step, filter) {
     var result = step.content[0];
 
