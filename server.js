@@ -120,8 +120,10 @@ app.get('/hello/keys',function (req, res) {
 app.get('/compute/:name/:sizez', function (req, res) {
 
     var rep = myCache.get(req.params.name+'.json');
-
-
+    if(rep === undefined)
+    {
+        send()
+    }
     sp.fillgraph(rep.story.step);
     var data = sp.shortestPath();
     console.log(data);
@@ -148,14 +150,43 @@ app.get('/stories', function (req, res) {
 
         if( item.split(".")[1] === 'json')
         {
-            toSend.push(item)
+            var sto = myCache.get(item);
+            var file = {
+                file:item.split(".")[0],
+                label:sto.story.$.name
+            };
+            console.log(file);
+            toSend.push(file);
         }
+
     });
 
-    var stories =  myCache.mget(toSend);
-    console.dir('/stories');
-    res.send(stories);
+    res.send(toSend);
+});
 
+app.get('/show/stories', function (req, res) {
+    //read the dir
+    console.dir('/stories');
+    console.dir(myCache.keys());
+
+    var toSend = [];
+
+    myCache.keys().forEach(function(item)
+    {
+        console.log(item);
+
+        if( item.split(".")[1] === 'json')
+        {
+
+            toSend.push(myCache.get(item).name);
+        }
+    });
+    res.send(toSend);
+
+});
+
+app.get('/show/stories/:name', function (req, res) {
+    res.send(myCache.get(req.params.name+'.json'));
 });
 
 app.get('/stories/:name/step/:step', function (req, res) {
@@ -164,6 +195,9 @@ app.get('/stories/:name/step/:step', function (req, res) {
     var step = req.params.step;
 
     var json = myCache.get(req.params.name+'.json');
+    console.dir(json);
+    console.dir(req.params.name);
+
     res.send(json.story.step[step].content[0]);
 
 
@@ -176,14 +210,13 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
     json.story.step.forEach(function(item){
         if(item.content[0].type[0]==='end'&&typeof item.content[0].win!== 'undefined' && item.content[0].win[0]==='true')
         {
-
             res.send(true+'');
             found = true;
             return;
         }
     })
     if(!found)
-    res.send(false+'');
+        res.send(false+'');
 });
 
 app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {

@@ -4,7 +4,7 @@
 <div class="show">
   <h1>{{selected._label}}</h1>
   <p>Choose a story: </p>
-  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"></select>
+  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
   <div id="network-story" ng-style="graphStyle"></div>
   <p class="error" ng-hide="hasShortestPath" >No path from start to end</p>
 

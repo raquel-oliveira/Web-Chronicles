@@ -8,12 +8,12 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
 
           if (reponse.status === 200) {
               $scope.showhint = false;
-              $scope.goToStep(reponse.data.answer._stepId);
+              $scope.goToStep(reponse.data.$.stepId);
           }
           else {
               $scope.showhint = true;
-              $scope.hint = reponse.data.hint;
-              console.log( reponse.data.hint);
+              $scope.hint = reponse.data;
+              console.log( reponse);
               console.log($scope.hint);
               $scope.hint.close = 'Not even close';
 

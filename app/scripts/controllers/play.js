@@ -24,7 +24,7 @@ angular.module('cApp')
         $scope.startStory = function () {
           $scope.choose = false; //disable view to choose a story
           $scope.play = true;
-          $scope.storyPath = $scope.selected._file;
+          $scope.storyPath = $scope.selected.file;
           $scope.goToStep(0); // start from root
         };
 
@@ -33,9 +33,11 @@ angular.module('cApp')
           if (undefined != step) {
             $scope.cleanLastStep();
             $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
-              var content = data.content;
-              $scope.currentStep = content;
-              $scope.currentStep.url = 'views/play_step/' + content.type + '.html';$scope.stepType = content.type;
+
+              console.dir(data);
+              $scope.currentStep = data;
+              $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
+              $scope.stepType = data.type[0];
               $scope.play = true;
               ++$scope.nbSteps;
             });
@@ -50,12 +52,10 @@ angular.module('cApp')
 
         };
 
-        var x2js = new X2JS();
         $http.get('stories/').success(function (data) {
-
-            var raw = x2js.xml_str2json(data);
-            $scope.stories = raw.stories.story;
-
+            console.dir(data);
+            $scope.stories = data;
+            console.dir($scope.stories );
             $scope.choose = true;
             $scope.selected = $scope.stories[0];
             $scope.play = false;
