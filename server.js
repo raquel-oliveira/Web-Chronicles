@@ -82,7 +82,32 @@ function createEndStep(step, stepData){
 }
 
 function createMazeStep(step, stepData){
-
+    step.outcomes = [];
+    for (var i = 0; i < stepData.maze.outcome.length; ++i) {
+        step.outcomes.push({
+            text: stepData.maze.outcome[i].text[0],
+            nextStep: stepData.maze.outcome[i].nextStep[0]
+        });
+    }
+    
+    step.getPlayInfos = function(){
+        return step;
+    };
+    step.getShowInfos = function(){
+        var r = {
+            id: step.id,
+            title: step.title,
+            description: step.description,
+	    rows: step.maze.rows;
+	    columns: step.maze.columns;
+            outcomes: step.outcomes,
+            nextStep: []
+        };
+        for (var i = 0; i < step.outcomes.length; ++i){
+            r.nextStep.push(step.outcomes[i].nextStep);
+        }
+        return r;
+    }
 }
 
 function createRiddleStep(step, stepData){
