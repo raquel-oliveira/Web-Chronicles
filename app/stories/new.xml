@@ -29,9 +29,9 @@
         <id>3</id>
         <title>Riddle</title>
         <desc>Description riddle</desc>
-        <question>bonjour ou aaa</question>
-        <hint>La réponse est dans la question</hint>
         <riddle>
+            <question>bonjour ou aaa</question>
+            <hint>La réponse est dans la question</hint>
             <outcome>
                 <text>bonjour</text>
                 <nextStep>5</nextStep>
