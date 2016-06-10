@@ -11,6 +11,7 @@ const sp = require('./app/scripts/shortestpath2.js');
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
 
+
 // App
 const app = express();
 
@@ -72,14 +73,51 @@ function createMazeStep(step, stepData){
 }
 
 function createRiddleStep(step, stepData){
+    
+}
 
+var stories = [];
+
+// Return the story object which corresponds to story_file
+function getStory(story_file) {
+    for (var i = 0; i < stories.length; ++i) {
+	if (stories[i].file === story_file) { return stories[i].story; }
+    }
+    return readStory(story_file);
+}
+
+// Parse the file story_file and load the story in memory
+function readStory(story_file) {
+    fs.readFile('./app/stories/' + story_file, 'utf-8', function(error, file) {
+        if (error)  {
+            console.log("Error: Can't read " + story_file);
+            return;
+        }
+
+        var parseString = xml2js.parseString;
+        parseString(data, function (error, data){
+            if (err) {
+            console.log("Error during parsing " + story_file);
+            return;
+            }
+
+            var story = createStory(data);
+
+            stories.push({
+            file : story_file,
+            story : story
+            });
+
+            return story;
+        });
+    });
 }
 
 
 function filterStep(step, filter) {
     var result = step.content[0];
 
-    
+
     if (! filter && (typeof step.hiden !== "undefined")) {
 	for (var key in step.hiden[0]) {
 	    result[key] = step.hiden[0][key];
@@ -95,7 +133,7 @@ function filterStory(story, filter) {
     for (var key in story.story.step) {
 	result.step.push(filterStep(story.story.step[key], filter));
     }
-    
+
     return result;
 }
 
@@ -175,7 +213,6 @@ function contains(key)
     return false;
 }
 
-
 app.get('/show/story/:name',function (req, res) {
     if( req.accepts('xml'))
     {
@@ -192,7 +229,6 @@ app.get('/hello/',function (req, res) {
     initCache();
     res.send('hi');
 });
-
 
 app.get('/hello/keys',function (req, res) {
     //myCache.set(item+'.json',result);
@@ -211,7 +247,7 @@ app.get('/compute/:name/:sizez', function (req, res) {
     sp.fillgraph(rep.story.step);
     var data = sp.shortestPath();
     console.log(data);
-    
+
     if(req.params.sizez === 'true')
     {
         res.send(data.length+'');
@@ -284,8 +320,6 @@ app.get('/stories/:name/step/:step', function (req, res) {
     console.dir(req.params.name);
 
     res.send(json.story.step[step].content[0]);
-
-
 });
 
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
@@ -316,7 +350,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
     console.log(step);
     console.dir(result.story.step[step].hiden);
     console.dir(result.story.step[step].hiden[0]);
-    
+
     var answerS = result.story.step[step].hiden[0].nextStep;
 
     var minLevDist = 100;
@@ -359,24 +393,24 @@ var upload = multer({
     inMemory: true //This is important. It's what populates the buffer.
     ,
     onFileUploadStart: function (file) {
-        
+
     },
     onFileUploadData: function (file, data) {
-        
+
     },
     onFileUploadComplete: function (file) {
-        
+
     },
     onParseStart: function () {
-        
+
     },
     onParseEnd: function (req, next) {
-        
+
         next();
     },
     onError: function (e, next) {
         if (e) {
-            
+
         }
         next();
     }
@@ -392,7 +426,7 @@ app.post('/stories/:name', upload.any(), function (req, res) {
     var name = req.params.name;
     var file = req.files.file[0];
     var path = './app/stories/';
-    
+
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
@@ -401,7 +435,7 @@ app.post('/stories/:name', upload.any(), function (req, res) {
     var stream = fs.createWriteStream(path + fileName);
     stream.write(buffer);
     stream.on('error', function (err) {
-        
+
         res.status(400).send({
             message: 'Problem saving the file. Please try again.'
         });
@@ -411,8 +445,9 @@ app.post('/stories/:name', upload.any(), function (req, res) {
         res.status(204);
     });
     stream.end();
-    
+
 });
+
 
 
 app.use(express.static(__dirname + '/app'));
