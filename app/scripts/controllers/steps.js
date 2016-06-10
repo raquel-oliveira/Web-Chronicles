@@ -1,7 +1,9 @@
 'use strict';
 var myApp = angular.module('cApp');
 
+
 myApp.controller('RiddleCtrl', function ($scope, $http, story) {
+
   $scope.verifyAnswer = function (answer) {
 
         $http.get('stories/' + story.get().file + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
@@ -70,6 +72,9 @@ myApp.controller('EndCtrl', function ($scope, $http, story) {
 
     });
  });
+
+
+
 
  myApp.controller('MCCtrl', function ($scope) {
    $scope.optionsRadio = true;

@@ -5,6 +5,7 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 const multer = require('multer');
 const util = require('util');
+var bodyParser = require('body-parser')
 const Levenshtein = require('levenshtein');
 const sp = require('./libs/shortestpath2.js');
 // Constants
@@ -264,7 +265,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 });
 
 
-var upload = multer({
+/*var upload = multer({
     dest: './app/stories/',
     rename: function (fieldname, filename) {
         return filename;
@@ -272,19 +273,21 @@ var upload = multer({
     inMemory: true //This is important. It's what populates the buffer.
     ,
     onFileUploadStart: function (file) {
-        
+
     },
     onFileUploadData: function (file, data) {
-        
+        //totest
+        myCache.set('file',data);
     },
     onFileUploadComplete: function (file) {
-        
+
     },
     onParseStart: function () {
-        
+
+
     },
     onParseEnd: function (req, next) {
-        
+
         next();
     },
     onError: function (e, next) {
@@ -293,37 +296,44 @@ var upload = multer({
         }
         next();
     }
-});
+});*/
 
 
 
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(bodyParser.json());
 
 
+app.post('/stories/', function (req, res) {
 
-app.post('/stories/:name', upload.any(), function (req, res) {
+    console.log(req.body);
 
-    var name = req.params.name;
-    var file = req.files.file[0];
+    var xmltoStore = toXML(req.body);
+    //console.dir(req);
     var path = './app/stories/';
-    
+
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
-    var buffer = file.buffer; //Note: buffer only populates if you set inMemory: true.
-    var fileName = file.name;
-    var stream = fs.createWriteStream(path + fileName);
-    stream.write(buffer);
-    stream.on('error', function (err) {
-        
-        res.status(400).send({
-            message: 'Problem saving the file. Please try again.'
-        });
-    });
-    stream.on('finish', function () {
 
-        res.status(204);
-    });
-    stream.end();
+            fs.writeFile(path+'fileName'+'.xml', xmltoStore, function (err) {
+                if(err) {
+                    res.status(400).send({
+                        message: 'Problem saving the file. Please try again.'
+                    });
+                }
+                else {
+
+                    res.redirect("back");
+
+                }
+            });
+
+
+
     
 });
 
