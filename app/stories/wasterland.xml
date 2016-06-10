@@ -135,7 +135,7 @@
             <id>10</id>
             <description> Sables ombragés. On vous apprend la position de ... todo </description>
 	    <type>end</type>
-            <end>false</end>
+            <win>false</win>
         </content>
     </step>
     <step>

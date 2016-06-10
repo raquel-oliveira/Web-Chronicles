@@ -1,8 +1,8 @@
 <div>
   <b>Choix:</b>
   <ul>
-    <li ng-repeat="s in step.content.nextStep">
-      {{ s._label }} -> Step <b>{{ s.__text }}</b>
+    <li ng-repeat="s in step.content[0].nextStep">
+      {{ s.$.label }} -> Step <b>{{ s._ }}</b>
     </li>
   </ul>
   

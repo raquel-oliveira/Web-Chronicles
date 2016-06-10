@@ -8,12 +8,12 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
 
           if (reponse.status === 200) {
               $scope.showhint = false;
-              $scope.goToStep(reponse.data.answer._stepId);
+              $scope.goToStep(reponse.data.$.stepId);
           }
           else {
               $scope.showhint = true;
-              $scope.hint = reponse.data.hint;
-              console.log( reponse.data.hint);
+              $scope.hint = reponse.data;
+              console.log( reponse);
               console.log($scope.hint);
               $scope.hint.close = 'Not even close';
 
@@ -72,16 +72,12 @@ myApp.controller('EndCtrl', function ($scope, $http) {
 
  myApp.controller('MCCtrl', function ($scope) {
    $scope.optionsRadio = true;
-   console.log("in the controller");
-  if ($scope.currentStep.type === 'multiple_choice'){ //just to confirm
-    console.log("is multiple");
-    if (!Array.isArray($scope.currentStep.nextStep)){
-      $scope.optionsRadio = false;
-      $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
-      console.log("is object");
-    }else{
-      $scope.optionsRadio = true;
-      console.log("is array of size:"+ $scope.currentStep.nextStep.length);
-    }
+  if (!Array.isArray($scope.currentStep.nextStep)){
+    $scope.optionsRadio = false;
+    $scope.selectedAnswer = $scope.currentStep.nextStep.__text;
+  }
+  else{
+    $scope.optionsRadio = true;
+
   }
 });

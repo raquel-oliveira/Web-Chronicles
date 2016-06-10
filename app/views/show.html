@@ -2,16 +2,16 @@
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 <div class="show">
-  <h1>Stories</h1>
+  <h1>{{selected._label}}</h1>
   <p>Choose a story: </p>
-  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"></select>
+  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
   <div id="network-story" ng-style="graphStyle"></div>
-  <p ng-hide="hasShortestPath" ng-style="infoStyle">No path from start to end</p>
+  <p class="error" ng-hide="hasShortestPath" >No path from start to end</p>
 
   <div ng-show="showDatas">
     <h2>Step datas</h2>
-    <div><b>Step id</b> : {{ step.content.id }}</div>
-    <div><b>Type</b> : {{ step.content.type }}</div>
+    <div><b>Step id</b> : {{ step.content[0].id[0] }}</div>
+    <div><b>Type</b> : {{ step.content[0].type[0] }}</div>
     <div ng-show="step.content.title != undefined"><b>Step title</b> : {{ step.content.title }}</div>
     <div ng-show="step.content.description != undefined"><b>Step description</b> : {{ step.content.description }}</div>
     <div ng-show="step.content.hint != undefined"><b>Hint</b> : {{ step.content.hint._label }}</div>

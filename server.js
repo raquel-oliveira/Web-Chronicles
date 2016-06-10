@@ -9,248 +9,258 @@ const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
 // Constants
 const PORT = 8080;
+const STORY_PATH = './app/stories/';
 
 // App
 const app = express();
 
-app.get('/hello/',function (req, res) {
-    sp.hello2();
-    res.send('say');
+function toXML(result)
+{
+    var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
+    var xml2 = builder.buildObject(result);
+    return builder.buildObject(result);
+}
 
-});
 
-app.get('/compute/:name/:sizez', function (req, res) {
-    var name = req.params.name;
-    var lengthAsked = req.params.sizez;
-    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
-        if (err) {
-            res.statusCode = 404;
-            res.send("story not found");
-        }
-        else {
-            var parseString = xml2js.parseString;
-            parseString(data, function (err, result) {
-                if (err) {
-                    res.statusCode = 404;
+var NodeCache = require( "node-cache" );
+var myCache = new NodeCache( { stdTTL: 0, checkperiod: 0 } );
 
-                    res.send("bad story");
+function initCache(fileName) {
+    console.log('init cahc');
+    console.log(fileName);
+    fs.readdir('./app/stories', function (err, files) {
+            files
+            .filter(function(file) {
+                var parts = file.split(".");
+                if(parts[1] === 'xml' )
+                {
+                    if(fileName===undefined)
+                    {
+                        return true;
+                    }
+                    if(fileName===parts[0])
+                    {
+                        return true;
+                    }
+
                 }
-
-
-                //construct graph representation
-                sp.fillgraph(result.story.step);
-
-
-                var data = sp.shortestPath(lengthAsked);
-                console.log(data);
-                //res.set('Content-Type', 'text/xml');
-                res.statusCode = 200;
-                res.send(data);
-
-            });
-        }
-    });
-});
-
-app.get('/stories', function (req, res) {
-    fs.readdir('./app/stories', function (err, data) {
-        if (err) {
-            res.statusCode = 404;
-            res.send('error\n');
-            
-
-
-        }
-        else {
-            //res.statusCode = 200;
-            var stories = [];
-            var toDoS = 0;
-            data.forEach(function (item) {
-
-                var paths = item.split(".");
-                if (paths[1] == 'xml') {
-                    toDoS++;
-                }
-            });
-            data.forEach(function (item) {
-
-                var paths = item.split(".");
-                if (paths[1] == 'xml') {
-
+                return false;
+            })
+            .forEach(function (item) {
+                    var name = item.split(".")[0];
                     //lire fichier pour name
                     fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
                         if (err) {
-                            
+
                         }
                         else {
 
                             var parseString = xml2js.parseString;
-
                             parseString(data2, function (err, result) {
                                 if (err) {
-                                    
+
                                     return;
                                 }
-                                
 
-                                
-                                var story = {
-                                    $: {
-                                        file: paths[0],
-                                        label: result.story.$.name
-                                    }
-                                };
-                                stories.push(story);
+                                result.file = name;
+                               // stories.push(story);
+                                myCache.set(name+'.json',result);
+                                myCache.set(name+'.xml', toXML(result));
+                                console.log("added "+name+" to cache");
 
-                                if(toDoS==stories.length)
-                                {
-                                    
-                                    var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
-                                    var wrap = {story: stories};
-
-                                    var xml2 = builder.buildObject(wrap);
-                                    res.send(xml2);
-                                }
                             });
                         }
                     });
-                }
+
             });
+
+    });
+}
+
+initCache();
+
+function contains(key)
+{
+    var keyToF = key+'.xml';
+    myCache.keys().forEach(function (item) {
+        if(keyToF===item.file)
+        {
+            return true;
         }
     });
+    return false;
+}
+
+
+app.get('/show/story/:name',function (req, res) {
+    if( req.accepts('xml'))
+    {
+        res.set('Content-Type', 'text/xml');
+        res.send(myCache.get(req.params.name+'.xml'));
+    }
+    else {
+        res.set('Content-Type', 'application/json');
+        res.send(myCache.get(req.params.name+'.json'));
+    }
+
 });
 
+app.get('/hello/',function (req, res) {
+    initCache();
+    res.send('hi');
+});
+
+app.get('/hello/keys',function (req, res) {
+    //myCache.set(item+'.json',result);
+    //var value = myCache.get( "myKey" );
+    var mykeys = myCache.keys();
+    res.send(mykeys);
+});
+
+app.get('/compute/:name/:sizez', function (req, res) {
+
+    var rep = myCache.get(req.params.name+'.json');
+    if(rep === undefined)
+    {
+        send()
+    }
+    sp.fillgraph(rep.story.step);
+    var data = sp.shortestPath();
+    console.log(data);
+    
+    if(req.params.sizez === 'true')
+    {
+        res.send(data.length+'');
+    }
+    else {
+        res.send(data);
+    }
+});
+
+app.get('/stories', function (req, res) {
+    //read the dir
+    console.dir('/stories');
+    console.dir(myCache.keys());
+
+    var toSend = [];
+
+    myCache.keys().forEach(function(item)
+    {
+        console.log(item);
+
+        if( item.split(".")[1] === 'json')
+        {
+            var sto = myCache.get(item);
+            var file = {
+                file:item.split(".")[0],
+                label:sto.story.$.name
+            };
+            console.log(file);
+            toSend.push(file);
+        }
+
+    });
+
+    res.send(toSend);
+});
+
+app.get('/show/stories', function (req, res) {
+    //read the dir
+    console.dir('/stories');
+    console.dir(myCache.keys());
+
+    var toSend = [];
+
+    myCache.keys().forEach(function(item)
+    {
+        console.log(item);
+
+        if( item.split(".")[1] === 'json')
+        {
+
+            toSend.push(myCache.get(item).name);
+        }
+    });
+    res.send(toSend);
+
+});
 
 app.get('/show/stories/:name', function (req, res) {
-
-
-    var name = req.params.name;
-    //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
-    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
-        if (err) {
-            res.statusCode = 404;
-            res.send("story not found");
-        }
-        else {
-            res.set('Content-Type', 'text/xml');
-            res.statusCode = 200;
-            
-            res.send(data);
-        }
-    });
-
+    res.send(myCache.get(req.params.name+'.json'));
 });
-
 
 app.get('/stories/:name/step/:step', function (req, res) {
 
     var name = req.params.name;
     var step = req.params.step;
 
-    //fs.readFile('./app/stories/'+name+'.xml', 'utf8',function(err,data) {
-    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
-        if (err) {
-            res.statusCode = 404;
-            res.send("story not found");
-        }
-        else {
-            res.set('Content-Type', 'text/xml');
+    var json = myCache.get(req.params.name+'.json');
+    console.dir(json);
+    console.dir(req.params.name);
 
-            res.statusCode = 200;
+    res.send(json.story.step[step].content[0]);
 
-            var parseString = xml2js.parseString;
-
-            parseString(data, function (err, result) {
-
-
-                var builder = new xml2js.Builder({rootName: 'content'});
-                try {
-                    var xml2 = builder.buildObject(result.story.step[step].content[0]);
-                    
-                    res.send(xml2);
-                }
-                catch (e) {
-                }
-            });
-        }
-    });
 
 });
 
+app.get('/stories/:name/haveHappyEnd', function (req, res) {
+
+    var json = myCache.get(req.params.name+'.json');
+    var found = false;
+    json.story.step.forEach(function(item){
+        if(item.content[0].type[0]==='end'&&typeof item.content[0].win!== 'undefined' && item.content[0].win[0]==='true')
+        {
+            res.send(true+'');
+            found = true;
+            return;
+        }
+    })
+    if(!found)
+        res.send(false+'');
+});
+
 app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
-    var name = req.params.name;
-    var step = req.params.step;
+
+    var step = parseInt(req.params.step);
     var reponse = req.params.reponse;
 
-    fs.readFile('./app/stories/' + name + '.xml', 'utf8', function (err, data) {
-        if (err) {
-            res.statusCode = 404;
-            res.send("story not found");
+    var result = myCache.get(req.params.name+'.json');
+
+    console.dir(result);
+    console.dir(result.story.step[step]);
+    console.log(step);
+    console.dir(result.story.step[step].hiden);
+    console.dir(result.story.step[step].hiden[0]);
+    var answerS = result.story.step[step].hiden[0].answer;
+    var minLevDist = 100;
+
+    var found = false;
+    //distance
+    answerS.forEach(function (answer) {
+        if (answer._ == reponse) {
+
+            res.send(answer);
+            found = true;
         }
-        else {
-            var parseString = xml2js.parseString;
-            var xml = data;
-            parseString(xml, function (err, result) {
-                if (err) {
-                    res.statusCode = 404;
-                    res.send("bad story");
-                }
+        var lComp = Levenshtein( answer._, reponse );
+        if(lComp < minLevDist)
+            minLevDist=lComp;
 
-                res.set('Content-Type', 'text/xml');
-
-
-                var answerS = result.story.step[step].hiden[0].answer;
-                var minLevDist = 100;
-                
-                
-                var found = false;
-                answerS.forEach(function (answer) {
-                    if (answer._ == reponse) {
-                        var builder = new xml2js.Builder({rootName: 'answer'});
-                        var xml2 = builder.buildObject(answer);
-                        
-                        res.statusCode = 200;
-                        res.send(xml2);
-                        found = true;
-                    }
-                    var lComp = Levenshtein( answer._, reponse );
-                    
-                    
-                    if(lComp < minLevDist)
-                        minLevDist=lComp;
-
-                });
-
-                if(!found) {
-                    try {
-
-                        
-
-                        var hint = {
-                            _: result.story.step[step].hiden[0].hint[0],
-                            $: {
-                                distance: minLevDist
-                            }
-                        };
-                        var builder = new xml2js.Builder({rootName: 'hint'});
-                        var xml2 = builder.buildObject(hint);
-                        
-                        
-                        
-
-
-                    }
-                    catch (e) {
-                        
-                    }
-                    res.statusCode = 210;
-                    
-                    res.send(xml2);
-                }
-
-            });
-        }
     });
+
+    if(!found) {
+
+        var hint = {
+            hint: result.story.step[step].hiden[0].hint[0],
+            distance: minLevDist
+
+        };
+
+        res.statusCode = 210;
+        res.send(hint);
+    }
+
+
 });
 
 
@@ -293,11 +303,7 @@ var upload = multer({
 app.post('/stories/:name', upload.any(), function (req, res) {
 
     var name = req.params.name;
-    
-    //
-    
     var file = req.files.file[0];
-
     var path = './app/stories/';
     
 
@@ -327,3 +333,5 @@ app.use(express.static(__dirname + '/'));
 
 
 app.listen(PORT);
+
+console.log('Started on port:'+PORT);

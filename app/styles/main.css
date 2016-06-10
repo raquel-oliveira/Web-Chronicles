@@ -87,12 +87,13 @@ body {
 
   }
 
-  .end, .riddle, .step{
-
+  .end, .riddle, .step, .multiple_choice{
+    font-size: 20px;
+    text-align: center;
   }
 
   .steps{
-
+    border-top: 1px solid #e5e5e5;
   }
 
   .btn-app{
@@ -112,4 +113,12 @@ body {
     height:60px;   /* Height of the footer */
     bottom:0;
   }
+
+  .error{
+    color : red;
+    font-weight : bold;
+    font-size : 30px
+  }
+
+
 }

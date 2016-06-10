@@ -5,18 +5,18 @@
 <div class="play">
     <div class="choose-story" ng-show="choose">
         <h2>Choose a story: </h2>
-        <select ng-options="story as story._label for story in stories track by story._file"
+        <select ng-options="story as story.label for story in stories track by story.file"
                 ng-model="selected"></select>
         <h2>
             <a ng-click="startStory()" class="btn btn-lg">
-                Start story: {{ selected._label }}
+                Start story: {{ selected.label }}
                 <span class="glyphicon glyphicon-play"></span>
             </a>
         </h2>
     </div> <!-- <div class="choose-story" ng-show="choose"> -->
 
     <div class="story-play" ng-show="play">
-      <h1> {{ selected._label }} </h1>
+      <h1> {{ selected.label }} </h1>
         <ng-include src="'views/play_step/step.html'"></ng-include>
         <ng-include src="currentStep.url"></ng-include>
     </div> <!-- <div class="story-play" ng-show="play"> -->
