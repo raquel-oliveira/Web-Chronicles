@@ -79,4 +79,5 @@ myApp.controller('EndCtrl', function ($scope, $http) {
   else{
     $scope.optionsRadio = true;
   }
+     
 });

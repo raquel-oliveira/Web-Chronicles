@@ -7,7 +7,7 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http){
+    .controller('PlayCtrl', function ($scope, $http, $sce){
         $scope.nbSteps = 0;
         // Story
         $scope.stories = null; // list of stories
@@ -39,7 +39,9 @@ angular.module('cApp')
               $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
               $scope.stepType = data.type[0];
               $scope.play = true;
-              ++$scope.nbSteps;
+                $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
+
+                ++$scope.nbSteps;
             });
           } else {
             alert("Choose an option");
