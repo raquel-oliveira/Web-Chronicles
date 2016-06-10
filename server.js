@@ -6,7 +6,7 @@ const xml2js = require('xml2js');
 const multer = require('multer');
 const util = require('util');
 const Levenshtein = require('levenshtein');
-const sp = require('./app/scripts/shortestpath2.js');
+const sp = require('./libs/shortestpath2.js');
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
