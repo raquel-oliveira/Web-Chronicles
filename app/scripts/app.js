@@ -45,8 +45,16 @@ angular
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
+      .when('/show/:story', {
+        templateUrl: 'views/show.html',
+        controller: 'ShowCtrl',
+        controllerAs: 'show'
+      })
+
       .when('/edit', {
-        templateUrl: 'views/403.html',
+        templateUrl: 'views/edit-step.html',
+	  controller: 'EditCtrl',
+	  controllerAs: 'edit'
       })
       .when('/help', {
         templateUrl: 'views/403.html',

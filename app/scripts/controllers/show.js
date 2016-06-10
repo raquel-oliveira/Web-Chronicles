@@ -9,10 +9,14 @@ var x2js = new X2JS();
  * # ShowCtrl
  */
 angular.module('cApp')
-    .config(function ($httpProvider) {
-        $httpProvider.interceptors.push('xmlHttpInterceptor');
+    .directive('storyNetwork', function() {
+	return { template: '<div id="network-story" ng-style="graphStyle"></div>',
+		 link: function(scope) {
+		     
+		 }
+	       };
     })
-    .controller('ShowCtrl', ['$scope', '$http', 'ShortestPathService', function ($scope, $http) {
+    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
         $scope.selected = null;
         $scope.stories = null;
         $scope.network = null;
@@ -53,7 +57,7 @@ angular.module('cApp')
 	    var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
             var story = data.story;
-
+	    console.log($scope.selected);
             for (var i = 0; i < story.step.length; ++i) {
                 if (story.step[i].content[0].type[0] === 'multiple_choice') {
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
@@ -104,54 +108,44 @@ angular.module('cApp')
                     edges: edges
                 };
 
-
                 var options = {layout: {hierarchical: true}};
 
                 if ($scope.network === null) {
                     $scope.network = new vis.Network(container, data, options);
-                }
-                else {
+                } else {
                     $scope.network.setData(data);
                 }
 
                 $scope.network.on("selectNode", function (params) {
-                    $scope.$apply(function () {
-                        if (!$scope.showDatas) {
-                            $scope.showDatas = true;
-                        }
-                    });
-
-                    var id = params.nodes[0];
-                    var step;
-
-                    for (var i = 0; i < story.step.length; ++i) {
-                        if (parseInt(story.step[i].content[0].id) === id) {
-                            step = story.step[i];
-                        }
-                    }
-
-                    $scope.$apply(function () {
-                        $scope.step = step;
-                        $scope.url = 'views/show-' + step.content[0].type[0] + '.html';
-                    });
+		    $scope.$apply(function() {
+			$scope.displayNode(params.nodes[0], story);
+		    });
                 });
-
-
             });
-
         };
+
+	$scope.displayNode = function(node, story) {
+            if (!$scope.showDatas) {
+                $scope.showDatas = true;
+            }
+
+	    var step;
+	    
+            for (var i = 0; i < story.step.length; ++i) {
+                if (parseInt(story.step[i].content[0].id) === node) {
+                    step = story.step[i];
+                }
+            }
+
+	    $scope.step = step;
+            $scope.url = 'views/show-' + step.content[0].type[0] + '.html';
+	};
 
         $scope.initStory = function (story_file) {
             $http.get(story_file).success(function (data) {
                 $scope.updateGraph(data);
             });
         };
-
-        $http.get('stories/').success(function (data) {
-            $scope.initStory('show/stories/' + data[0].file);
-            $scope.stories = data;
-            $scope.selected = $scope.stories[0];
-        });
 
         $scope.changeStory = function () {
 	    $scope.network.off('selectNode');
@@ -160,4 +154,12 @@ angular.module('cApp')
                 $scope.updateGraph(data);
             });
         };
+
+	console.log($routeParams.story);
+
+	$http.get('stories/').success(function (data) {
+            $scope.initStory('show/stories/' + data[0].file);
+            $scope.stories = data;
+            $scope.selected = $scope.stories[0];
+        });
     }]);
