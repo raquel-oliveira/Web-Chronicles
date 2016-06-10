@@ -102,13 +102,13 @@ app.get('/show/story/:name',function (req, res) {
         res.set('Content-Type', 'application/json');
         res.send(myCache.get(req.params.name+'.json'));
     }
-
 });
 
 app.get('/hello/',function (req, res) {
     initCache();
     res.send('hi');
 });
+
 
 app.get('/hello/keys',function (req, res) {
     //myCache.set(item+'.json',result);
