@@ -41,14 +41,16 @@ angular.module('cApp')
 	    if (typeof color === "undefined") { color = "#D2E5FF"; }
 	    if (typeof fontColor === "undefined") { fontColor = "#343434"; }
 
-	    var shape = (nodes.length == 0)? 'box': 'ellipse';
+	    if (nodes.length === 0) {
+		color = "#3333FF";
+		fontColor = "white";
+	    }
 		
             nodes.add({
                 id: id,
                 label: id,
 		color: color,
-		font: { color: fontColor },
-		shape: shape
+		font: { color: fontColor }
             });
 	}
 
