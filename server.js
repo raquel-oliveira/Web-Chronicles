@@ -11,8 +11,47 @@ const sp = require('./app/scripts/shortestpath2.js');
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
 
+
 // App
 const app = express();
+
+var stories = [];
+
+// Return the story object which corresponds to story_file
+function getStory(story_file) {
+    for (var i = 0; i < stories.length; ++i) {
+	if (stories[i].file === story_file) { return stories[i].story; }
+    }
+    return readStory(story_file);
+}
+
+// Parse the file story_file and load the story in memory
+function readStory(story_file) {
+    fs.readFile('./app/stories/' + story_file, 'utf-8', function(error, file) {
+	if (error)  {
+	    console.log("Error: Can't read " story_file);
+	    return;
+	}
+
+	var parseString xml2js.parseString;
+	parseString(data, function (error, data)) {
+	    if (err) {
+		console.log("Error during parsing " story_file);
+		return;
+	    }
+
+	    var story = createStory(data);
+
+	    stories.push({
+		file : story_file,
+		story : story
+	    });
+
+	    return story;
+	}
+    });
+}
+
 
 function filterStep(step, filter) {
     var result = step.content[0];
@@ -113,7 +152,6 @@ function contains(key)
     return false;
 }
 
-
 app.get('/show/story/:name',function (req, res) {
     if( req.accepts('xml'))
     {
@@ -130,7 +168,6 @@ app.get('/hello/',function (req, res) {
     initCache();
     res.send('hi');
 });
-
 
 app.get('/hello/keys',function (req, res) {
     //myCache.set(item+'.json',result);
@@ -222,8 +259,6 @@ app.get('/stories/:name/step/:step', function (req, res) {
     console.dir(req.params.name);
 
     res.send(json.story.step[step].content[0]);
-
-
 });
 
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
@@ -351,6 +386,7 @@ app.post('/stories/:name', upload.any(), function (req, res) {
     stream.end();
     
 });
+
 
 
 app.use(express.static(__dirname + '/app'));
