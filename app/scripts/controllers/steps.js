@@ -1,11 +1,12 @@
 'use strict';
 var myApp = angular.module('cApp');
 
-myApp.controller('RiddleCtrl', function ($scope, $http) {
+
+myApp.controller('RiddleCtrl', function ($scope, $http, story) {
 
   $scope.verifyAnswer = function (answer) {
 
-        $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
+        $http.get('stories/' + story.get().file + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
 
           if (reponse.status === 200) {
               $scope.showhint = false;
@@ -49,7 +50,8 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
 });
 
 
-myApp.controller('EndCtrl', function ($scope, $http) {
+myApp.controller('EndCtrl', function ($scope, $http, story) {
+  $scope.storyPath = story.get().file;
        if ( $scope.currentStep.win[0] === 'true') {
          $scope.showStory = true;
          $scope.tryAgain = false;
@@ -65,7 +67,7 @@ myApp.controller('EndCtrl', function ($scope, $http) {
      }
 
 
-    $http.get('compute/' + $scope.storyPath + '/true').success(function (data) {
+    $http.get('compute/' + story.get().file + '/true').success(function (data) {
       $scope.minSteps = data;
 
     });
@@ -83,5 +85,5 @@ myApp.controller('EndCtrl', function ($scope, $http) {
   else{
     $scope.optionsRadio = true;
   }
-     
+
 });

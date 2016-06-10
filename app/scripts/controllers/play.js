@@ -7,11 +7,8 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http, $sce){
+    .controller('PlayCtrl', function ($scope, $http, $sce, story){
         $scope.nbSteps = 0;
-        // Story
-        $scope.stories = null; // list of stories
-        $scope.storyPath = null; // path of story selected
 
         // Current step
         $scope.currentStep = null;
@@ -24,24 +21,23 @@ angular.module('cApp')
         $scope.startStory = function () {
           $scope.choose = false; //disable view to choose a story
           $scope.play = true;
-          $scope.storyPath = $scope.selected.file;
           $scope.goToStep(0); // start from root
+          $scope.storyName = story.get().label;
         };
 
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
           if (undefined != step) {
             $scope.cleanLastStep();
-            $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
+            $http.get('stories/' + story.get().file + '/step/' + step).success(function (data) {
 
               console.dir(data);
               $scope.currentStep = data;
               $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
               $scope.stepType = data.type[0];
               $scope.play = true;
-                $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
-
-                ++$scope.nbSteps;
+              $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
+              ++$scope.nbSteps;
             });
           } else {
             alert("Choose an option");
@@ -54,12 +50,7 @@ angular.module('cApp')
 
         };
 
-        $http.get('stories/').success(function (data) {
-            console.dir(data);
-            $scope.stories = data;
-            console.dir($scope.stories );
-            $scope.choose = true;
-            $scope.selected = $scope.stories[0];
-            $scope.play = false;
-        });
+        $scope.choose = true;
+        $scope.play = false;
+
 });
