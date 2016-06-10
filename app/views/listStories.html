@@ -1,0 +1,9 @@
+<!-- build:css(.tmp) styles/main.css -->
+<link rel="stylesheet" href="styles/main.css">
+<!-- endbuild -->
+<div ng-controller="SetStory">
+  <div class="choose-story" ng-show="choose">
+    <p>Choose a story: </p>
+    <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
+  </div>
+</div>

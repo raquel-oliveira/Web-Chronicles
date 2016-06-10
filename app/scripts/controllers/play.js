@@ -7,11 +7,10 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http, $sce){
+    .controller('PlayCtrl', function ($scope, $http, $sce, story){
+      console.log("Play");
+      console.log(story);
         $scope.nbSteps = 0;
-        // Story
-        $scope.stories = null; // list of stories
-        $scope.storyPath = null; // path of story selected
 
         // Current step
         $scope.currentStep = null;
@@ -22,17 +21,21 @@ angular.module('cApp')
 
         /*After a story is choosed*/
         $scope.startStory = function () {
+          console.log("start story");
+          console.log(story);
+
           $scope.choose = false; //disable view to choose a story
           $scope.play = true;
-          $scope.storyPath = $scope.selected.file;
           $scope.goToStep(0); // start from root
         };
 
         /* Go to the step after click in "next" */
         $scope.goToStep = function (step) {
+          console.log("go to step");
+          console.log(story);
           if (undefined != step) {
             $scope.cleanLastStep();
-            $http.get('stories/' + $scope.storyPath + '/step/' + step).success(function (data) {
+            $http.get('stories/' + story.file + '/step/' + step).success(function (data) {
 
               console.dir(data);
               $scope.currentStep = data;
@@ -54,12 +57,6 @@ angular.module('cApp')
 
         };
 
-        $http.get('stories/').success(function (data) {
-            console.dir(data);
-            $scope.stories = data;
-            console.dir($scope.stories );
-            $scope.choose = true;
-            $scope.selected = $scope.stories[0];
-            $scope.play = false;
-        });
+        $scope.choose = true;
+        $scope.play = false;
 });

@@ -86,6 +86,10 @@ body {
   .contact{
 
   }
+  .choose-story{
+    font-size: 20px;
+    text-align: center;
+  }
 
   .end, .riddle, .step, .multiple_choice{
     font-size: 20px;

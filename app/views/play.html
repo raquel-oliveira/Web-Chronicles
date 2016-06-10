@@ -4,12 +4,10 @@
 
 <div class="play">
     <div class="choose-story" ng-show="choose">
-        <h2>Choose a story: </h2>
-        <select ng-options="story as story.label for story in stories track by story.file"
-                ng-model="selected"></select>
+        <ng-include src="'views/listStories.html'"></ng-include>
         <h2>
             <a ng-click="startStory()" class="btn btn-lg">
-                Start story: {{ selected.label }}
+                Start story: {{ storyName }}
                 <span class="glyphicon glyphicon-play"></span>
             </a>
         </h2>
