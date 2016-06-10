@@ -83,10 +83,12 @@ function createEndStep(step, stepData){
 
 function createMazeStep(step, stepData){
     step.outcomes = [];
-    for (var i = 0; i < stepData.maze.outcome.length; ++i) {
+    step.rows = stepData.maze[0].rows[0];
+    step.columns = stepData.maze[0].columns[0];
+    for (var i = 0; i < stepData.maze[0].outcome.length; ++i) {
         step.outcomes.push({
-            text: stepData.maze.outcome[i].text[0],
-            nextStep: stepData.maze.outcome[i].nextStep[0]
+            text: stepData.maze[0].outcome[i].text[0],
+            nextStep: stepData.maze[0].outcome[i].nextStep[0]
         });
     }
     
@@ -98,8 +100,8 @@ function createMazeStep(step, stepData){
             id: step.id,
             title: step.title,
             description: step.description,
-	    rows: step.maze.rows;
-	    columns: step.maze.columns;
+            rows: step.rows,
+            columns: step.columns,
             outcomes: step.outcomes,
             nextStep: []
         };
