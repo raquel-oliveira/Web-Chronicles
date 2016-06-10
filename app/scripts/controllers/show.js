@@ -34,6 +34,22 @@ angular.module('cApp')
 		arrows: { to: true }
             });
 	}
+
+	function addNode(nodes, id, color, fontColor) {
+	    if (typeof color === "undefined") { color : "#D2E5FF"; }
+	    if (typeof fontColor === "undefined") { color : "#343434"; }
+
+	    var shape = (nodes.length == 0)? 'box': 'ellipse';
+		
+            nodes.add({
+                id: id,
+                label: id,
+		color: color,
+		font: { color: fontColor },
+		shape: shape
+            });
+	}
+
 	
         $scope.updateGraph = function (story) {
             var nodes = new vis.DataSet([]);
@@ -41,10 +57,7 @@ angular.module('cApp')
 	    
             for (var i = 0; i < story.step.length; ++i) {
                 if (story.step[i].content.type === 'multiple_choice') {
-                    nodes.add({
-                        id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.id
-                    });
+		    addNode(nodes, parseInt(story.step[i].content.id));
 
 		    if (Array.isArray(story.step[i].content.nextStep)) {
 			for (let j = 0; j < story.step[i].content.nextStep.length; ++j) {
@@ -56,18 +69,9 @@ angular.module('cApp')
                 } else if (story.step[i].content.type === 'end') {
                     var color = (story.step[i].content.win === 'false') ?
                         '#882222' : '#228822';
-                    nodes.add({
-                        id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.id,
-                        color: color,
-                        font: {color: "#FFFFFF"}
-                    });
-
+		    addNode(nodes, parseInt(story.step[i].content.id), color, "#FFFFFF");
                 } else if (story.step[i].content.type === 'riddle') {
-                    nodes.add({
-                        id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.id
-                    });
+		    addNode(nodes, parseInt(story.step[i].content.id));
 
                     if (Array.isArray(story.step[i].hiden.answer)) {
                         for (let j = 0; j < story.step[i].hiden.answer.length; ++j) {
@@ -78,17 +82,10 @@ angular.module('cApp')
                     }
 
                 } else if (story.step[i].content.type === 'maze') {
-                    nodes.add({
-                        id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.id
-                    });
-
+		    addNode(nodes, parseInt(story.step[i].content.id));
 		    addEdge(edges, parseInt(story.step[i].content.id), parseInt(story.step[i].content.nextStep));
 		} else {
-                    nodes.add({
-                        id: parseInt(story.step[i].content.id),
-                        label: story.step[i].content.id
-                    });
+		    addNode(nodes, parseInt(story.step[i].content.id));
                 }
             }
 
@@ -166,6 +163,7 @@ angular.module('cApp')
 
         $scope.changeStory = function () {
 	    $scope.network.off('selectNode');
+	    $scope.showDatas = false;
             $http.get('show/stories/' + $scope.selected._file).success(function (data) {
                 $scope.updateGraph(data.story);
             });
