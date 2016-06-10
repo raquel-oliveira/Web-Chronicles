@@ -5,10 +5,9 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
   $scope.verifyAnswer = function (answer) {
 
         $http.get('stories/' + $scope.storyPath + '/step/' +  $scope.currentStep.id + "/reponse/" + answer).then(function (reponse) {
-
           if (reponse.status === 200) {
               $scope.showhint = false;
-              $scope.goToStep(reponse.data.$.stepId);
+              $scope.goToStep(reponse.data._);
           }
           else {
               $scope.showhint = true;

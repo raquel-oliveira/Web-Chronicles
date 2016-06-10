@@ -14,13 +14,36 @@ const STORY_PATH = './app/stories/';
 // App
 const app = express();
 
+function filterStep(step, filter) {
+    var result = step.content[0];
+
+    
+    if (! filter && (typeof step.hiden !== "undefined")) {
+	for (var key in step.hiden[0]) {
+	    result[key] = step.hiden[0][key];
+	}
+    }
+
+    return result;
+}
+
+function filterStory(story, filter) {
+    var result = { name : story.story.$.name, step : [] };
+
+    for (var key in story.story.step) {
+	result.step.push(filterStep(story.story.step[key], filter));
+    }
+    
+    return result;
+}
+
+
 function toXML(result)
 {
     var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
     var xml2 = builder.buildObject(result);
     return builder.buildObject(result);
 }
-
 
 var NodeCache = require( "node-cache" );
 var myCache = new NodeCache( { stdTTL: 0, checkperiod: 0 } );
@@ -67,7 +90,6 @@ function initCache(fileName) {
                                 myCache.set(name+'.json',result);
                                 myCache.set(name+'.xml', toXML(result));
                                 console.log("added "+name+" to cache");
-
                             });
                         }
                     });
@@ -186,7 +208,8 @@ app.get('/show/stories', function (req, res) {
 });
 
 app.get('/show/stories/:name', function (req, res) {
-    res.send(myCache.get(req.params.name+'.json'));
+    //res.send(myCache.get(req.params.name+'.json'));
+    res.send(filterStory(myCache.get(req.params.name+'.json'), false));
 });
 
 app.get('/stories/:name/step/:step', function (req, res) {
@@ -231,18 +254,20 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
     console.log(step);
     console.dir(result.story.step[step].hiden);
     console.dir(result.story.step[step].hiden[0]);
-    var answerS = result.story.step[step].hiden[0].answer;
+    
+    var answerS = result.story.step[step].hiden[0].nextStep;
+
     var minLevDist = 100;
 
     var found = false;
     //distance
     answerS.forEach(function (answer) {
-        if (answer._ == reponse) {
+        if (answer.$.answer == reponse) {
 
             res.send(answer);
             found = true;
         }
-        var lComp = Levenshtein( answer._, reponse );
+        var lComp = Levenshtein( answer.$.answer, reponse );
         if(lComp < minLevDist)
             minLevDist=lComp;
 

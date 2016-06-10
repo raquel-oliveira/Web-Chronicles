@@ -33,11 +33,6 @@ angular.module('cApp')
 	    if (typeof color === "undefined") { color = "#D2E5FF"; }
 	    if (typeof fontColor === "undefined") { fontColor = "#343434"; }
 
-	    if (nodes.length === 0) {
-		color = "#3333FF";
-		fontColor = "white";
-	    }
-
             nodes.add({
                 id: id,
                 label: id,
@@ -47,35 +42,27 @@ angular.module('cApp')
 	}
 
 
-        $scope.updateGraph = function (data) {
+        $scope.updateGraph = function (story) {
 	    var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
-            var story = data.story;
-            for (var i = 0; i < story.step.length; ++i) {
-                if (story.step[i].content[0].type[0] === 'multiple_choice') {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
 
-                    for (let j = 0; j < story.step[i].content[0].nextStep.length; ++j) {
-                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep[j]._));
-                    }
-                } else if (story.step[i].content[0].type[0] === 'end') {
-                    var color = (story.step[i].content[0].win[0] === 'false') ?
+	    for (var i = 0; i < story.step.length; ++i) {
+		var color, fontColor;
+
+		if (story.step[i].type[0] === 'end') {
+                    color = (story.step[i].win[0] === 'false') ?
                         '#882222' : '#228822';
+		    fontColor = "#FFFFFF";
+		}
 
-		    addNode(nodes, parseInt(story.step[i].content[0].id), color, "#FFFFFF");
-                } else if (story.step[i].content[0].type[0] === 'riddle') {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-
-                    for (let j = 0; j < story.step[i].hiden[0].answer.length; ++j) {
-                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].hiden[0].answer[j].$.stepId));
+		addNode(nodes, parseInt(story.step[i].id), color, fontColor);
+		
+		if (typeof story.step[i].nextStep !== "undefined") {
+                    for (let j = 0; j < story.step[i].nextStep.length; ++j) {
+                        addEdge(edges, parseInt(story.step[i].id), parseInt(story.step[i].nextStep[j]._));
                     }
-                } else if (story.step[i].content[0].type[0] === 'maze') {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-                    addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep[0]._));
-                } else {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-                }
-            }
+		}
+	    }
 
             $http.get('compute/' + $routeParams.story + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
@@ -125,19 +112,19 @@ angular.module('cApp')
 	    var step;
 
             for (var i = 0; i < story.step.length; ++i) {
-                if (parseInt(story.step[i].content[0].id) === node) {
+                if (parseInt(story.step[i].id) === node) {
                     step = story.step[i];
                 }
             }
 
 	    $scope.step = step;
-            $scope.url = 'views/show-' + step.content[0].type[0] + '.html';
+            $scope.url = 'views/show-' + step.type[0] + '.html';
 	};
 
     if($routeParams.story !== undefined){
-      $http.get('show/stories/'+ $routeParams.story).success(function (data) {
-                  $scope.updateGraph(data);
-                  $scope.storyName = data.story.$.name;
-              });
+	$http.get('show/stories/'+ $routeParams.story).success(function (data) {
+            $scope.updateGraph(data);
+            $scope.storyName = data.name;
+      });
     }
 }]);

@@ -52,10 +52,10 @@ function addVertex(item)
     if(typeof item.hiden !== 'undefined' ) {
 
 
-        item.hiden[0].answer.forEach(function(nextStepID) {
+        item.hiden[0].nextStep.forEach(function(step) {
 
 
-            vertex.to.push(nextStepID.$.stepId);
+            vertex.to.push(step._);
         });
 
     }

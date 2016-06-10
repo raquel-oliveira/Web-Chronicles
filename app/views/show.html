@@ -8,11 +8,11 @@
 
   <div ng-show="showDatas">
     <h2>Step datas</h2>
-    <div><b>Step id</b> : {{ step.content[0].id[0] }}</div>
-    <div><b>Type</b> : {{ step.content[0].type[0] }}</div>
-    <div ng-show="step.content[0].title != undefined"><b>Step title</b> : {{ step.content[0].title[0] }}</div>
-    <div ng-show="step.content[0].description != undefined"><b>Step description</b> : {{ step.content[0].description[0] }}</div>
-    <div ng-show="step.content[0].hint != undefined"><b>Hint</b> : {{ step.content[0].hint._label }}</div>
+    <div><b>Step id</b> : {{ step.id[0] }}</div>
+    <div><b>Type</b> : {{ step.type[0] }}</div>
+    <div ng-show="step.title != undefined"><b>Step title</b> : {{ step.title[0] }}</div>
+    <div ng-show="step.description != undefined"><b>Step description</b> : {{ step.description[0] }}</div>
+    <div ng-show="step.hint != undefined"><b>Hint</b> : {{ step.hint._label }}</div>
     <ng-include src="url" />
   </div>
 </div>

@@ -40,13 +40,13 @@
 
         </content>
         <hiden>
-            <answer stepId="4">abri13</answer>
-            <answer stepId="4">abri 13</answer>
-            <answer stepId="10">sables ombragés</answer>
-            <answer stepId="11">cathedrale</answer>
-            <answer stepId="11">base des super mutants</answer>
-            <answer stepId="11">confrérie de l'acier</answer>
-            <hint>On vous à parlé de l'abri 13</hint>
+	  <nextStep answer="abri13">4</nextStep>
+	  <nextStep answer="abri 13">4</nextStep>
+	  <nextStep answer="sables ombragés">10</nextStep>
+	  <nextStep answer="cathedrale">11</nextStep>
+	  <nextStep answer="base des super mutants">11</nextStep>
+	  <nextStep answer="confrérie de l'acier">11</nextStep>
+          <hint>On vous à parlé de l'abri 13</hint>
         </hiden>
 
     </step>

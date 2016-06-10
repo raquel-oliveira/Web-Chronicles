@@ -1,6 +1,6 @@
 <div>
   <b>Answers : </b>
   <ul>
-    <li ng-repeat="a in step.hiden[0].answer">{{ a._ }} -> Step <b>{{ a.$.stepId }}</b></li>
+    <li ng-repeat="a in step.nextStep">{{ a.$.answer }} -> Step <b>{{ a._ }}</b></li>
   </ul>
 </div>
