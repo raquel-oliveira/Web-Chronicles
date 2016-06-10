@@ -146,7 +146,7 @@ function createRiddleStep(step, stepData){
     }
 }
 
-var stories = [];
+var stories = {};
 
 // Return the story object which corresponds to story_file
 function getStory(story_file) {
@@ -171,18 +171,17 @@ function readStory(story_file) {
             return;
             }
 
-            var story = createStory(data);
+	    var steps = [];
+	    for (var step in data.step) {
+		steps.push(createStep(step));
+	    }
 
-            stories.push({
-            file : story_file,
-            story : story
-            });
+	    stories[story.name] = { story.name, steps : steps};
 
-            return story;
+            return stories[story_file];
         });
     });
 }
-
 
 function filterStep(step, filter) {
     var result = step.content[0];
