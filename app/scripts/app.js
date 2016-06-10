@@ -40,6 +40,11 @@ angular
         controller: 'PlayCtrl',
         controllerAs: 'play'
       })
+      .when('/play/:story', {
+        templateUrl: 'views/play.html',
+        controller: 'SetStory',
+        controllerAs: 'set'
+      })
       .when('/show/:story', {
         templateUrl: 'views/show.html',
         controller: 'ShowCtrl',
