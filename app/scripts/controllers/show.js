@@ -53,22 +53,13 @@ angular.module('cApp')
 	    var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
             var story = data.story;
-	    console.log(story.step);
-            //console.log('updateGraph');
-            //console.log(story);
-            //console.log(story.step);
 
             for (var i = 0; i < story.step.length; ++i) {
-		console.log(i);
                 if (story.step[i].content[0].type[0] === 'multiple_choice') {
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
 
-                    if (Array.isArray(story.step[i].content[0].nextStep)) {
-                        for (let j = 0; j < story.step[i].content[0].nextStep.length; ++j) {
-                            addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep[j]._));
-                        }
-                    } else {
-                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep));
+                    for (let j = 0; j < story.step[i].content[0].nextStep.length; ++j) {
+                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep[j]._));
                     }
                 } else if (story.step[i].content[0].type[0] === 'end') {
                     var color = (story.step[i].content[0].win[0] === 'false') ?
@@ -78,12 +69,8 @@ angular.module('cApp')
                 } else if (story.step[i].content[0].type[0] === 'riddle') {
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
 
-                    if (Array.isArray(story.step[i].hiden[0].answer)) {
-                        for (let j = 0; j < story.step[i].hiden[0].answer.length; ++j) {
-                            addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].hiden[0].answer[j].$.stepId));
-                        }
-                    } else {
-                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].hiden[0].answer.$.stepId));
+                    for (let j = 0; j < story.step[i].hiden[0].answer.length; ++j) {
+                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].hiden[0].answer[j].$.stepId));
                     }
                 } else if (story.step[i].content[0].type[0] === 'maze') {
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
@@ -92,9 +79,6 @@ angular.module('cApp')
 		    addNode(nodes, parseInt(story.step[i].content[0].id));
                 }
             }
-
-	    console.log(edges.get());
-	    console.log(nodes.get());
 	    
             $http.get('compute/' + $scope.selected.file + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
