@@ -158,6 +158,42 @@ function readStory(story_file) {
     });
 }
 
+app.get('/show/story/:name',function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(getShowStory(req.params.name + '.xml'));
+});
+
+function getShowStory(storyName){
+    var storyRaw = getStory(storyName);
+    var story = {
+        name: storyRaw.name,
+        steps: []
+    };
+    for (var i = 0; i < storyRaw.steps.length; ++i){
+        story.steps.push(storyRaw.steps[i].getShowInfos());
+    }
+
+    return story;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function filterStep(step, filter) {
     var result = step.content[0];
