@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<story>
+  <name>complicated ééé näme</name>
+  <file>hi.xml</file>
+  <step>
+    <id>0</id>
+    <description><![CDATA[Move on click on next]]></description>
+    <title>Single Choice</title>
+    <type>multiple_choice</type>
+    <multiple_choice>
+      <nextStep>
+        <numStep>1</numStep>
+        <label><![CDATA[Next step :2 !]]></label>
+      </nextStep>
+    </multiple_choice>
+  </step>
+  <step>
+    <id>1</id>
+    <description><![CDATA[Move on click on next]]></description>
+    <title>Single Choice</title>
+    <type>riddle</type>
+    <riddle>
+      <nextStep>
+        <numStep>2</numStep>
+        <answser>ok</answser>
+        <label><![CDATA[Next step :3 type ok in text field]]></label>
+      </nextStep>
+    </riddle>
+  </step>
+  <step>
+    <id>3</id>
+    <description><![CDATA[This is <b>First step !</b>]]></description>
+    <title>text</title>
+    <type>maze</type>
+    <maze>
+      <rows>5</rows>
+      <columns>2</columns>
+      <nextStep>
+        <numStep>4</numStep>
+      </nextStep>
+    </maze>
+  </step>
+  <step>
+    <id>0</id>
+    <description><![CDATA[This is <b>First step !</b>]]></description>
+    <title>text</title>
+    <type>end</type>
+    <end>true</end>
+  </step>
+</story>
