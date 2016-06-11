@@ -64,7 +64,7 @@ function createMultipleChoiceStep(step, stepData) {
             r.nextStep.push(step.outcomes[i].nextStep);
         }
         return r;
-    }
+    };
 
     return step;
 }
@@ -145,10 +145,13 @@ function createRiddleStep(step, stepData) {
         return r;
     };
 
-    step.verifyAnswer = function(){
+    step.verifyAnswer = function(data){
+        // TODO Rajouter des meilleurs moyens de check qu'une égalité parfaite
         for (var i = 0; i < step.outcomes.length; ++i){
-            
+            if (step.outcomes[i].text === data)
+                return step.outcomes[i].nextStep;
         }
+        return null;
     };
 
 
@@ -235,6 +238,53 @@ app.get('/stories', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(getStoriesNamesList());
 });
+
+app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(stories[req.params.storyName].steps[req.params.step][req.params.action](req.params.data));
+    /*var step = parseInt(req.params.step);
+    var reponse = req.params.reponse;
+
+    var result = myCache.get(req.params.name + '.json');
+
+    console.dir(result);
+    console.dir(result.story.step[step]);
+    console.log(step);
+    console.dir(result.story.step[step].hiden);
+    console.dir(result.story.step[step].hiden[0]);
+
+    var answerS = result.story.step[step].hiden[0].nextStep;
+
+    var minLevDist = 100;
+
+    var found = false;
+    //distance
+    answerS.forEach(function (answer) {
+        if (answer.$.answer == reponse) {
+
+            res.send(answer);
+            found = true;
+        }
+        var lComp = Levenshtein(answer.$.answer, reponse);
+        if (lComp < minLevDist)
+            minLevDist = lComp;
+
+    });
+
+    if (!found) {
+
+        var hint = {
+            hint: result.story.step[step].hiden[0].hint[0],
+            distance: minLevDist
+
+        };
+
+        res.statusCode = 210;
+        res.send(hint);
+    }*/
+});
+
+
 
 function getStoriesNamesList() {
     var r = [];
@@ -351,53 +401,6 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
     if (!found)
         res.send(false + '');
 });
-
-app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
-
-    var step = parseInt(req.params.step);
-    var reponse = req.params.reponse;
-
-    var result = myCache.get(req.params.name + '.json');
-
-    console.dir(result);
-    console.dir(result.story.step[step]);
-    console.log(step);
-    console.dir(result.story.step[step].hiden);
-    console.dir(result.story.step[step].hiden[0]);
-
-    var answerS = result.story.step[step].hiden[0].nextStep;
-
-    var minLevDist = 100;
-
-    var found = false;
-    //distance
-    answerS.forEach(function (answer) {
-        if (answer.$.answer == reponse) {
-
-            res.send(answer);
-            found = true;
-        }
-        var lComp = Levenshtein(answer.$.answer, reponse);
-        if (lComp < minLevDist)
-            minLevDist = lComp;
-
-    });
-
-    if (!found) {
-
-        var hint = {
-            hint: result.story.step[step].hiden[0].hint[0],
-            distance: minLevDist
-
-        };
-
-        res.statusCode = 210;
-        res.send(hint);
-    }
-
-
-});
-
 
 var upload = multer({
     dest: './app/stories/',
