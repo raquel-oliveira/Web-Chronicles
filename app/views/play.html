@@ -2,21 +2,10 @@
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 
-<div class="play">
-    <div class="choose-story" ng-show="choose">
-        <h2>Choose a story: </h2>
-        <select ng-model="selected" ng-options="story as story for story in stories"></select>
-        <h2>
-            <a ng-click="startStory()" class="btn btn-lg">
-                Start story: {{ selected }}
-                <span class="glyphicon glyphicon-play"></span>
-            </a>
-        </h2>
-    </div> <!-- <div class="choose-story" ng-show="choose"> -->
-
-    <div class="story-play" ng-show="play">
-      <h1> {{ selected.label }} </h1>
+<div class="story-play">
+      <div class="title">
+         <h1> {{ storyName }} </h1>
+       </div>
         <ng-include src="'views/play_step/step.html'"></ng-include>
         <ng-include src="currentStep.url"></ng-include>
-    </div> <!-- <div class="story-play" ng-show="play"> -->
-</div> <!-- <div class="play"> -->
+</div> <!-- <div class="story-play" ng-show="play"> -->

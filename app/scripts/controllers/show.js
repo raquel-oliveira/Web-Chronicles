@@ -10,6 +10,7 @@ var x2js = new X2JS();
  */
 angular.module('cApp')
     .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+        $scope.view = "show";
         $scope.storyName = null;
         $scope.network = null;
         $scope.graphStyle = {
@@ -32,6 +33,7 @@ angular.module('cApp')
 	function addNode(nodes, id, color, fontColor) {
 	    if (typeof color === "undefined") { color = "#D2E5FF"; }
 	    if (typeof fontColor === "undefined") { fontColor = "#343434"; }
+
 
             nodes.add({
                 id: id,
@@ -74,8 +76,8 @@ angular.module('cApp')
                 var edgesData = edges.get();
                 for (var i = 0; i < spData.data.length - 1; ++i) {
                     for (var j = 0; j < edgesData.length; ++j) {
-                        if (parseInt(spData.data[i]) == edgesData[j].from &&
-                            parseInt(spData.data[i + 1]) == edgesData[j].to) {
+                        if (parseInt(spData.data[i]) === edgesData[j].from &&
+                            parseInt(spData.data[i + 1]) === edgesData[j].to) {
                             edges.update({id: edgesData[j].id, color: 'green', 'width': 3});
                         }
                     }

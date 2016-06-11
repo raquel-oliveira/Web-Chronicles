@@ -45,13 +45,13 @@ myApp.controller('EndCtrl', function ($scope, $http) {
         $scope.tryAgain = false;
         $scope.winT = true;
         $scope.win = "You win";
-        $scope.winStyle = {'font-size': '100px', 'text-align': 'center', 'color': 'green'};
+        $scope.winStyle = {'color': 'green'};
     } else {
         $scope.showStory = false;
         $scope.winT = false;
         $scope.tryAgain = true;
         $scope.win = "You lose";
-        $scope.winStyle = {'font-size': '100px', 'text-align': 'center', 'color': 'red'};
+        $scope.winStyle = {'color': 'red'};
     }
 
 

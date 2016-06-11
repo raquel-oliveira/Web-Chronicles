@@ -36,11 +36,11 @@ function addVertex(item)
 	item.win === true) {
         vertex.end = true;
     }
-    
+
     if(typeof item.nextStep !== 'undefined' && item.nextStep) {
 	console.log(item);
 
-	
+
         item.nextStep.forEach(function(nextStepID) {
 
             vertex.to.push(nextStepID);
@@ -97,7 +97,7 @@ function shortestPath() {
             if(graph[item].visited===-1)
             {
 
-                
+
                 graph[item].visited = indexCur;
                 iDtoExplore.push(item);
 

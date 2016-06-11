@@ -1,12 +1,25 @@
-<form novalidate ng-controller="EditorCtrl">
+<div ng-controller="EditCtrl">
 
-    <input ng-model="step.content.title" type="text"/>
-    <input ng-model="step.content.description" type="text"/>
-    <input ng-model="step.content.id" type="number"/>
+ <div>
+     <label>Nom : </label><input ng-model="storyName" type="text"/>
+     <label>Nom Ficier :</label><input ng-model="storyPath" type="text"/>
+     Create new story <input type="button" ng-click="newStory()"/>
+ </div>
+<form  ng-submit="submitMyForm()">
+
+    <label>Titre : </label><input ng-model="currentStep.content.title" type="text"/>
+    <label>Desc : </label><textarea ng-model="currentStep.content.description"/></textarea>
+    <label>id : </label><input ng-model="currentStep.content.id" type="number"/>
 
     <input type="radio" ng-model="stem.content.type" value="multiple_choice">multiple_choice
     <input type="radio" ng-model="stem.content.type" value="riddle">riddle
     <input type="radio" ng-model="stem.content.type" value="maze">maze
 
+
+    <input type="button" ng-click="addStep()"/>
+    <input type="submit">Add Step<input/>
+
     <ng-include src="step.typeUrl"></ng-include>
+
 </form>
+</div>

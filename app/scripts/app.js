@@ -36,17 +36,22 @@ angular
         controllerAs: 'contact'
       })
       .when('/play', {
+        templateUrl: 'views/chooseStory.html',
+        controller: 'PlayCtrl',
+        controllerAs: 'play'
+      })
+      .when('/play/:story', {
         templateUrl: 'views/play.html',
         controller: 'PlayCtrl',
         controllerAs: 'play'
       })
-      .when('/show/:story', {
-        templateUrl: 'views/show.html',
+      .when('/show', {
+        templateUrl: 'views/chooseStory.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
-      .when('/show', {
-        templateUrl: 'views/403.html',
+      .when('/show/:story', {
+        templateUrl: 'views/show.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })

@@ -152,7 +152,7 @@ function createRiddleStep(step, stepData) {
     };
 
     step.verifyAnswer = function(data){
-        // TODO Rajouter des meilleurs moyens de check qu'une égalité parfaite
+        // TODO Rajouter des meilleurs moyens de check qu'une Ã©galitÃ© parfaite
         for (var i = 0; i < step.outcomes.length; ++i){
             if (step.outcomes[i].text === data)
                 return {
