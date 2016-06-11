@@ -37,6 +37,14 @@ function createStep(stepData) {
     return step;
 }
 
+function copyStepBasicData(from, to){
+    to.title = from.title;
+    to.description = from.description;
+    to.type = from.type;
+    to.id = from.id;
+
+    return to;
+}
 function createMultipleChoiceStep(step, stepData) {
     step.type = 'multiple_choice';
     step.outcomes = [];
@@ -49,17 +57,15 @@ function createMultipleChoiceStep(step, stepData) {
     }
 
     step.getPlayInfos = function () {
-        return step;
+        return copyStepBasicData(step, {
+            outcomes: step.outcomes
+        });
     };
     step.getShowInfos = function () {
-        var r = {
-            id: step.id,
-            type: step.type,
-            title: step.title,
-            description: step.description,
+        var r = copyStepBasicData(step, {
             outcomes: step.outcomes,
             nextStep: []
-        };
+        });
         for (var i = 0; i < step.outcomes.length; ++i) {
             r.nextStep.push(step.outcomes[i].nextStep);
         }
@@ -74,17 +80,15 @@ function createEndStep(step, stepData) {
     step.win = stepData.end[0].win[0] === "true";
 
     step.getPlayInfos = function () {
-        return step;
+        return copyStepBasicData(step, {
+            win: step.win
+        });
     };
     step.getShowInfos = function () {
-        return {
-            id: step.id,
-            type: step.type,
-            title: step.title,
-            description: step.description,
+        return copyStepBasicData(step, {
             win: step.win,
             nextStep: []
-        };
+        });
     };
 
     return step;
@@ -97,11 +101,19 @@ function createMazeStep(step, stepData) {
     step.columns = stepData.maze[0].columns[0];
 
     step.getPlayInfos = function () {
-        return step;
+        return copyStepBasicData(step, {
+            nextStep: step.nextStep,
+            rows: step.rows,
+            columns: step.columns
+        })
     };
 
     step.getShowInfos = function () {
-        return step;
+        return copyStepBasicData(step, {
+            nextStep: step.nextStep,
+            rows: step.rows,
+            columns: step.columns
+        })
     };
 
     return step;
@@ -121,25 +133,18 @@ function createRiddleStep(step, stepData) {
     }
 
     step.getPlayInfos = function () {
-        return {
-            id: step.id,
-            title: step.title,
-            description: step.description,
+        return copyStepBasicData(step, {
             question: step.question
-        }
+        });
     };
 
     step.getShowInfos = function () {
-        var r = {
-            id: step.id,
-            type: step.type,
-            title: step.title,
-            description: step.description,
+        var r = copyStepBasicData(step, {
             question: step.question,
             hint: step.hint,
 	    outcomes: step.outcomes,
             nextStep: []
-        };
+        });
         for (var i = 0; i < step.outcomes.length; ++i) {
             r.nextStep.push(step.outcomes[i].nextStep);
         }
@@ -150,9 +155,15 @@ function createRiddleStep(step, stepData) {
         // TODO Rajouter des meilleurs moyens de check qu'une égalité parfaite
         for (var i = 0; i < step.outcomes.length; ++i){
             if (step.outcomes[i].text === data)
-                return step.outcomes[i].nextStep;
+                return {
+                    correct: true,
+                    nextStep: step.outcomes[i].nextStep
+                }
         }
-        return null;
+        return {
+            correct: false,
+            hint: step.hint
+        };
     };
 
 
@@ -232,6 +243,7 @@ app.get('/play/:storyName/:step', function (req, res) {
 function getPlayStep(storyName, stepId) {
     var storyRaw = stories[storyName];
     var stepRaw = storyRaw.steps[stepId];
+    console.log(stepRaw.getPlayInfos());
     return stepRaw.getPlayInfos();
 }
 
@@ -289,11 +301,9 @@ app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
 
 function getStoriesNamesList() {
     var r = [];
-    console.log("Bonjour");
     for (var i = 0; i < Object.keys(stories).length; ++i) {
         r.push(Object.keys(stories)[i]);
     }
-    console.log(r);
     return r;
 }
 
