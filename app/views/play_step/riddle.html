@@ -1,13 +1,12 @@
 <div class="riddle" ng-controller="RiddleCtrl">
     <form novalidate>
         <input ng-model="answer" type="text"/>
-        <p>Your guess is {{answer}}</p>
 
         <a class="btn btn-lg btn-app" ng-click="verifyAnswer(answer)">Next</a>
         <div ng-show="showhint">
 
-            <div>Hint: <span ng-bind="hint.__text"></span></div>
-            <div>Distance: <span ng-bind="hint._distance"></span></div>
+            <div>Hint: <span ng-bind="hint.hint"></span></div>
+            <div>Distance: <span ng-bind="hint.distance"></span></div>
             <div> <span ng-bind="hint.close"></span></div>
         </div>
     </form>

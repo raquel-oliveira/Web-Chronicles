@@ -105,8 +105,6 @@ angular.module('cApp')
 	};
 
 	$scope.handleKey = function($event) {
-	    if ($scope.endReached) { return; }
-
 	    if ($event.keyCode === 40) {
 		if ($scope.player.y < $scope.nbRows - 1 &&
 		    ! $scope.isWall($scope.translate($scope.player.x, $scope.player.y),
@@ -136,6 +134,11 @@ angular.module('cApp')
 	    if ($scope.player.x === $scope.end.x &&
 	        $scope.player.y === $scope.end.y) {
 		$scope.endReached = true;
+	    }
+
+	    if ($scope.endReached &&
+		($scope.player.x !== $scope.end.x || $scope.player.y !== $scope.end.y)) {
+		$scope.endReached = false;
 	    }
 	};
 

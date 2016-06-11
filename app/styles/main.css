@@ -87,8 +87,28 @@ body {
 
   }
 
-  .end, .riddle, .step, .multiple_choice{
+  .title{
+    color: blue;
+    text-align: center;
+    font-size: 50px;
+    border: 25px solid navy;
+  }
+  .choose-story{
     font-size: 20px;
+    text-align: center;
+  }
+
+  .riddle, .step, .multiple_choice{
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .info-end, .maze{
+    text-align: center;
+  }
+
+  .end{
+    font-size: 200px;
     text-align: center;
   }
 

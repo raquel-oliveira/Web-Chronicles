@@ -1,4 +1,5 @@
-<div ng-controller="MazeCtrl"
+<div class="maze">
+  <div ng-controller="MazeCtrl"
      ng-style="mazeStyle"
      ng-keydown="handleKey($event)"
      tabindex="1">
@@ -7,5 +8,6 @@
       <td ng-repeat="c in r" ng-style="getStyle(c)"></td>
     </tr>
   </table>
-  <button ng-click="goToStep(currentStep.nextStep.__text)" ng-hide="! endReached"> Next</button>
+    <button ng-click="goToStep(currentStep.nextStep[0]._)" ng-hide="! endReached"> Next</button>
+  </div>
 </div>

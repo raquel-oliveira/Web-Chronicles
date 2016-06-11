@@ -1,1 +1,3 @@
-<span><b>Win</b> : {{ step.content.win }}</span>
+<b>Status</b> : 
+<span ng-hide="step.content[0].win[0] === 'true'">lose</span>
+<span ng-hide="step.content[0].win[0] === 'false'">win</span>

@@ -1,6 +1,6 @@
-<div ng-controller="ShowRiddleCtrl">
+<div>
   <b>Answers : </b>
   <ul>
-    <li ng-repeat="a in answers">{{ a.__text }} -> Step <b>{{ a._stepId }}</b></li>
+    <li ng-repeat="a in step.hiden[0].answer">{{ a._ }} -> Step <b>{{ a.$.stepId }}</b></li>
   </ul>
 </div>

@@ -115,8 +115,8 @@
                 Trudy: ça marche !
                 Vous suivez le garde. Il vous conduit à travers un couloir jusqu'à une porte isolée.
                 Tout le monde roupille et vous ne tardez pas à prendre la direction des sables ombragés, pour ramener Trudi à sa famille.
-                <nextStep label="sables ombragés">11</nextStep>
             </description>
+	    <nextStep label="sables ombragés">11</nextStep>
 	    <type>multiple_choice</type>
         </content>
     </step>
@@ -135,7 +135,7 @@
             <id>10</id>
             <description> Sables ombragés. On vous apprend la position de ... todo </description>
 	    <type>end</type>
-            <end>false</end>
+            <win>false</win>
         </content>
     </step>
     <step>

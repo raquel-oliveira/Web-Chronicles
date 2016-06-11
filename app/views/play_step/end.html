@@ -1,9 +1,9 @@
 <!-- build:css(.tmp) styles/main.css -->
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
-<div class="end" id="end-status" ng-controller="EndCtrl">
-  <span ng-style="winStyle"> {{ win }}</span>
-  <div ng-show="winT">
+<div id="end-status" ng-controller="EndCtrl">
+  <span class="end" ng-style="winStyle">{{ win }}</span>
+  <div class="info-end" ng-show="winT">
     <p>Number of step made it:  {{ nbSteps }}<p/>
     <p>Minimum number of step:  {{ minSteps }}<p/>
   </div> <!--<div ng-show="winT">-->
@@ -11,6 +11,6 @@
     <a class="btn btn-lg btn-app" ng-href="#/" >Try again?</a> <!-- #/play use ng-click or another to update the page without save previews data -->
   </div><!--<div ng-show= "tryAgain">-->
   <div ng-show= "showStory">
-    <a class="btn btn-lg btn-app" ng-href="#/show">Show</a> <!-- change to use by default the story used in 'play' and data(chemin) created.-->
+    <a class="btn btn-lg btn-app" ng-href="#/show/{{storyPath}}">Show</a> <!-- change to use by default the story used in 'play' and data(chemin) created.-->
   </div> <!--<div ng-show= "showStory">-->
 </div><!--<div id="end-status">-->

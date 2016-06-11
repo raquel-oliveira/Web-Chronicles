@@ -2,19 +2,18 @@
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 <div class="show">
-  <h1>{{selected._label}}</h1>
-  <p>Choose a story: </p>
-  <select ng-model="selected" ng-change="changeStory()" ng-options="story as story._label for story in stories track by story._file"></select>
+  <h1>{{storyName}}</h1>
   <div id="network-story" ng-style="graphStyle"></div>
   <p class="error" ng-hide="hasShortestPath" >No path from start to end</p>
 
   <div ng-show="showDatas">
     <h2>Step datas</h2>
-    <div><b>Step id</b> : {{ step.content.id }}</div>
-    <div><b>Type</b> : {{ step.content.type }}</div>
-    <div ng-show="step.content.title != undefined"><b>Step title</b> : {{ step.content.title }}</div>
-    <div ng-show="step.content.description != undefined"><b>Step description</b> : {{ step.content.description }}</div>
-    <div ng-show="step.content.hint != undefined"><b>Hint</b> : {{ step.content.hint._label }}</div>
+    <div><b>Step id</b> : {{ step.content[0].id[0] }}</div>
+    <div><b>Type</b> : {{ step.content[0].type[0] }}</div>
+    <div ng-show="step.content[0].title != undefined"><b>Step title</b> : {{ step.content[0].title[0] }}</div>
+    <div ng-show="step.content[0].description != undefined"><b>Step description</b> : {{ step.content[0].description[0] }}</div>
+    <div ng-show="step.content[0].hint != undefined"><b>Hint</b> : {{ step.content[0].hint._label }}</div>
     <ng-include src="url" />
   </div>
+
 </div>
