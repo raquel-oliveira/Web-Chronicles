@@ -36,8 +36,8 @@ angular
         controllerAs: 'contact'
       })
       .when('/play', {
-        templateUrl: 'views/play.html',
-        controller: 'PlayCtrl',
+        templateUrl: 'views/chooseStory.html',
+        controller: 'SetStory',
         controllerAs: 'play'
       })
       .when('/play/:story', {

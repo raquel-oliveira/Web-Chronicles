@@ -3,17 +3,7 @@
 <!-- endbuild -->
 
 <div ng-controller="PlayCtrl">
-  <div class="play">
-    <div class="choose-story" ng-show="choose">
-        <ng-include src="'views/listStories.html'"></ng-include>
-        <h2>
-            <a ng-click="startStory()" class="btn btn-lg">
-                Let's get it start it!!!!
-            </a>
-        </h2>
-    </div> <!-- <div class="choose-story" ng-show="choose"> -->
-
-    <div class="story-play" ng-show="play">
+    <div class="story-play">
       <h1> {{ storyName }} </h1>
         <ng-include src="'views/play_step/step.html'"></ng-include>
         <ng-include src="currentStep.url"></ng-include>
