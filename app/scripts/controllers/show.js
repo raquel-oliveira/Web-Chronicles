@@ -17,7 +17,6 @@ angular.module('cApp')
     })
     .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
         $scope.view = "show";
-        console.log("in controller show");
         $scope.storyName = null;
         $scope.network = null;
         $scope.graphStyle = {
