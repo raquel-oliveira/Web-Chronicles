@@ -15,9 +15,8 @@ const STORY_PATH = './app/stories/';
 // App
 const app = express();
 
-function createStep(stepData){
+function createStep(stepData) {
     var step = {};
-    console.log(stepData);
     step.id = stepData.id[0];
     step.title = stepData.title[0];
     if (stepData.hasOwnProperty("desc"))
@@ -25,23 +24,23 @@ function createStep(stepData){
     else
         step.description = "";
 
-    if(stepData.hasOwnProperty("multiple_choice")){
+    if (stepData.hasOwnProperty("multiple_choice")) {
         step = createMultipleChoiceStep(step, stepData);
-    }else if (stepData.hasOwnProperty("end")){
+    } else if (stepData.hasOwnProperty("end")) {
         step = createEndStep(step, stepData);
-    }else if (stepData.hasOwnProperty("maze")){
+    } else if (stepData.hasOwnProperty("maze")) {
         step = createMazeStep(step, stepData);
-    }else if (stepData.hasOwnProperty("riddle")){
+    } else if (stepData.hasOwnProperty("riddle")) {
         step = createRiddleStep(step, stepData);
     }
 
     return step;
 }
 
-function createMultipleChoiceStep(step, stepData){
+function createMultipleChoiceStep(step, stepData) {
     step.type = 'multiple_choice';
     step.outcomes = [];
-    
+
     for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
         step.outcomes.push({
             text: stepData.multiple_choice[0].outcome[i].text[0],
@@ -49,19 +48,19 @@ function createMultipleChoiceStep(step, stepData){
         });
     }
 
-    step.getPlayInfos = function(){
+    step.getPlayInfos = function () {
         return step;
     };
-    step.getShowInfos = function(){
+    step.getShowInfos = function () {
         var r = {
             id: step.id,
-	    type: step.type,
+            type: step.type,
             title: step.title,
             description: step.description,
             outcomes: step.outcomes,
             nextStep: []
         };
-        for (var i = 0; i < step.outcomes.length; ++i){
+        for (var i = 0; i < step.outcomes.length; ++i) {
             r.nextStep.push(step.outcomes[i].nextStep);
         }
         return r;
@@ -70,17 +69,17 @@ function createMultipleChoiceStep(step, stepData){
     return step;
 }
 
-function createEndStep(step, stepData){
+function createEndStep(step, stepData) {
     step.type = 'end';
     step.win = stepData.end[0].win[0] === "true";
 
-    step.getPlayInfos = function(){
+    step.getPlayInfos = function () {
         return step;
     };
-    step.getShowInfos = function(){
+    step.getShowInfos = function () {
         return {
             id: step.id,
-	    type: step.type,
+            type: step.type,
             title: step.title,
             description: step.description,
             win: step.win,
@@ -91,7 +90,7 @@ function createEndStep(step, stepData){
     return step;
 }
 
-function createMazeStep(step, stepData){
+function createMazeStep(step, stepData) {
     step.type = 'maze';
     step.nextStep = [];
     step.rows = stepData.maze[0].rows[0];
@@ -100,31 +99,31 @@ function createMazeStep(step, stepData){
     for (var i = 0; i < stepData.maze[0].nextStep.length; ++i) {
         step.nextStep.push(stepData.maze[0].nextStep[i]);
     }
-    
-    step.getPlayInfos = function(){
+
+    step.getPlayInfos = function () {
         return step;
     };
 
-    step.getShowInfos = function(){
-	return step;
+    step.getShowInfos = function () {
+        return step;
     }
 
     return step;
 }
 
-function createRiddleStep(step, stepData){
+function createRiddleStep(step, stepData) {
     step.type = 'riddle';
     step.question = stepData.riddle[0].question[0];
     step.hint = stepData.riddle[0].hint[0];
     step.outcomes = [];
-    for (var i = 0; i < stepData.riddle[0].outcome.length; ++i){
+    for (var i = 0; i < stepData.riddle[0].outcome.length; ++i) {
         step.outcomes.push({
             text: stepData.riddle[0].outcome[i].text[0],
             nextStep: stepData.riddle[0].outcome[i].nextStep[0]
         });
     }
 
-    step.getPlayInfos = function(){
+    step.getPlayInfos = function () {
         return {
             id: step.id,
             title: step.title,
@@ -133,17 +132,17 @@ function createRiddleStep(step, stepData){
         }
     };
 
-    step.getShowInfos = function(){
+    step.getShowInfos = function () {
         var r = {
             id: step.id,
-	    type: step.type,
+            type: step.type,
             title: step.title,
             description: step.description,
             question: step.question,
             hint: step.hint,
             nextStep: []
         };
-        for (var i = 0; i < step.outcomes.length; ++i){
+        for (var i = 0; i < step.outcomes.length; ++i) {
             r.nextStep.push(step.outcomes[i].nextStep);
         }
         return r;
@@ -153,14 +152,6 @@ function createRiddleStep(step, stepData){
 }
 
 var stories = {};
-
-// Return the story object which corresponds to story_file
-function getStory(story_file) {
-    for (var i = 0; i < stories.length; ++i) {
-	if (stories[i].file === story_file) { return stories[i].story; }
-    }
-    return readStory(story_file);
-}
 
 // Parse the file story_file and load the story in memory
 function readStory(story_file) {
@@ -183,25 +174,41 @@ function readStory(story_file) {
                 steps.push(createStep(data.story.step[i]));
             }
             stories[data.story.name] = {name: data.story.name[0], steps: steps};
-
-            return stories[story_file];
         });
+        console.log("\t" + story_file);
     });
 }
 
-app.get('/show/story/:name',function (req, res) {
+function initStories() {
+    console.log('Init stories...');
+    fs.readdir('./app/stories', function (err, files) {
+        console.log("stories list: ");
+        files.filter(function (file) {
+            var parts = file.split(".");
+            if (parts[1] === 'xml') {
+                return true;
+            }
+            return false;
+        }).forEach(function (item) {
+            readStory(item);
+        });
+    });
+}
+initStories();
+
+app.get('/show/story/:name', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(getShowStory(req.params.name + '.xml'));
 });
 
-function getShowStory(storyName){
-    var storyRaw = getStory(storyName);
+function getShowStory(storyName) {
+    var storyRaw = stories[storyName];
 
     var story = {
         name: storyRaw.name,
         steps: []
     };
-    for (var i = 0; i < storyRaw.steps.length; ++i){
+    for (var i = 0; i < storyRaw.steps.length; ++i) {
         story.steps.push(storyRaw.steps[i].getShowInfos());
     }
 
@@ -210,11 +217,11 @@ function getShowStory(storyName){
 
 app.get('/stories/:name/step/:step', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(getPlayStep(req.params.name + '.xml', req.params.step));
+    res.send(getPlayStep(req.params.name, req.params.step));
 });
 
-function getPlayStep(storyName, stepId){
-    var storyRaw = getStory(storyName);
+function getPlayStep(storyName, stepId) {
+    var storyRaw = stories[storyName];
     var stepRaw = storyRaw.steps[stepId];
     return stepRaw.getPlayInfos();
 }
@@ -222,37 +229,12 @@ function getPlayStep(storyName, stepId){
 app.get('/stories', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(getStoriesNamesList());
-    //read the dir
-    /*console.dir('/stories');
-    console.dir(myCache.keys());
-
-    var toSend = [];
-
-    myCache.keys().forEach(function(item)
-    {
-        console.log(item);
-
-        if( item.split(".")[1] === 'json')
-        {
-            var sto = myCache.get(item);
-            console.log(sto);
-            var file = {
-                file:item.split(".")[0],
-                label:sto.story.$.name
-            };
-            console.log(file);
-            toSend.push(file);
-        }
-
-    });
-
-    res.send(toSend);*/
 });
 
-function getStoriesNamesList(){
+function getStoriesNamesList() {
     var r = [];
     console.log("Bonjour");
-    for (var i = 0; i < Object.keys(stories).length; ++i){
+    for (var i = 0; i < Object.keys(stories).length; ++i) {
         r.push(Object.keys(stories)[i]);
     }
     console.log(r);
@@ -260,138 +242,34 @@ function getStoriesNamesList(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function filterStep(step, filter) {
     var result = step.content[0];
 
 
-    if (! filter && (typeof step.hiden !== "undefined")) {
-	for (var key in step.hiden[0]) {
-	    result[key] = step.hiden[0][key];
-	}
-    }
-
-    return result;
-}
-
-function filterStory(story, filter) {
-    var result = { name : story.story.$.name, step : [] };
-
-    for (var key in story.story.step) {
-	result.step.push(filterStep(story.story.step[key], filter));
-    }
-
-    return result;
-}
-
-function toXML(result)
-{
-    var builder = new xml2js.Builder({rootName: 'stories', explicitArray: true});
-    var xml2 = builder.buildObject(result);
-    return builder.buildObject(result);
-}
-
-var NodeCache = require( "node-cache" );
-var myCache = new NodeCache( { stdTTL: 0, checkperiod: 0 } );
-
-function initCache(fileName) {
-    console.log('init cahc');
-    console.log(fileName);
-    fs.readdir('./app/stories', function (err, files) {
-            files
-            .filter(function(file) {
-                var parts = file.split(".");
-                if(parts[1] === 'xml' )
-                {
-                    if(fileName===undefined)
-                    {
-                        return true;
-                    }
-                    if(fileName===parts[0])
-                    {
-                        return true;
-                    }
-
-                }
-                return false;
-            })
-            .forEach(function (item) {
-		getStory(item);
-		//console.log(stories);
-                    var name = item.split(".")[0];
-                    //lire fichier pour name
-                    fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
-                        if (err) {
-
-                        }
-                        else {
-
-                            var parseString = xml2js.parseString;
-                            parseString(data2, function (err, result) {
-                                if (err) {
-
-                                    return;
-                                }
-
-                                result.file = name;
-
-                                myCache.set(name+'.json',result);
-                                myCache.set(name+'.xml', toXML(result));
-                                console.log("added "+name+" to cache");
-                            });
-                        }
-                    });
-            });
-
-    });
-}
-
-initCache();
-console.log(stories);
-function contains(key)
-{
-    var keyToF = key+'.xml';
-    myCache.keys().forEach(function (item) {
-        if(keyToF===item.file)
-        {
-            return true;
+    if (!filter && (typeof step.hiden !== "undefined")) {
+        for (var key in step.hiden[0]) {
+            result[key] = step.hiden[0][key];
         }
-    });
-    return false;
+    }
+
+    return result;
 }
 
-app.get('/hello/',function (req, res) {
+app.get('/hello/', function (req, res) {
     initCache();
     res.send('hi');
 });
 
-app.get('/hello/keys',function (req, res) {
+app.get('/hello/keys', function (req, res) {
     var mykeys = myCache.keys();
     res.send(mykeys);
 });
 
 app.get('/compute/:name/:sizez', function (req, res) {
-    
+
     //var rep = myCache.get(req.params.name+'.json');
     var rep = stories[req.params.name];
-    if(rep === undefined)
-    {
+    if (rep === undefined) {
         //send()
     }
 
@@ -399,9 +277,8 @@ app.get('/compute/:name/:sizez', function (req, res) {
     var data = sp.shortestPath();
     console.log(data);
 
-    if(req.params.sizez === 'true')
-    {
-        res.send(data.length+'');
+    if (req.params.sizez === 'true') {
+        res.send(data.length + '');
     }
     else {
         res.send(data);
@@ -409,32 +286,32 @@ app.get('/compute/:name/:sizez', function (req, res) {
 });
 
 /*app.get('/stories', function (req, res) {
-    //read the dir
-    console.dir('/stories');
-    console.dir(myCache.keys());
+ //read the dir
+ console.dir('/stories');
+ console.dir(myCache.keys());
 
-    var toSend = [];
+ var toSend = [];
 
-    myCache.keys().forEach(function(item)
-    {
-        console.log(item);
+ myCache.keys().forEach(function(item)
+ {
+ console.log(item);
 
-        if( item.split(".")[1] === 'json')
-        {
-            var sto = myCache.get(item);
-	    console.log(sto);
-            var file = {
-                file:item.split(".")[0],
-                label:sto.story.$.name
-            };
-            console.log(file);
-            toSend.push(file);
-        }
+ if( item.split(".")[1] === 'json')
+ {
+ var sto = myCache.get(item);
+ console.log(sto);
+ var file = {
+ file:item.split(".")[0],
+ label:sto.story.$.name
+ };
+ console.log(file);
+ toSend.push(file);
+ }
 
-    });
+ });
 
-    res.send(toSend);
-});*/
+ res.send(toSend);
+ });*/
 
 app.get('/show/stories', function (req, res) {
     //read the dir
@@ -443,12 +320,10 @@ app.get('/show/stories', function (req, res) {
 
     var toSend = [];
 
-    myCache.keys().forEach(function(item)
-    {
+    myCache.keys().forEach(function (item) {
         console.log(item);
 
-        if( item.split(".")[1] === 'json')
-        {
+        if (item.split(".")[1] === 'json') {
 
             toSend.push(myCache.get(item).name);
         }
@@ -459,18 +334,17 @@ app.get('/show/stories', function (req, res) {
 
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
 
-    var json = myCache.get(req.params.name+'.json');
+    var json = myCache.get(req.params.name + '.json');
     var found = false;
-    json.story.step.forEach(function(item){
-        if(item.content[0].type[0]==='end'&&typeof item.content[0].win!== 'undefined' && item.content[0].win[0]==='true')
-        {
-            res.send(true+'');
+    json.story.step.forEach(function (item) {
+        if (item.content[0].type[0] === 'end' && typeof item.content[0].win !== 'undefined' && item.content[0].win[0] === 'true') {
+            res.send(true + '');
             found = true;
             return;
         }
     })
-    if(!found)
-        res.send(false+'');
+    if (!found)
+        res.send(false + '');
 });
 
 app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
@@ -478,7 +352,7 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
     var step = parseInt(req.params.step);
     var reponse = req.params.reponse;
 
-    var result = myCache.get(req.params.name+'.json');
+    var result = myCache.get(req.params.name + '.json');
 
     console.dir(result);
     console.dir(result.story.step[step]);
@@ -498,13 +372,13 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
             res.send(answer);
             found = true;
         }
-        var lComp = Levenshtein( answer.$.answer, reponse );
-        if(lComp < minLevDist)
-            minLevDist=lComp;
+        var lComp = Levenshtein(answer.$.answer, reponse);
+        if (lComp < minLevDist)
+            minLevDist = lComp;
 
     });
 
-    if(!found) {
+    if (!found) {
 
         var hint = {
             hint: result.story.step[step].hiden[0].hint[0],
@@ -552,7 +426,6 @@ var upload = multer({
 });
 
 
-
 app.post('/stories/:name', upload.any(), function (req, res) {
 
     var name = req.params.name;
@@ -581,11 +454,10 @@ app.post('/stories/:name', upload.any(), function (req, res) {
 });
 
 
-
 app.use(express.static(__dirname + '/app'));
 app.use(express.static(__dirname + '/'));
 
 
 app.listen(PORT);
 
-console.log('Started on port:'+PORT);
+console.log('Started on port:' + PORT);

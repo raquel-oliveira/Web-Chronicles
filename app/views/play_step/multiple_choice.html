@@ -1,7 +1,7 @@
 <div class="multiple_choice" ng-controller='MCCtrl'>
   <div ng-show="optionsRadio" >
     <label ng-repeat="outcome in currentStep.outcomes">
-        <input type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{ outcome.id }}">  {{ outcome.text }} </br></br></input>
+        <input type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{ outcome.nextStep }}">  {{ outcome.text }} </br></br></input>
     </label>
   </div><!-- div ng-show="optionsRadio" > -->
   <a class="btn btn-lg btn-app" ng-click="goToStep(selectedAnswer)"> Next </a>

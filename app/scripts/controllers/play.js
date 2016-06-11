@@ -33,13 +33,9 @@ angular.module('cApp')
             if (undefined != step) {
                 $scope.cleanLastStep();
                 $http.get('stories/' + $scope.selected + '/step/' + step).success(function (data) {
-
-                    console.dir(data);
                     $scope.currentStep = data;
-                    $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
-                    $scope.stepType = data.type[0];
+                    $scope.currentStep.url = 'views/play_step/' + data.type + '.html';
                     $scope.play = true;
-                    $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
 
                     ++$scope.nbSteps;
                 });
@@ -51,7 +47,6 @@ angular.module('cApp')
         // Clean data related to last step
         $scope.cleanLastStep = function () {
             $scope.currentStep = null;
-
         };
 
         $http.get('stories/').success(function (data) {
