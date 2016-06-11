@@ -186,7 +186,7 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
-
+            console.log(data.story.name[0]);
             var steps = [];
 
             for (var i = 0; i < data.story.step.length; ++i) {
@@ -372,10 +372,7 @@ app.get('/compute/:name/:sizez', function (req, res) {
  {
  var sto = myCache.get(item);
  console.log(sto);
- var file = {
- file:item.split(".")[0],
- label:sto.story.$.name
- };
+
  console.log(file);
  toSend.push(file);
  }
