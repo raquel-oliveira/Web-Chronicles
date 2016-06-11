@@ -7,23 +7,29 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http, $sce, story, checkStory, $routeParams){
+    .controller('PlayCtrl', function ($scope, $http, $sce, story, $routeParams){
+      console.log("In controller Play");
       //variables
       $scope.nbSteps = 0;
       $scope.currentStep = null;
       $scope.view = "play";
 
       //TODO: Need to implement check of parameter, for now, its show an alert in setFile
-      story.setFile($routeParams.story);
-      $scope.storyName = story.getName();
-      $scope.goToStep(0); //start from 0.
-
+      if($routeParams.story !== undefined){
+        story.setFile($routeParams.story);
+        console.log("PLAY: not param in URL");
+        console.log($routeParams.story);
+        $scope.storyName = story.getName();
+        $scope.goToStep(0); //start from 0.
+      }
 
       /* Definition of functions */
 
       // Go to the step after click in "next"
       $scope.goToStep = function (step) {
-        if (undefined != step) {
+        console.log("the step is:");
+        console.log(step);
+        if (undefined !== step) {
           $scope.cleanLastStep();
           $http.get('stories/' + story.getFile() + '/step/' + step).success(function (data) {
             $scope.currentStep = data;

@@ -2,11 +2,8 @@
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 
-<div ng-controller="PlayCtrl">
-    <div class="story-play">
+<div class="story-play">
       <h1> {{ storyName }} </h1>
         <ng-include src="'views/play_step/step.html'"></ng-include>
         <ng-include src="currentStep.url"></ng-include>
-    </div> <!-- <div class="story-play" ng-show="play"> -->
-</div> <!-- <div class="play"> -->
-</div>
+</div> <!-- <div class="story-play" ng-show="play"> -->

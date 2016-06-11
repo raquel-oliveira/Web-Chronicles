@@ -36,17 +36,17 @@ angular
         controllerAs: 'contact'
       })
       .when('/play', {
-        templateUrl: 'views/playAll.html',
-        controller: 'SetStory',
+        templateUrl: 'views/chooseStory.html',
+        controller: 'PlayCtrl',
         controllerAs: 'play'
       })
       .when('/play/:story', {
         templateUrl: 'views/play.html',
-        controller: 'SetStory',
-        controllerAs: 'set'
+        controller: 'PlayCtrl',
+        controllerAs: 'play'
       })
       .when('/show', {
-        templateUrl: 'views/showAll.html',
+        templateUrl: 'views/chooseStory.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })

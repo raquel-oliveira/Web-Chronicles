@@ -3,6 +3,7 @@
 var myApp = angular.module('cApp');
 
 myApp.controller('SetStory', function ($scope, $http, story){
+  console.log("In controller setStory");
   $scope.selected = null;
   $scope.storyPath = "";
   $http.get('stories/').success(function (data) {
@@ -10,12 +11,17 @@ myApp.controller('SetStory', function ($scope, $http, story){
             $scope.selected = $scope.stories[0];
             story.setStory($scope.selected);
             $scope.storyPath = story.getFile();
+            console.log("SETSTORY: initial:");
+            console.log(story.get());
+
         });
 
     $scope.changeStory = function () {
       $http.get('show/stories/' + $scope.selected.file).success(function (data) {
                story.setStory($scope.selected);
                $scope.storyPath = story.getFile();
+               console.log("SETSTORY: change story:");
+               console.log(story.get());
            });
        };
 });
@@ -44,6 +50,7 @@ myApp.factory('story', function($http){
           }
         }
         if(check === false){
+          console.log("VALUE: trying to set value of URL");
           alert("This is story is not available!");
 
         }
