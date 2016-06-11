@@ -319,7 +319,7 @@ app.post('/stories/', function (req, res) {
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
 
-            fs.writeFile(path+'fileName'+'.xml', xmltoStore, function (err) {
+            fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
                 if(err) {
                     res.status(400).send({
                         message: 'Problem saving the file. Please try again.'
@@ -327,6 +327,7 @@ app.post('/stories/', function (req, res) {
                 }
                 else {
                     console.log("Write");
+                    console.log();
                     console.log(xmltoStore);
                     res.redirect("back");
 
