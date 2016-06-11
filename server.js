@@ -198,7 +198,7 @@ initStories();
 
 app.get('/show/story/:name', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(getShowStory(req.params.name + '.xml'));
+    res.send(getShowStory(req.params.name));
 });
 
 function getShowStory(storyName) {
