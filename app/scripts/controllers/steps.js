@@ -3,18 +3,16 @@ var myApp = angular.module('cApp');
 
 myApp.controller('RiddleCtrl', function ($scope, $http) {
     $scope.verifyAnswer = function (answer) {
-        $http.get('play/stepAction/' + $scope.selected + "/" + $scope.currentStep + 
-            '/' + answer).then(function (reponse) {
-            if (reponse.status === 200) {
-                $scope.showhint = false;
-                $scope.goToStep(reponse.data._);
+        $http.get('play/stepAction/' + $scope.selected + "/" + $scope.currentStep.id +
+            '/verifyAnswer/' + answer).then(function (reponse) {
+            if (reponse.data.correct === true) {
+                $scope.goToStep(reponse.data.nextStep);
             }
             else {
                 $scope.showhint = true;
-                $scope.hint = reponse.data;
-                console.log(reponse);
-                console.log($scope.hint);
-                $scope.hint.close = 'Not even close';
+                $scope.hint = reponse.data.hint;
+
+                /*$scope.hint.close = 'Not even close';
 
                 if ($scope.hint._distance < 2) {
                     $scope.hint.close = 'Hot as the sun';
@@ -30,8 +28,7 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
                 }
                 else if ($scope.hint._distance < 15) {
                     $scope.hint.close = 'Frozen';
-                }
-
+                }*/
             }
         });
     };
