@@ -4,14 +4,6 @@
 'use strict';
 var graph = [];
 
-function ShortPath(){
-    this.hello2 = hello2();
-    this.unpack = unpack();
-    this.addVertex = addVertex();
-    this.fillgraph = fillgraph();
-    this.shortestPath = shortestPath();
-}
-
 function hello2()
 {
     console.log('hello from the inside');
@@ -33,50 +25,50 @@ function unpack(from)
 
 function addVertex(item)
 {
-
     var vertex = {
-        id: item.content[0].id[0],
         end: false,
         visited: -1,
         to: []
     };
 
-    if(item.content[0].type[0]==='end'&&typeof item.content[0].win !== 'undefined' && item.content[0].win[0]==='true')
-    {
+    if (item.type === 'end' &&
+	typeof item.win !== 'undefined' &&
+	item.win === true) {
         vertex.end = true;
     }
 
-    if(typeof item.content[0].nextStep !== 'undefined' && item.content[0].nextStep) {
+    if(typeof item.nextStep !== 'undefined' && item.nextStep) {
+	console.log(item);
 
 
+        item.nextStep.forEach(function(nextStepID) {
 
-        item.content[0].nextStep.forEach(function(nextStepID) {
-
-            vertex.to.push(nextStepID._);
+            vertex.to.push(nextStepID);
 
         });
     }
-
+    /*
     if(typeof item.hiden !== 'undefined' ) {
 
 
-        item.hiden[0].answer.forEach(function(nextStepID) {
+        item.hiden[0].nextStep.forEach(function(step) {
 
 
-            vertex.to.push(nextStepID.$.stepId);
+            vertex.to.push(step._);
         });
 
     }
-
-    graph.push(vertex);
+    */
+    graph[item.id] = vertex;
 }
 
 function fillgraph(steps){
-    graph = [];
-    
+    graph = {};
+
     steps.forEach(function(item) {
         addVertex(item);
     });
+
 }
 function shortestPath() {
     //graph is arrayVertex[ vertex{id:id, end: true, visited:id to:[ids]}]
@@ -85,16 +77,11 @@ function shortestPath() {
 
     var iDtoExplore = [];
     iDtoExplore.push(0);
-
-    console.log(graph);
-
+    //console.log(graph);
     while (iDtoExplore.length>0) {
         var indexCur = iDtoExplore.shift();
-        console.log('exploring');
-        console.log(indexCur);
-        console.log(graph[indexCur]);
-        console.log(graph[indexCur].end);
-
+/*	console.log(indexCur);
+	console.log(graph);*/
         if(graph[indexCur].end === true || graph[indexCur].end ==='true')
         {
             console.log('end');
@@ -102,12 +89,15 @@ function shortestPath() {
         }
 
         graph[indexCur].to.forEach(function(item) {
-
+/*	    console.log(item);
+	    console.log(graph);
+	    console.log(graph[item]);
+            console.log('add');*/
 
             if(graph[item].visited===-1)
             {
-                console.log('add');
-                console.log(item);
+
+
                 graph[item].visited = indexCur;
                 iDtoExplore.push(item);
 

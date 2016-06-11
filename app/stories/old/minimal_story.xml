@@ -29,8 +29,8 @@
             <question>How many is 10 in binary?</question>
         </content>
         <hiden>
-          <answer stepId="4">2</answer>
-            <hint> 01 => 1, 11 => 3</hint>
+	  <nextStep answer="2">4</nextStep>
+          <hint> 01 => 1, 11 => 3</hint>
         </hiden>
 
     </step>

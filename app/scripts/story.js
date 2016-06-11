@@ -8,6 +8,7 @@ myApp.controller('SetStory', function ($scope, $http, story){
   $http.get('stories/').success(function (data) {
             $scope.stories = data;
             $scope.selected = $scope.stories[0];
+            console.log($scope.selected );
             story.setStory($scope.selected);
             $scope.storyPath = story.getFile();
 

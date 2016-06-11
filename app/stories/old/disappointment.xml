@@ -12,13 +12,13 @@
   </step>
   <step>
       <content>
-      <id>1</id>
-      <title>Montain</title>
-      <description>They told you, a long time ago there was only happy people that live here, that received watter from the FORBIDDEN MOUNTAIN (in this time it was called HAPPY MOUNTAIN). </description>
-      <nextStep label="Go to Forbidden mountain">4</nextStep>
-      <nextStep label="Go sleep">5</nextStep>
-      <nextStep label="Tell Roberto about the story">6</nextStep>
-      <type>multiple_choice</type>
+	<id>1</id>
+	<title>Montain</title>
+	<description>They told you, a long time ago there was only happy people that live here, that received watter from the FORBIDDEN MOUNTAIN (in this time it was called HAPPY MOUNTAIN). </description>
+	<nextStep label="Go to Forbidden mountain">4</nextStep>
+	<nextStep label="Go sleep">5</nextStep>
+	<nextStep label="Tell Roberto about the story">6</nextStep>
+	<type>multiple_choice</type>
       </content>
   </step>
   <step>
@@ -29,7 +29,7 @@
       <type>riddle</type>
     </content>
     <hiden>
-      <answer stepId="6">left</answer>
+      <nextStep answer="left">6</nextStep>
       <hint>try the other directions</hint>
     </hiden>
 
@@ -42,7 +42,7 @@
       <type>riddle</type>
     </content>
     <hiden>
-      <answer stepId="6">left</answer>
+      <nextStep answer="left">6</nextStep>
       <hint>try the other directions</hint>
     </hiden>
   </step>

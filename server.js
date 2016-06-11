@@ -5,251 +5,286 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 const multer = require('multer');
 const util = require('util');
-var bodyParser = require('body-parser')
 const Levenshtein = require('levenshtein');
-const sp = require('./libs/shortestpath2.js');
+const sp = require('./app/scripts/shortestpath2.js');
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
 
+
 // App
 const app = express();
 
-function toXML(result,rootNameParam)
-{
-    var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
-    var xml2 = builder.buildObject(result);
-    return builder.buildObject(result);
+function createStep(stepData) {
+    var step = {};
+    step.id = stepData.id[0];
+    step.title = stepData.title[0];
+    if (stepData.hasOwnProperty("desc"))
+        step.description = stepData.desc[0];
+    else
+        step.description = "";
+
+    if (stepData.hasOwnProperty("multiple_choice")) {
+        step = createMultipleChoiceStep(step, stepData);
+    } else if (stepData.hasOwnProperty("end")) {
+        step = createEndStep(step, stepData);
+    } else if (stepData.hasOwnProperty("maze")) {
+        step = createMazeStep(step, stepData);
+    } else if (stepData.hasOwnProperty("riddle")) {
+        step = createRiddleStep(step, stepData);
+    }
+
+    return step;
 }
 
+function copyStepBasicData(from, to){
+    to.title = from.title;
+    to.description = from.description;
+    to.type = from.type;
+    to.id = from.id;
 
-var NodeCache = require( "node-cache" );
-var myCache = new NodeCache( { stdTTL: 0, checkperiod: 0 } );
+    return to;
+}
+function createMultipleChoiceStep(step, stepData) {
+    step.type = 'multiple_choice';
+    step.outcomes = [];
 
-function initCache(fileName) {
-    console.log('init cahc');
-    console.log(fileName);
-    fs.readdir('./app/stories', function (err, files) {
-            files
-            .filter(function(file) {
-                var parts = file.split(".");
-                if(parts[1] === 'xml' )
-                {
-                    if(fileName===undefined)
-                    {
-                        return true;
-                    }
-                    if(fileName===parts[0])
-                    {
-                        return true;
-                    }
+    for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
+        step.outcomes.push({
+            text: stepData.multiple_choice[0].outcome[i].text[0],
+            nextStep: stepData.multiple_choice[0].outcome[i].nextStep[0]
+        });
+    }
 
+    step.getPlayInfos = function () {
+        return copyStepBasicData(step, {
+            outcomes: step.outcomes
+        });
+    };
+    step.getShowInfos = function () {
+        var r = copyStepBasicData(step, {
+            outcomes: step.outcomes,
+            nextStep: []
+        });
+        for (var i = 0; i < step.outcomes.length; ++i) {
+            r.nextStep.push(step.outcomes[i].nextStep);
+        }
+        return r;
+    };
+
+    return step;
+}
+
+function createEndStep(step, stepData) {
+    step.type = 'end';
+    step.win = stepData.end[0].win[0] === "true";
+
+    step.getPlayInfos = function () {
+        return copyStepBasicData(step, {
+            win: step.win
+        });
+    };
+    step.getShowInfos = function () {
+        return copyStepBasicData(step, {
+            win: step.win,
+            nextStep: []
+        });
+    };
+
+    return step;
+}
+
+function createMazeStep(step, stepData) {
+    step.type = 'maze';
+    step.nextStep = stepData.maze[0].nextStep;
+    step.rows = stepData.maze[0].rows[0];
+    step.columns = stepData.maze[0].columns[0];
+
+    step.getPlayInfos = function () {
+        return copyStepBasicData(step, {
+            nextStep: step.nextStep,
+            rows: step.rows,
+            columns: step.columns
+        })
+    };
+
+    step.getShowInfos = function () {
+        return copyStepBasicData(step, {
+            nextStep: step.nextStep,
+            rows: step.rows,
+            columns: step.columns
+        })
+    };
+
+    return step;
+}
+
+function createRiddleStep(step, stepData) {
+    step.type = 'riddle';
+    step.question = stepData.riddle[0].question[0];
+    step.hint = stepData.riddle[0].hint[0];
+    step.outcomes = [];
+
+    for (var i = 0; i < stepData.riddle[0].outcome.length; ++i) {
+        step.outcomes.push({
+            text: stepData.riddle[0].outcome[i].text[0],
+            nextStep: stepData.riddle[0].outcome[i].nextStep[0]
+        });
+    }
+
+    step.getPlayInfos = function () {
+        return copyStepBasicData(step, {
+            question: step.question
+        });
+    };
+
+    step.getShowInfos = function () {
+        var r = copyStepBasicData(step, {
+            question: step.question,
+            hint: step.hint,
+	    outcomes: step.outcomes,
+            nextStep: []
+        });
+        for (var i = 0; i < step.outcomes.length; ++i) {
+            r.nextStep.push(step.outcomes[i].nextStep);
+        }
+        return r;
+    };
+
+    step.verifyAnswer = function(data){
+        // TODO Rajouter des meilleurs moyens de check qu'une Ã©galitÃ© parfaite
+        for (var i = 0; i < step.outcomes.length; ++i){
+            if (step.outcomes[i].text === data)
+                return {
+                    correct: true,
+                    nextStep: step.outcomes[i].nextStep
                 }
-                return false;
-            })
-            .forEach(function (item) {
-                    var name = item.split(".")[0];
-                    //lire fichier pour name
-                    fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
-                        if (err) {
+        }
+        return {
+            correct: false,
+            hint: step.hint
+        };
+    };
 
-                        }
-                        else {
 
-                            var parseString = xml2js.parseString;
-                            parseString(data2, function (err, result) {
-                                if (err) {
-
-                                    return;
-                                }
-
-                                result.file = name;
-                               // stories.push(story);
-                                myCache.set(name+'.json',result);
-                                myCache.set(name+'.xml', toXML(result,'stories'));
-                                console.log("added "+name+" to cache");
-
-                            });
-                        }
-                    });
-
-            });
-
-    });
+    return step;
 }
 
-initCache();
+var stories = {};
 
-function contains(key)
-{
-    var keyToF = key+'.xml';
-    myCache.keys().forEach(function (item) {
-        if(keyToF===item.file)
-        {
-            return true;
-        }
-    });
-    return false;
-}
-
-
-app.get('/show/story/:name',function (req, res) {
-    if( req.accepts('xml'))
-    {
-        res.set('Content-Type', 'text/xml');
-        res.send(myCache.get(req.params.name+'.xml'));
-    }
-    else {
-        res.set('Content-Type', 'application/json');
-        res.send(myCache.get(req.params.name+'.json'));
-    }
-});
-
-app.get('/hello/',function (req, res) {
-    initCache();
-    res.send('hi');
-});
-
-
-app.get('/hello/keys',function (req, res) {
-    //myCache.set(item+'.json',result);
-    //var value = myCache.get( "myKey" );
-    var mykeys = myCache.keys();
-    res.send(mykeys);
-});
-
-app.get('/compute/:name/:sizez', function (req, res) {
-
-    var rep = myCache.get(req.params.name+'.json');
-    if(rep === undefined)
-    {
-        send()
-    }
-    sp.fillgraph(rep.story.step);
-    var data = sp.shortestPath();
-    console.log(data);
-    
-    if(req.params.sizez === 'true')
-    {
-        res.send(data.length+'');
-    }
-    else {
-        res.send(data);
-    }
-});
-
-app.get('/stories', function (req, res) {
-    //read the dir
-    console.dir('/stories');
-    console.dir(myCache.keys());
-
-    var toSend = [];
-
-    myCache.keys().forEach(function(item)
-    {
-        console.log(item);
-
-        if( item.split(".")[1] === 'json')
-        {
-            var sto = myCache.get(item);
-            var file = {
-                file:item.split(".")[0],
-                label:sto.story.$.name
-            };
-            console.log(file);
-            toSend.push(file);
-        }
-
-    });
-
-    res.send(toSend);
-});
-
-app.get('/show/stories', function (req, res) {
-    //read the dir
-    console.dir('/stories');
-    console.dir(myCache.keys());
-
-    var toSend = [];
-
-    myCache.keys().forEach(function(item)
-    {
-        console.log(item);
-
-        if( item.split(".")[1] === 'json')
-        {
-
-            toSend.push(myCache.get(item).name);
-        }
-    });
-    res.send(toSend);
-
-});
-
-app.get('/show/stories/:name', function (req, res) {
-    res.send(myCache.get(req.params.name+'.json'));
-});
-
-app.get('/stories/:name/step/:step', function (req, res) {
-
-    var name = req.params.name;
-    var step = req.params.step;
-
-    var json = myCache.get(req.params.name+'.json');
-    console.dir(json);
-    console.dir(req.params.name);
-
-    res.send(json.story.step[step].content[0]);
-
-
-});
-
-app.get('/stories/:name/haveHappyEnd', function (req, res) {
-
-    var json = myCache.get(req.params.name+'.json');
-    var found = false;
-    json.story.step.forEach(function(item){
-        if(item.content[0].type[0]==='end'&&typeof item.content[0].win!== 'undefined' && item.content[0].win[0]==='true')
-        {
-            res.send(true+'');
-            found = true;
+// Parse the file story_file and load the story in memory
+function readStory(story_file) {
+    fs.readFile('./app/stories/' + story_file, 'utf-8', function (error, file) {
+        if (error) {
+            console.log("Error: Can't read " + story_file);
             return;
         }
-    })
-    if(!found)
-        res.send(false+'');
+
+        var parseString = xml2js.parseString;
+        parseString(file, function (error, data) {
+            if (error) {
+                console.log("Error during parsing " + story_file);
+                return;
+            }
+
+            var steps = [];
+
+            for (var i = 0; i < data.story.step.length; ++i) {
+                steps.push(createStep(data.story.step[i]));
+            }
+            stories[data.story.name] = {name: data.story.name[0], steps: steps};
+        });
+        console.log("\t" + story_file);
+    });
+}
+
+function initStories() {
+    console.log('Init stories...');
+    fs.readdir('./app/stories', function (err, files) {
+        console.log("stories list: ");
+        files.filter(function (file) {
+            var parts = file.split(".");
+            if (parts[1] === 'xml') {
+                return true;
+            }
+            return false;
+        }).forEach(function (item) {
+            readStory(item);
+        });
+    });
+}
+
+initStories();
+
+app.get('/show/story/:name', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(getShowStory(req.params.name));
 });
 
-app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
+function getShowStory(storyName) {
+    var storyRaw = stories[storyName];
 
-    var step = parseInt(req.params.step);
+    var story = {
+        name: storyRaw.name,
+        steps: []
+    };
+    for (var i = 0; i < storyRaw.steps.length; ++i) {
+        story.steps.push(storyRaw.steps[i].getShowInfos());
+    }
+
+    return story;
+}
+
+app.get('/play/:storyName/:step', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(getPlayStep(req.params.storyName, req.params.step));
+});
+
+function getPlayStep(storyName, stepId) {
+    var storyRaw = stories[storyName];
+    var stepRaw = storyRaw.steps[stepId];
+    console.log(stepRaw.getPlayInfos());
+    return stepRaw.getPlayInfos();
+}
+
+app.get('/stories', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(getStoriesNamesList());
+});
+
+app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(stories[req.params.storyName].steps[req.params.step][req.params.action](req.params.data));
+    /*var step = parseInt(req.params.step);
     var reponse = req.params.reponse;
 
-    var result = myCache.get(req.params.name+'.json');
+    var result = myCache.get(req.params.name + '.json');
 
     console.dir(result);
     console.dir(result.story.step[step]);
     console.log(step);
     console.dir(result.story.step[step].hiden);
     console.dir(result.story.step[step].hiden[0]);
-    var answerS = result.story.step[step].hiden[0].answer;
+
+    var answerS = result.story.step[step].hiden[0].nextStep;
+
     var minLevDist = 100;
 
     var found = false;
     //distance
     answerS.forEach(function (answer) {
-        if (answer._ == reponse) {
+        if (answer.$.answer == reponse) {
 
             res.send(answer);
             found = true;
         }
-        var lComp = Levenshtein( answer._, reponse );
-        if(lComp < minLevDist)
-            minLevDist=lComp;
+        var lComp = Levenshtein(answer.$.answer, reponse);
+        if (lComp < minLevDist)
+            minLevDist = lComp;
 
     });
 
-    if(!found) {
+    if (!found) {
 
         var hint = {
             hint: result.story.step[step].hiden[0].hint[0],
@@ -259,13 +294,126 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 
         res.statusCode = 210;
         res.send(hint);
-    }
-
-
+    }*/
 });
 
 
-/*var upload = multer({
+
+function getStoriesNamesList() {
+    var r = [];
+    for (var i = 0; i < Object.keys(stories).length; ++i) {
+        r.push(Object.keys(stories)[i]);
+    }
+    return r;
+}
+
+
+function filterStep(step, filter) {
+    var result = step.content[0];
+
+
+    if (!filter && (typeof step.hiden !== "undefined")) {
+        for (var key in step.hiden[0]) {
+            result[key] = step.hiden[0][key];
+        }
+    }
+
+    return result;
+}
+
+app.get('/hello/', function (req, res) {
+    initCache();
+    res.send('hi');
+});
+
+app.get('/hello/keys', function (req, res) {
+    var mykeys = myCache.keys();
+    res.send(mykeys);
+});
+
+app.get('/compute/:name/:sizez', function (req, res) {
+
+    //var rep = myCache.get(req.params.name+'.json');
+    var rep = stories[req.params.name];
+    if (rep === undefined) {
+        //send()
+    }
+
+    sp.fillgraph(getShowStory(req.params.name).steps);
+    var data = sp.shortestPath();
+    console.log(data);
+
+    if (req.params.sizez === 'true') {
+        res.send(data.length + '');
+    }
+    else {
+        res.send(data);
+    }
+});
+
+/*app.get('/stories', function (req, res) {
+ //read the dir
+ console.dir('/stories');
+ console.dir(myCache.keys());
+
+ var toSend = [];
+
+ myCache.keys().forEach(function(item)
+ {
+ console.log(item);
+
+ if( item.split(".")[1] === 'json')
+ {
+ var sto = myCache.get(item);
+ console.log(sto);
+ var file = {
+ file:item.split(".")[0],
+ label:sto.story.$.name
+ };
+ console.log(file);
+ toSend.push(file);
+ }
+
+ });
+
+ res.send(toSend);
+ });*/
+
+app.get('/show/stories', function (req, res) {
+    //read the dir
+    console.dir('/stories');
+    console.dir(myCache.keys());
+
+    var toSend = [];
+
+    myCache.keys().forEach(function (item) {
+        console.log(item);
+
+        if (item.split(".")[1] === 'json') {
+
+            toSend.push(myCache.get(item).name);
+        }
+    });
+    res.send(toSend);
+
+});
+
+app.get('/stories/:name/haveHappyEnd', function (req, res) {
+
+    var json = myCache.get(req.params.name + '.json');
+    var found = false;
+    json.story.step.forEach(function (item) {
+        if (item.content[0].type[0] === 'end' && typeof item.content[0].win !== 'undefined' && item.content[0].win[0] === 'true') {
+            res.send(true + '');
+            found = true;
+            return;
+        }
+    })
+    if (!found)
+        res.send(false + '');
+});
+
+var upload = multer({
     dest: './app/stories/',
     rename: function (fieldname, filename) {
         return filename;
@@ -276,14 +424,12 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
 
     },
     onFileUploadData: function (file, data) {
-        //totest
-        myCache.set('file',data);
+
     },
     onFileUploadComplete: function (file) {
 
     },
     onParseStart: function () {
-
 
     },
     onParseEnd: function (req, next) {
@@ -292,51 +438,38 @@ app.get('/stories/:name/step/:step/reponse/:reponse', function (req, res) {
     },
     onError: function (e, next) {
         if (e) {
-            
+
         }
         next();
     }
-});*/
+});
 
 
+app.post('/stories/:name', upload.any(), function (req, res) {
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
-app.use(bodyParser.json());
-
-
-app.post('/stories/', function (req, res) {
-
-    console.log(req.body);
-
-    var xmltoStore = toXML(req.body.story,'story');
-    //console.dir(req);
+    var name = req.params.name;
+    var file = req.files.file[0];
     var path = './app/stories/';
 
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
+    var buffer = file.buffer; //Note: buffer only populates if you set inMemory: true.
+    var fileName = file.name;
+    var stream = fs.createWriteStream(path + fileName);
+    stream.write(buffer);
+    stream.on('error', function (err) {
 
-            fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
-                if(err) {
-                    res.status(400).send({
-                        message: 'Problem saving the file. Please try again.'
-                    });
-                }
-                else {
-                    console.log("Write");
-                    console.log();
-                    console.log(xmltoStore);
-                    res.redirect("back");
+        res.status(400).send({
+            message: 'Problem saving the file. Please try again.'
+        });
+    });
+    stream.on('finish', function () {
 
-                }
-            });
+        res.status(204);
+    });
+    stream.end();
 
-
-
-    
 });
 
 
@@ -346,4 +479,4 @@ app.use(express.static(__dirname + '/'));
 
 app.listen(PORT);
 
-console.log('Started on port:'+PORT);
+console.log('Started on port:' + PORT);

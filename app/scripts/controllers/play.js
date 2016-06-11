@@ -20,9 +20,9 @@ angular.module('cApp')
           $scope.currentStep = null; // Clean data related to last step
           $http.get('stories/' + story.getFile() + '/step/' + step).success(function (data) {
             $scope.currentStep = data;
-            $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
-            $scope.stepType = data.type[0];
-            $scope.htmlDesc = $sce.trustAsHtml(data.description[0]);
+            $scope.currentStep.url = 'views/play_step/' + data.type + '.html';
+            $scope.stepType = data.type;
+            $scope.htmlDesc = $sce.trustAsHtml(data.description);
             ++$scope.nbSteps;
           });
         } else {

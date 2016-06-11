@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <story name="Riddle Test" >
     <step>
         <content>
@@ -8,8 +9,8 @@
             <question>How many is 10 in binary?</question>
         </content>
         <hiden>
-          <answer stepId="1">2</answer>
-            <hint> 01 => 1, 11 => 3</hint>
+	  <nextStep answer="2">1</nextStep>
+          <hint> 01 => 1, 11 => 3</hint>
         </hiden>
     </step>
     <step>
@@ -21,8 +22,8 @@
             <question>How many is 10 in binary?</question>
         </content>
         <hiden>
-          <answer stepId="2">2</answer>
-            <hint> 01 => 1, 11 => 3</hint>
+	  <nextStep answer="2">2</nextStep>
+          <hint> 01 => 1, 11 => 3</hint>
         </hiden>
     </step>
     <step>
@@ -34,9 +35,9 @@
             <question>Where he go?</question>
         </content>
         <hiden>
-          <answer stepId="3">left</answer>
-          <answer stepId="4">right</answer>
-            <hint> left, right, up, down</hint>
+	  <nextStep answer="left">3</nextStep>
+	  <nextStep answer="right">4</nextStep>
+          <hint> left, right, up, down</hint>
         </hiden>
     </step>
     <step>
