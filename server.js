@@ -192,7 +192,7 @@ function readStory(story_file) {
             for (var i = 0; i < data.story.step.length; ++i) {
                 steps.push(createStep(data.story.step[i]));
             }
-            stories[data.story.name] = {name: data.story.name[0], steps: steps};
+            stories[data.story.name] = {name: data.story.name[0],filename:story_file.split('.')[0], steps: steps};
         });
         console.log("\t" + story_file);
     });
@@ -302,7 +302,14 @@ app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
 function getStoriesNamesList() {
     var r = [];
     for (var i = 0; i < Object.keys(stories).length; ++i) {
-        r.push(Object.keys(stories)[i]);
+        //r.push(Object.keys(stories)[i]);
+
+        var storyObject = {
+
+            file:stories[Object.keys(stories)[i]].filename,
+            label:Object.keys(stories)[i]
+        };
+        r.push(storyObject);
     }
     return r;
 }
@@ -366,10 +373,7 @@ app.get('/compute/:name/:sizez', function (req, res) {
  {
  var sto = myCache.get(item);
  console.log(sto);
- var file = {
- file:item.split(".")[0],
- label:sto.story.$.name
- };
+
  console.log(file);
  toSend.push(file);
  }
