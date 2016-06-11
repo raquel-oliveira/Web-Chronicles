@@ -45,13 +45,13 @@ angular
         controller: 'SetStory',
         controllerAs: 'set'
       })
-      .when('/show/:story', {
-        templateUrl: 'views/show.html',
+      .when('/show', {
+        templateUrl: 'views/showAll.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })
-      .when('/show', {
-        templateUrl: 'views/403.html',
+      .when('/show/:story', {
+        templateUrl: 'views/show.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
       })

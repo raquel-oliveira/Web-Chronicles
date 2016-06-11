@@ -16,6 +16,7 @@ angular.module('cApp')
     };
     })
     .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+        $scope.view = "show";
         $scope.storyName = null;
         $scope.network = null;
         $scope.graphStyle = {
