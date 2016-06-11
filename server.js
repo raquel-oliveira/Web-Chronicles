@@ -192,7 +192,10 @@ function readStory(story_file) {
             for (var i = 0; i < data.story.step.length; ++i) {
                 steps.push(createStep(data.story.step[i]));
             }
-            stories[data.story.name] = {name: data.story.name[0], steps: steps};
+            stories[story_file.slice(0, -4)] = {
+                name: data.story.name[0],
+                file: story_file,
+                steps: steps};
         });
         console.log("\t" + story_file);
     });
@@ -302,7 +305,10 @@ app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
 function getStoriesNamesList() {
     var r = [];
     for (var i = 0; i < Object.keys(stories).length; ++i) {
-        r.push(Object.keys(stories)[i]);
+        r.push({
+            file: Object.keys(stories)[i],
+            label: stories[Object.keys(stories)[i]].name
+        });
     }
     return r;
 }
