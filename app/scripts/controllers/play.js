@@ -32,7 +32,7 @@ angular.module('cApp')
         $scope.goToStep = function (step) {
             if (undefined != step) {
                 $scope.cleanLastStep();
-                $http.get('stories/' + $scope.selected + '/step/' + step).success(function (data) {
+                $http.get('play/' + $scope.selected + '/' + step).success(function (data) {
                     $scope.currentStep = data;
                     $scope.currentStep.url = 'views/play_step/' + data.type + '.html';
                     $scope.play = true;

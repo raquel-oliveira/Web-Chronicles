@@ -106,7 +106,7 @@ function createMazeStep(step, stepData) {
 
     step.getShowInfos = function () {
         return step;
-    }
+    };
 
     return step;
 }
@@ -116,6 +116,7 @@ function createRiddleStep(step, stepData) {
     step.question = stepData.riddle[0].question[0];
     step.hint = stepData.riddle[0].hint[0];
     step.outcomes = [];
+
     for (var i = 0; i < stepData.riddle[0].outcome.length; ++i) {
         step.outcomes.push({
             text: stepData.riddle[0].outcome[i].text[0],
@@ -147,6 +148,13 @@ function createRiddleStep(step, stepData) {
         }
         return r;
     };
+
+    step.verifyAnswer = function(){
+        for (var i = 0; i < step.outcomes.length; ++i){
+            
+        }
+    };
+
 
     return step;
 }
@@ -194,6 +202,7 @@ function initStories() {
         });
     });
 }
+
 initStories();
 
 app.get('/show/story/:name', function (req, res) {
@@ -215,9 +224,9 @@ function getShowStory(storyName) {
     return story;
 }
 
-app.get('/stories/:name/step/:step', function (req, res) {
+app.get('/play/:storyName/:step', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(getPlayStep(req.params.name, req.params.step));
+    res.send(getPlayStep(req.params.storyName, req.params.step));
 });
 
 function getPlayStep(storyName, stepId) {
