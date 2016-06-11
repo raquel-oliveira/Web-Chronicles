@@ -38,11 +38,13 @@ function createStep(stepData){
 }
 
 function createMultipleChoiceStep(step, stepData){
+    step.type = 'multiple_choice';
     step.outcomes = [];
-    for (var i = 0; i < stepData.multiple_choice.outcome.length; ++i) {
+    
+    for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
         step.outcomes.push({
-            text: stepData.multiple_choice.outcome[i].text[0],
-            nextStep: stepData.multiple_choice.outcome[i].nextStep[0]
+            text: stepData.multiple_choice[0].outcome[i].text[0],
+            nextStep: stepData.multiple_choice[0].outcome[i].nextStep[0]
         });
     }
 
@@ -52,6 +54,7 @@ function createMultipleChoiceStep(step, stepData){
     step.getShowInfos = function(){
         var r = {
             id: step.id,
+	    type: step.type,
             title: step.title,
             description: step.description,
             outcomes: step.outcomes,
@@ -62,9 +65,12 @@ function createMultipleChoiceStep(step, stepData){
         }
         return r;
     }
+
+    return step;
 }
 
 function createEndStep(step, stepData){
+    step.type = 'end';
     step.win = stepData.end[0].win[0] === "true";
 
     step.getPlayInfos = function(){
@@ -73,53 +79,47 @@ function createEndStep(step, stepData){
     step.getShowInfos = function(){
         return {
             id: step.id,
+	    type: step.type,
             title: step.title,
             description: step.description,
             win: step.win,
             nextStep: []
         };
     };
+
+    return step;
 }
 
 function createMazeStep(step, stepData){
-    step.outcomes = [];
+    step.type = 'maze';
+    step.nextStep = [];
     step.rows = stepData.maze[0].rows[0];
     step.columns = stepData.maze[0].columns[0];
-    for (var i = 0; i < stepData.maze[0].outcome.length; ++i) {
-        step.outcomes.push({
-            text: stepData.maze[0].outcome[i].text[0],
-            nextStep: stepData.maze[0].outcome[i].nextStep[0]
-        });
+
+    for (var i = 0; i < stepData.maze[0].nextStep.length; ++i) {
+        step.nextStep.push(stepData.maze[0].nextStep[i]);
     }
     
     step.getPlayInfos = function(){
         return step;
     };
+
     step.getShowInfos = function(){
-        var r = {
-            id: step.id,
-            title: step.title,
-            description: step.description,
-            rows: step.rows,
-            columns: step.columns,
-            outcomes: step.outcomes,
-            nextStep: []
-        };
-        for (var i = 0; i < step.outcomes.length; ++i){
-            r.nextStep.push(step.outcomes[i].nextStep);
-        }
-        return r;
+	return step;
     }
+
+    return step;
 }
 
 function createRiddleStep(step, stepData){
+    step.type = 'riddle';
     step.question = stepData.riddle[0].question[0];
     step.hint = stepData.riddle[0].hint[0];
     step.outcomes = [];
     for (var i = 0; i < stepData.riddle[0].outcome.length; ++i){
         step.outcomes.push({
-            text: stepDat.riddle[0].outcome[i].text,
-            nextStep: stepDat.riddle[0].outcome[i].text
+            text: stepData.riddle[0].outcome[i].text[0],
+            nextStep: stepData.riddle[0].outcome[i].nextStep[0]
         });
     }
 
@@ -135,6 +135,7 @@ function createRiddleStep(step, stepData){
     step.getShowInfos = function(){
         var r = {
             id: step.id,
+	    type: step.type,
             title: step.title,
             description: step.description,
             question: step.question,
@@ -146,9 +147,11 @@ function createRiddleStep(step, stepData){
         }
         return r;
     }
+
+    return step;
 }
 
-var stories = {};
+var stories = { };
 
 // Return the story object which corresponds to story_file
 function getStory(story_file) {
@@ -165,20 +168,21 @@ function readStory(story_file) {
             console.log("Error: Can't read " + story_file);
             return;
         }
-
+	
         var parseString = xml2js.parseString;
-        parseString(data, function (error, data){
-            if (err) {
+        parseString(file, function (error, data){
+            if (error) {
             console.log("Error during parsing " + story_file);
             return;
             }
 
 	    var steps = [];
-	    for (var step in data.step) {
-		steps.push(createStep(step));
+
+	    for (var i = 0; i < data.story.step.length; ++i) {
+		steps.push(createStep(data.story.step[i]));
 	    }
 
-	    stories[story.name] = { story.name, steps : steps};
+	    stories[data.story.name] = { name : data.story.name[0], steps : steps};
 
             return stories[story_file];
         });
@@ -191,7 +195,8 @@ app.get('/show/story/:name',function (req, res) {
 });
 
 function getShowStory(storyName){
-    var storyRaw = getStory(storyName);
+    var storyRaw = stories[storyName];
+
     var story = {
         name: storyRaw.name,
         steps: []
@@ -222,7 +227,6 @@ function getShowStory(storyName){
 
 
 
->>>>>>> da747919b34b3cb07df8b8eb5a0ea70e822ec785
 function filterStep(step, filter) {
     var result = step.content[0];
 
@@ -245,7 +249,6 @@ function filterStory(story, filter) {
 
     return result;
 }
-
 
 function toXML(result)
 {
@@ -279,6 +282,8 @@ function initCache(fileName) {
                 return false;
             })
             .forEach(function (item) {
+		getStory(item);
+		//console.log(stories);
                     var name = item.split(".")[0];
                     //lire fichier pour name
                     fs.readFile('./app/stories/' + item, 'utf8', function (err, data2) {
@@ -295,21 +300,20 @@ function initCache(fileName) {
                                 }
 
                                 result.file = name;
-                               // stories.push(story);
+
                                 myCache.set(name+'.json',result);
                                 myCache.set(name+'.xml', toXML(result));
                                 console.log("added "+name+" to cache");
                             });
                         }
                     });
-
             });
 
     });
 }
 
 initCache();
-
+console.log(stories);
 function contains(key)
 {
     var keyToF = key+'.xml';
@@ -347,13 +351,15 @@ app.get('/hello/keys',function (req, res) {
 });
 
 app.get('/compute/:name/:sizez', function (req, res) {
-
-    var rep = myCache.get(req.params.name+'.json');
+    
+    //var rep = myCache.get(req.params.name+'.json');
+    var rep = stories[req.params.name];
     if(rep === undefined)
     {
-        send()
+        //send()
     }
-    sp.fillgraph(rep.story.step);
+
+    sp.fillgraph(getShowStory(req.params.name).steps);
     var data = sp.shortestPath();
     console.log(data);
 
@@ -380,6 +386,7 @@ app.get('/stories', function (req, res) {
         if( item.split(".")[1] === 'json')
         {
             var sto = myCache.get(item);
+	    console.log(sto);
             var file = {
                 file:item.split(".")[0],
                 label:sto.story.$.name
@@ -415,8 +422,8 @@ app.get('/show/stories', function (req, res) {
 });
 
 app.get('/show/stories/:name', function (req, res) {
-    //res.send(myCache.get(req.params.name+'.json'));
-    res.send(filterStory(myCache.get(req.params.name+'.json'), false));
+    var story = stories[req.params.name]
+    res.send(getShowStory(req.params.name));
 });
 
 app.get('/stories/:name/step/:step', function (req, res) {
@@ -524,9 +531,6 @@ var upload = multer({
         next();
     }
 });
-
-
-
 
 
 

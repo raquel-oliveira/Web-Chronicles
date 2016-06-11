@@ -46,25 +46,25 @@ angular.module('cApp')
 	    var nodes = new vis.DataSet([]);
             var edges = new vis.DataSet([]);
 
-	    for (var i = 0; i < story.step.length; ++i) {
+	    for (var i = 0; i < story.steps.length; ++i) {
 		var color, fontColor;
 
-		if (story.step[i].type[0] === 'end') {
-                    color = (story.step[i].win[0] === 'false') ?
+		if (story.steps[i].type === 'end') {
+                    color = (story.steps[i].win === 'false') ?
                         '#882222' : '#228822';
 		    fontColor = "#FFFFFF";
 		}
 
-		addNode(nodes, parseInt(story.step[i].id), color, fontColor);
-		
-		if (typeof story.step[i].nextStep !== "undefined") {
-                    for (let j = 0; j < story.step[i].nextStep.length; ++j) {
-                        addEdge(edges, parseInt(story.step[i].id), parseInt(story.step[i].nextStep[j]._));
+		addNode(nodes, parseInt(story.steps[i].id), color, fontColor);
+
+		if (typeof story.steps[i].nextStep !== "undefined") {
+                    for (let j = 0; j < story.steps[i].nextStep.length; ++j) {
+                        addEdge(edges, parseInt(story.steps[i].id), parseInt(story.steps[i].nextStep[j]));
                     }
 		}
 	    }
 
-            $http.get('compute/' + $routeParams.story + '/false').then(function (spData) {
+             $http.get('compute/' + $routeParams.story + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
                     $scope.hasShortestPath = true;
                 } else {
@@ -101,7 +101,7 @@ angular.module('cApp')
 			$scope.displayNode(params.nodes[0], story);
 		    });
                 });
-            });
+             });
         };
 
 	$scope.displayNode = function(node, story) {
@@ -111,9 +111,9 @@ angular.module('cApp')
 
 	    var step;
 
-            for (var i = 0; i < story.step.length; ++i) {
-                if (parseInt(story.step[i].id) === node) {
-                    step = story.step[i];
+            for (var i = 0; i < story.steps.length; ++i) {
+                if (parseInt(story.steps[i].id) === node) {
+                    step = story.steps[i];
                 }
             }
 
