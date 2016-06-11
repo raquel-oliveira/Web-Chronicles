@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<story>
-  <name>complicated ééé näme</name>
+<story name="complicated ééé näme">
   <file>hi.xml</file>
   <step>
     <id>0</id>

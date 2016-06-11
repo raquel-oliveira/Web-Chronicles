@@ -11,19 +11,13 @@ angular.module('cApp')
       //variables
       $scope.nbSteps = 0;
       $scope.currentStep = null;
+      $scope.view = "play";
 
       //TODO: Need to implement check of parameter, for now, its show an alert in setFile
       story.setFile($routeParams.story);
       $scope.storyName = story.getName();
       $scope.goToStep(0); //start from 0.
-      /*var a;
-      //var result = checkStory.nameIsValide($routeParams.story);
-      var result = checkStory.nameIsValide($routeParams.story).then(function (result) {
-      a = result;
-    });
-      console.log("hahahah");
-      console.log(result);
-      console.log(a);*/
+
 
       /* Definition of functions */
 
