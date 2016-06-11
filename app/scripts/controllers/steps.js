@@ -42,7 +42,7 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
 
 
 myApp.controller('EndCtrl', function ($scope, $http) {
-    if ($scope.currentStep.win[0] === 'true') {
+    if ($scope.currentStep.win === true) {
         $scope.showStory = true;
         $scope.tryAgain = false;
         $scope.winT = true;

@@ -36,7 +36,7 @@ angular.module('cApp')
                     $scope.currentStep = data;
                     $scope.currentStep.url = 'views/play_step/' + data.type + '.html';
                     $scope.play = true;
-
+		    console.log(data);
                     ++$scope.nbSteps;
                 });
             } else {

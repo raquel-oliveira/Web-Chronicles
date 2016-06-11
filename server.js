@@ -92,13 +92,9 @@ function createEndStep(step, stepData) {
 
 function createMazeStep(step, stepData) {
     step.type = 'maze';
-    step.nextStep = [];
+    step.nextStep = stepData.maze[0].nextStep;
     step.rows = stepData.maze[0].rows[0];
     step.columns = stepData.maze[0].columns[0];
-
-    for (var i = 0; i < stepData.maze[0].nextStep.length; ++i) {
-        step.nextStep.push(stepData.maze[0].nextStep[i]);
-    }
 
     step.getPlayInfos = function () {
         return step;
