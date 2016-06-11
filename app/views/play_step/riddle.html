@@ -1,7 +1,6 @@
 <div class="riddle" ng-controller="RiddleCtrl">
     <form novalidate>
         <input ng-model="answer" type="text"/>
-        <p>Your guess is {{answer}}</p>
 
         <a class="btn btn-lg btn-app" ng-click="verifyAnswer(answer)">Next</a>
         <div ng-show="showhint">

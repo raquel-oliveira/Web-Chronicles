@@ -3,7 +3,9 @@
 <!-- endbuild -->
 
 <div class="story-play">
-      <h1> {{ storyName }} </h1>
+      <div class="title">
+         <h1> {{ storyName }} </h1>
+       </div>
         <ng-include src="'views/play_step/step.html'"></ng-include>
         <ng-include src="currentStep.url"></ng-include>
 </div> <!-- <div class="story-play" ng-show="play"> -->

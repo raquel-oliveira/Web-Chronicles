@@ -86,6 +86,13 @@ body {
   .contact{
 
   }
+
+  .title{
+    color: blue;
+    text-align: center;
+    font-size: 50px;
+    border: 25px solid navy;
+  }
   .choose-story{
     font-size: 20px;
     text-align: center;
@@ -96,8 +103,12 @@ body {
     text-align: center;
   }
 
+  .info-end, .maze{
+    text-align: center;
+  }
+
   .end{
-    font-size: 100px;
+    font-size: 200px;
     text-align: center;
   }
 
