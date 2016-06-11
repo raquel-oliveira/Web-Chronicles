@@ -382,8 +382,6 @@ app.get('/hello/',function (req, res) {
 });
 
 app.get('/hello/keys',function (req, res) {
-    //myCache.set(item+'.json',result);
-    //var value = myCache.get( "myKey" );
     var mykeys = myCache.keys();
     res.send(mykeys);
 });

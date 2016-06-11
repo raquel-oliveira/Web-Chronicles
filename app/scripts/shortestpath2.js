@@ -33,10 +33,10 @@ function addVertex(item)
 
     if (item.type === 'end' &&
 	typeof item.win !== 'undefined' &&
-	item.win === 'true') {
+	item.win === true) {
         vertex.end = true;
     }
-
+    
     if(typeof item.nextStep !== 'undefined' && item.nextStep) {
 
 
@@ -77,11 +77,11 @@ function shortestPath() {
 
     var iDtoExplore = [];
     iDtoExplore.push(0);
-    console.log(graph);
+    //console.log(graph);
     while (iDtoExplore.length>0) {
         var indexCur = iDtoExplore.shift();
-	console.log(indexCur);
-	console.log(graph);
+/*	console.log(indexCur);
+	console.log(graph);*/
         if(graph[indexCur].end === true || graph[indexCur].end ==='true')
         {
             console.log('end');
@@ -89,10 +89,10 @@ function shortestPath() {
         }
 
         graph[indexCur].to.forEach(function(item) {
-	    console.log(item);
+/*	    console.log(item);
 	    console.log(graph);
 	    console.log(graph[item]);
-            console.log('add');
+            console.log('add');*/
 
             if(graph[item].visited===-1)
             {
