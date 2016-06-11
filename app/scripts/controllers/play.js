@@ -7,7 +7,7 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', function ($scope, $http, $sce, story, $routeParams){
+    .controller('PlayCtrl', ['$scope', '$http', '$sce', 'story', '$routeParams', function ($scope, $http, $sce, story, $routeParams){
       console.log("In controller Play");
       //variables
       $scope.nbSteps = 0;
@@ -17,7 +17,6 @@ angular.module('cApp')
       //TODO: Need to implement check of parameter, for now, its show an alert in setFile
       if($routeParams.story !== undefined){
         story.setFile($routeParams.story);
-        console.log("PLAY: not param in URL");
         console.log($routeParams.story);
         $scope.storyName = story.getName();
         $scope.goToStep(0); //start from 0.
@@ -30,7 +29,7 @@ angular.module('cApp')
         console.log("the step is:");
         console.log(step);
         if (undefined !== step) {
-          $scope.cleanLastStep();
+          $scope.currentStep = null; // Clean data related to last step
           $http.get('stories/' + story.getFile() + '/step/' + step).success(function (data) {
             $scope.currentStep = data;
             $scope.currentStep.url = 'views/play_step/' + data.type[0] + '.html';
@@ -42,10 +41,4 @@ angular.module('cApp')
           alert("Choose an option");
         }
       };
-
-      // Clean data related to last step
-      $scope.cleanLastStep = function () {
-        $scope.currentStep = null;
-      };
-
-});
+}]);
