@@ -137,6 +137,7 @@ function createRiddleStep(step, stepData) {
             description: step.description,
             question: step.question,
             hint: step.hint,
+	    outcomes: step.outcomes,
             nextStep: []
         };
         for (var i = 0; i < step.outcomes.length; ++i) {

@@ -116,9 +116,11 @@ angular.module('cApp')
                     step = story.steps[i];
                 }
             }
+	    console.log(step);
+	    $scope.outcomes = step.outcomes;
 
 	    $scope.step = step;
-            $scope.url = 'views/show-' + step.type[0] + '.html';
+            $scope.url = 'views/show-' + step.type + '.html';
 	};
 
     if($routeParams.story !== undefined){
