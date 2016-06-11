@@ -38,9 +38,9 @@ function addVertex(item)
     }
     
     if(typeof item.nextStep !== 'undefined' && item.nextStep) {
+	console.log(item);
 
-
-
+	
         item.nextStep.forEach(function(nextStepID) {
 
             vertex.to.push(nextStepID);

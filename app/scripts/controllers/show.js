@@ -122,7 +122,7 @@ angular.module('cApp')
 	};
 
     if($routeParams.story !== undefined){
-	$http.get('show/stories/'+ $routeParams.story).success(function (data) {
+	$http.get('show/story/'+ $routeParams.story).success(function (data) {
             $scope.updateGraph(data);
             $scope.storyName = data.name;
       });
