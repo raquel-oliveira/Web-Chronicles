@@ -4,6 +4,14 @@
 'use strict';
 var graph = [];
 
+function ShortPath(){
+    this.hello2 = hello2();
+    this.unpack = unpack();
+    this.addVertex = addVertex();
+    this.fillgraph = fillgraph();
+    this.shortestPath = shortestPath();
+}
+
 function hello2()
 {
     console.log('hello from the inside');
