@@ -54,21 +54,3 @@ myApp.factory('story', function($http){
     }
   }
 });
-
-/*myApp.service('checkStory', ['$http', function ($http) {
-  var isValide = false;
-    this.nameIsValide = function (name) {
-      console.log("to na funcao");
-      $http.get('stories/').success(function (data) {
-        console.log("fiz http funcao");
-        for (var i = 0 ; i < data.length; i++){
-          if (data[i].file === name){
-            console.log("true ta");
-            isValide = true;
-          }
-        }
-        isValide = false;
-      });
-      return isValide;
-    }
-  }]);*/
