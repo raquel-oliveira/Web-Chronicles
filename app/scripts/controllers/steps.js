@@ -1,16 +1,21 @@
 'use strict';
 var myApp = angular.module('cApp');
 
-myApp.controller('RiddleCtrl', function ($scope, $http) {
+myApp.controller('RiddleCtrl', function ($scope, $http,story) {
     $scope.verifyAnswer = function (answer) {
-        $http.get('play/stepAction/' + $scope.selected + "/" + $scope.currentStep.id +
+        $http.get('play/stepAction/' + story.getFile() + "/" + $scope.currentStep.id +
             '/verifyAnswer/' + answer).then(function (reponse) {
             if (reponse.data.correct === true) {
+                console.log('correct');
                 $scope.goToStep(reponse.data.nextStep);
             }
             else {
-                $scope.showhint = true;
+                console.log('incorrect');
+                console.log(reponse.data);
+
                 $scope.hint = reponse.data.hint;
+                console.log($scope.hint);
+                $scope.showhint = true;
 
                 /*$scope.hint.close = 'Not even close';
 
