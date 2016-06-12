@@ -255,8 +255,13 @@ function initStories() {
 initStories();
 
 app.get('/show/story/:name', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send(getShowStory(req.params.name));
+    if (req.params.name in stories) {
+	res.set('Content-Type', 'application/json');
+	res.send(getShowStory(req.params.name));
+    } else {
+        res.statusCode = 400;
+	res.send('Error: can\t find story ' + req.params.name);
+    }
 });
 
 function getShowStory(storyName) {
