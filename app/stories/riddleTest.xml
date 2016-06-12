@@ -1,18 +1,7 @@
 <story>
     <name>Riddle Test</name>
     <step>
-        <title>Root riddle</title>
         <id>0</id>
-        <description>How many is 10 in binary?</description>
-        <type>riddle</type>
-        <question>How many is 10 in binary?</question>
-        <hiden>
-            <nextStep answer="2">1</nextStep>
-            <hint>01 => 1, 11 => 3</hint>
-        </hiden>
-    </step>
-    <step>
-        <id>1</id>
         <title>Riddle with 1 option</title>
         <desc>How many is 10 in binary?</desc>
         <riddle>
@@ -20,36 +9,36 @@
             <hint>01 => 1, 11 => 3</hint>
             <outcome>
                 <text>2</text>
-                <nextStep>2</nextStep>
+                <nextStep>1</nextStep>
             </outcome>
         </riddle>
     </step>
     <step>
         <id>2</id>
-        <title>Riddle with 3 option</title>
+        <title>Riddle with 2 option</title>
         <desc>Where he go?</desc>
         <riddle>
             <question>Where he go?</question>
             <hint>left, right, up, down</hint>
             <outcome>
                 <text>left</text>
-                <nextStep>3</nextStep>
+                <nextStep>2</nextStep>
             </outcome>
             <outcome>
                 <text>right</text>
-                <nextStep>4</nextStep>
+                <nextStep>3</nextStep>
             </outcome>
         </riddle>
     </step>
     <step>
-        <id>3</id>
+        <id>2</id>
         <desc>Sorry</desc>
         <end>
             <win>false</win>
         </end>
     </step>
     <step>
-        <id>4</id>
+        <id>3</id>
         <desc>Nice one!</desc>
         <end>
             <win>true</win>

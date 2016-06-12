@@ -12,7 +12,7 @@ function unpack(from) {
 
         from = graph[from].parent;
     }
-    route.push("0");
+    route.push(0);
     return route.reverse();
 }
 
@@ -71,10 +71,7 @@ function shortestPath() {
 
 
     }
-
-    var data = [];
-
-    return data;
+    return [];
 }
 
 if (typeof module !== 'undefined') {
