@@ -17,6 +17,7 @@ var session = require('express-session');
 // App
 const app = express();
 
+
 app.use(
     session(
         { secret: 'keyboard cat', cookie: { maxAge: 3600*24*6000  }}));
@@ -45,10 +46,7 @@ function update(sess,story,step,create)
     sess.save(function(err) {
         console.dir(sess.views);
     })
-
-
 }
-
 
 
 function createStep(stepData) {
@@ -492,10 +490,9 @@ app.get('/getLastStep', function(req, res, next) {
         res.redirect('/play/'+sess.views.story+"/"+sess.views.step);
         //res.send(sess.views);
     } else {
-        res.send('no session',503);
+        res.send('no session').send(503);
 
     }
-
 });
 
 app.use(express.static(__dirname + '/app'));

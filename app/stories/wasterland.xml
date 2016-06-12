@@ -5,13 +5,14 @@
         <id>0</id>
         <given>vault 13 combinaison</given>
         <desc>
-            <![CDATA[ <img src="images/13.png" height="100" width="100">civilisation est tombée en ruines à la suite d'une guerre nucléaire.
+            <![CDATA[ <img src="images/13.png" height="100" width="100"><div>Lacivilisation est tombée en ruines à la suite d'une guerre nucléaire.
                 Pour se protéger des explosions atomiques, certaines personnes ont trouvé refuge dans des abris anti-atomiques souterrains (vault en anglais).
 
                 Vous êtes est un habitant d'un de ces abris souterrains, l'Abri 13, qui est sélectionné pour être le premier à affronter le monde extérieur.
                 Le 5 décembre 2161, la puce servant à filtrer l'eau contaminée (water chip) vient de tomber en panne : <br></br>
                     votre mission sera d'aller affronter le monde extérieur pour trouver une puce de rechange avant que les réserves d'eau de l'abri ne s'épuisent.
-                Votre seule information de départ est l'existence d'un autre abri construit à l'Est qui, peut-être, aurait cette puce.]]></desc>
+
+                Votre seule information de départ est l'existence d'un autre abri construit à l'Est qui, peut-être, aurait cette puce.</div]]></desc>
         <type>multiple_choice</type>
         <multiple_choice>
 
@@ -30,8 +31,8 @@
 
         <type>multiple_choice</type>
         <multiple_choice>
-        <outcome><text>Quitter l'abri </text><nextStep>2</nextStep></outcome>
-    </multiple_choice>
+            <outcome><text>Quitter l'abri </text><nextStep>2</nextStep></outcome>
+        </multiple_choice>
 
     </step>
     <step>
@@ -75,9 +76,9 @@
 
         <type>multiple_choice</type>
         <multiple_choice><outcome><text>Fuir </text><nextStep>3</nextStep></outcome>
-        <outcome><text>Discuter </text><nextStep>5</nextStep></outcome>
-        <outcome><text>Combatre </text><nextStep>7</nextStep></outcome>
-        <outcome><text>S'infiltrer </text><nextStep>7</nextStep></outcome>
+            <outcome><text>Discuter </text><nextStep>5</nextStep></outcome>
+            <outcome><text>Combatre </text><nextStep>7</nextStep></outcome>
+            <outcome><text>S'infiltrer </text><nextStep>7</nextStep></outcome>
         </multiple_choice>
 
     </step>
