@@ -87,26 +87,23 @@ function shortestPath() {
 
 
 
+function exports()
+{
+    try{
 
 
+        module.exports = {
+            unpack: unpack,
+            addVertex: addVertex,
+            fillgraph: fillgraph,
+            shortestPath: shortestPath
+        };
+    }
+    catch(ex)
+    {
+        console.log('err');
+    }
 
+}
 
-
-
-
-
-
-
-
-/*module.exports = {
-
-
-    hello2: hello2,
-
-    unpack: unpack,
-    addVertex: addVertex,
-    fillgraph: fillgraph,
-    shortestPath: shortestPath,
-
-
-};*/
+exports();
