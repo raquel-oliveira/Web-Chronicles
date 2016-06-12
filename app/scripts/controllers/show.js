@@ -9,13 +9,7 @@ var x2js = new X2JS();
  * # ShowCtrl
  */
 angular.module('cApp')
-    .directive('storyNetwork', function() {
-      return {
-        template: '<div id="network-story" ng-style="graphStyle"></div>',link: function(scope) {
-      }
-    };
-    })
-    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', 'graph', '$location', function ($scope, $http, $routeParams, graph, $location) {
         $scope.view = "show";
         $scope.storyName = null;
         $scope.network = null;
@@ -27,62 +21,12 @@ angular.module('cApp')
         $scope.showDatas = false;
         $scope.hasShortestPath = true;
 
-        function addEdge(edges, from, to) {
-            edges.add({
-                id: edges.length,
-                from: from,
-                to: to,
-                arrows: {to: true}
-            });
-	}
+        $scope.updateGraph = function (story) {
+	    var graphData = graph.getGraphData(story);
+	    var nodes = graphData.nodes;
+            var edges = graphData.edges;
 
-	function addNode(nodes, id, color, fontColor) {
-	    if (typeof color === "undefined") { color = "#D2E5FF"; }
-	    if (typeof fontColor === "undefined") { fontColor = "#343434"; }
-
-	    var shape = (nodes.length === 0)? 'box': 'ellipse';
-
-            nodes.add({
-                id: id,
-                label: id,
-		color: color,
-		font: { color: fontColor },
-		shape: shape
-            });
-	}
-
-
-        $scope.updateGraph = function (data) {
-	    var nodes = new vis.DataSet([]);
-            var edges = new vis.DataSet([]);
-            var story = data.story;
-            for (var i = 0; i < story.step.length; ++i) {
-                if (story.step[i].content[0].type[0] === 'multiple_choice') {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-
-                    for (let j = 0; j < story.step[i].content[0].nextStep.length; ++j) {
-                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep[j]._));
-                    }
-                } else if (story.step[i].content[0].type[0] === 'end') {
-                    var color = (story.step[i].content[0].win[0] === 'false') ?
-                        '#882222' : '#228822';
-
-		    addNode(nodes, parseInt(story.step[i].content[0].id), color, "#FFFFFF");
-                } else if (story.step[i].content[0].type[0] === 'riddle') {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-
-                    for (let j = 0; j < story.step[i].hiden[0].answer.length; ++j) {
-                        addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].hiden[0].answer[j].$.stepId));
-                    }
-                } else if (story.step[i].content[0].type[0] === 'maze') {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-                    addEdge(edges, parseInt(story.step[i].content[0].id), parseInt(story.step[i].content[0].nextStep[0]._));
-                } else {
-		    addNode(nodes, parseInt(story.step[i].content[0].id));
-                }
-            }
-
-            $http.get('compute/' + $routeParams.story + '/false').then(function (spData) {
+            $http.get('shortestPath/' + $routeParams.story + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
                     $scope.hasShortestPath = true;
                 } else {
@@ -119,7 +63,7 @@ angular.module('cApp')
 			$scope.displayNode(params.nodes[0], story);
 		    });
                 });
-            });
+             });
         };
 
 	$scope.displayNode = function(node, story) {
@@ -129,20 +73,27 @@ angular.module('cApp')
 
 	    var step;
 
-            for (var i = 0; i < story.step.length; ++i) {
-                if (parseInt(story.step[i].content[0].id) === node) {
-                    step = story.step[i];
+            for (var i = 0; i < story.steps.length; ++i) {
+                if (parseInt(story.steps[i].id) === node) {
+                    step = story.steps[i];
                 }
             }
+	    $scope.outcomes = step.outcomes;
 
 	    $scope.step = step;
-            $scope.url = 'views/show-' + step.content[0].type[0] + '.html';
+            $scope.url = 'views/show-' + step.type + '.html';
 	};
 
+    /*
+    * Check if the parameter is a valid story.
+    */
     if($routeParams.story !== undefined){
-      $http.get('show/stories/'+ $routeParams.story).success(function (data) {
-                  $scope.updateGraph(data);
-                  $scope.storyName = data.story.$.name;
-              });
+      $http.get('show/story/'+ $routeParams.story).then(function (data) {
+            $scope.updateGraph(data.data);
+            $scope.storyName = data.data.name;
+      }, function(){
+        $location.path('/');
+        $location.replace();
+      });
     }
 }]);

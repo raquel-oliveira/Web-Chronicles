@@ -1,0 +1,61 @@
+<story>
+    <name>All kind of steps</name>
+    <step>
+        <id>0</id>
+        <title>Multiple choice</title>
+        <desc>Description multiple choice</desc>
+        <multiple_choice>
+            <outcome>
+                <text>Maze and good end</text>
+                <nextStep>1</nextStep>
+            </outcome>
+            <outcome>
+                <text>Riddle and bad end</text>
+                <nextStep>2</nextStep>
+            </outcome>
+        </multiple_choice>
+    </step>
+    <step>
+        <id>1</id>
+        <title>Maze</title>
+        <desc>Description maze</desc>
+        <maze>
+            <rows>5</rows>
+            <columns>5</columns>
+            <nextStep>3</nextStep>
+        </maze>
+    </step>
+    <step>
+        <id>2</id>
+        <title>Riddle</title>
+        <desc>Description riddle</desc>
+        <riddle>
+            <question>bonjour ou aaa</question>
+            <hint>The answer is in the question</hint>
+            <outcome>
+                <text>bonjour</text>
+                <nextStep>4</nextStep>
+            </outcome>
+            <outcome>
+                <text>aaa</text>
+                <nextStep>4</nextStep>
+            </outcome>
+        </riddle>
+    </step>
+    <step>
+        <id>3</id>
+        <title>Good end</title>
+        <desc>Description good end</desc>
+        <end>
+            <win>true</win>
+        </end>
+    </step>
+    <step>
+        <id>4</id>
+        <title>Bad end</title>
+        <desc>Description bad end</desc>
+        <end>
+            <win>false</win>
+        </end>
+    </step>
+</story>

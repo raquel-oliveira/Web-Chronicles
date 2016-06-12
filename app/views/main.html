@@ -1,12 +1,17 @@
 <div class="jumbotron">
   <h1>Browser Chronicles</h1>
-  <h2>A browser-based gamebook platform</h2>
-  <p class="lead">
-    <img src="images/books.jpg" height="400" width="600"><br> <!-- resize the image when adapt size of the page -->
-    Create your own stories.
-  </p>
-
-  <p><a class="btn btn-lg btn-app" ng-href="#/play"> Start  <span class="glyphicon glyphicon-road"></span></a></p>
-  <p><a class="btn btn-lg btn-app" ng-href="#/edit"> Edit <span class="glyphicon glyphicon-pencil"></span></a></p>
-
-</div>
+  <div ng-controller="SetStory">
+    <div class="choose-story">
+        <p>Choose a story: </p>
+        <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
+      <h2>
+          <a ng-href="#/play/{{storyPath}}" class="myButton2">
+              Play
+          </a>
+          <a ng-href="#/show/{{storyPath}}" class="myButton2">
+              Show
+          </a>
+      </h2>
+    </div> <!--<div class="choose-story"> -->
+  </div> <!-- <div ng-controller="SetStory"> -->
+</div> <!-- <div class="jumbotron"> -->

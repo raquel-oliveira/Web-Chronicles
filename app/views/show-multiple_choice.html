@@ -1,9 +1,9 @@
 <div>
-  <b>Choix:</b>
+  <b>Choice:</b>
   <ul>
-    <li ng-repeat="s in step.content[0].nextStep">
-      {{ s.$.label }} -> Step <b>{{ s._ }}</b>
+    <li ng-repeat="o in outcomes">
+      {{ o.text }} -> Step <b>{{ o.nextStep }}</b>
     </li>
   </ul>
-  
+
 </div>
