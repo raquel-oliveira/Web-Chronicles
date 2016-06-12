@@ -216,7 +216,7 @@ function readStory(story_file) {
 
             for (var i = 0; i < data.story.step.length; ++i) {
                 try {
-                    steps.push(createStep(data.story.step[i]));
+                    steps[data.story.step[i].id[0]] = (createStep(data.story.step[i]));
                 }
                 catch (ex)
                 {
