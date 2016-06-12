@@ -2,7 +2,7 @@
     <name>Valley of disappointment!</name>
     <step>
         <id>0</id>
-        <title>ezaeza</title>
+        <title>Initial</title>
         <desc>In the valley of disappointment people are always sad or really sad.
             Someone told you, there was a time this wasn't that sad...
         </desc>
@@ -42,7 +42,6 @@
     </step>
     <step>
         <id>2</id>
-        <title>ezaaqaqq</title>
         <desc>And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person
             that always belived THIS time he wouldn't be dissapointed).
         </desc>
@@ -72,7 +71,7 @@
     </step>
     <step>
         <id>4</id>
-        <title>dzqsdqsldp</title>
+        <title>Ops</title>
         <desc>The route to get in the Happy mountain was dangerous and protected by the guardians, so he die
             by a shot from the major protector of the valley
         </desc>
@@ -82,7 +81,7 @@
     </step>
     <step>
         <id>5</id>
-        <title>dloap</title>
+        <title>The coma</title>
         <desc>He slept so deeply that he got in a coma</desc>
         <end>
             <win>false</win>
@@ -90,7 +89,6 @@
     </step>
     <step>
         <id>6</id>
-        <title>dzazsqdsqd</title>
         <desc>Roberto listen the story, got excited but his mother didn't let him go to the mountain. So
             everybody lived dreaming about a better day
         </desc>

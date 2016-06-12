@@ -50,7 +50,7 @@
     </step>
     <step>
         <id>4</id>
-        <desc>Nice jog</desc>
+        <desc>Nice one!</desc>
         <end>
             <win>true</win>
         </end>
