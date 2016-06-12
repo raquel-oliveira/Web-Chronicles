@@ -1,9 +1,11 @@
 <story>
     <name>"Fallout 0"</name>
+
     <step>
         <id>0</id>
+        <given>vault 13 combinaison</given>
         <desc>
-            <![CDATA[ <img src="images/13.png" height="400" width="600">civilisation est tombée en ruines à la suite d'une guerre nucléaire.
+            <![CDATA[ <img src="images/13.png" height="100" width="100">civilisation est tombée en ruines à la suite d'une guerre nucléaire.
                 Pour se protéger des explosions atomiques, certaines personnes ont trouvé refuge dans des abris anti-atomiques souterrains (vault en anglais).
 
                 Vous êtes est un habitant d'un de ces abris souterrains, l'Abri 13, qui est sélectionné pour être le premier à affronter le monde extérieur.
@@ -12,6 +14,7 @@
                 Votre seule information de départ est l'existence d'un autre abri construit à l'Est qui, peut-être, aurait cette puce.]]></desc>
         <type>multiple_choice</type>
         <multiple_choice>
+
             <outcome><text>Explorer l'abri</text><nextStep>1</nextStep></outcome>
 
             <outcome><text>Sortir dans le monde exterieur </text><nextStep>2</nextStep></outcome>

@@ -10,11 +10,16 @@ const sp = require('./app/scripts/shortestpath2.js');
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
+var session = require('express-session');
+// Use the session middleware
 
 
 // App
 const app = express();
 
+app.use(
+    session(
+        { secret: 'keyboard cat', cookie: { maxAge: 3600*24*6000  }}));
 function createStep(stepData) {
 
     var step = {};
@@ -25,7 +30,12 @@ function createStep(stepData) {
         step.description = stepData.desc[0];
     else
         step.description = "";
-    
+
+    if (stepData.hasOwnProperty("given"))
+        step.given = stepData.given;
+    else
+        step.given = "";
+
     if (stepData.hasOwnProperty("multiple_choice")) {
         step = createMultipleChoiceStep(step, stepData);
     } else if (stepData.hasOwnProperty("end")) {
@@ -44,6 +54,8 @@ function copyStepBasicData(from, to){
     to.description = from.description;
     to.type = from.type;
     to.id = from.id;
+    to.given = from.given;
+
 
     return to;
 }
@@ -164,7 +176,7 @@ function createRiddleStep(step, stepData) {
 
     step.verifyAnswer = function(data){
         var minLevDist = 100;
-
+        var trimmedText = data.tri;
         var found = false;
         var nextStep;
         //distance
@@ -211,6 +223,7 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
+
             console.log("\t" + data.story.name[0]);
             var steps = [];
 
@@ -280,7 +293,28 @@ function getShowStory(storyName) {
 
 app.get('/play/:storyName/:step', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(getPlayStep(req.params.storyName, req.params.step));
+    var step = getPlayStep(req.params.storyName, req.params.step);
+    res.send(step);
+
+    var sess = req.session;
+    if (!sess.views) {
+
+        sess.views =[];
+    }
+    if(step.id==0)
+    {
+        sess.views =[];
+    }
+    if(step.given!=undefined&&step.given!=='')
+    {
+
+        step.given.forEach(function(item){
+            sess.views.push(item);
+        });
+        req.session.save(function(err) {
+        })
+    }
+
 });
 
 function getPlayStep(storyName, stepId) {
@@ -299,46 +333,8 @@ app.get('/stories', function (req, res) {
 app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(stories[req.params.storyName].steps[req.params.step][req.params.action](req.params.data));
-    /*var step = parseInt(req.params.step);
-    var reponse = req.params.reponse;
 
-    var result = myCache.get(req.params.name + '.json');
 
-    console.dir(result);
-    console.dir(result.story.step[step]);
-    console.log(step);
-    console.dir(result.story.step[step].hiden);
-    console.dir(result.story.step[step].hiden[0]);
-
-    var answerS = result.story.step[step].hiden[0].nextStep;
-
-    var minLevDist = 100;
-
-    var found = false;
-    //distance
-    answerS.forEach(function (answer) {
-        if (answer.$.answer == reponse) {
-
-            res.send(answer);
-            found = true;
-        }
-        var lComp = Levenshtein(answer.$.answer, reponse);
-        if (lComp < minLevDist)
-            minLevDist = lComp;
-
-    });
-
-    if (!found) {
-
-        var hint = {
-            hint: result.story.step[step].hiden[0].hint[0],
-            distance: minLevDist
-
-        };
-
-        res.statusCode = 210;
-        res.send(hint);
-    }*/
 });
 
 
@@ -368,28 +364,15 @@ function filterStep(step, filter) {
     return result;
 }
 
-app.get('/hello/', function (req, res) {
-    initCache();
-    res.send('hi');
-});
-
-app.get('/hello/keys', function (req, res) {
-    var mykeys = myCache.keys();
-    res.send(mykeys);
-});
-
-app.get('/shortestPath/:storyName/:sizez', function (req, res) {
+app.get('/shortestPath/:storyName/:onlySize', function (req, res) {
 
     var rep = stories[req.params.storyName];
-    if (rep === undefined) {
-        //send()
-    }
 
     sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
     console.log(data);
 
-    if (req.params.sizez === 'true') {
+    if (req.params.onlySize === 'true') {
         res.send(data.length + '');
     }
     else {
@@ -397,6 +380,7 @@ app.get('/shortestPath/:storyName/:sizez', function (req, res) {
     }
 });
 
+//TODO: update this
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
 
     var json = myCache.get(req.params.name + '.json');
@@ -422,6 +406,7 @@ function toXML(result,rootNameParam)
     return builder.buildObject(result);
 }
 
+//TODO: debug this
 app.post('/stories/', function (req, res) {
 
     console.log(req.body);
@@ -455,6 +440,19 @@ app.post('/stories/', function (req, res) {
 
 });
 
+
+
+// Access the session as req.session
+app.get('/inventory', function(req, res, next) {
+    var sess = req.session;
+    if (sess.views) {
+        res.send(sess.views);
+    } else {
+        sess.views = [];
+        res.send(sess.views);
+    }
+
+});
 
 app.use(express.static(__dirname + '/app'));
 app.use(express.static(__dirname + '/'));
