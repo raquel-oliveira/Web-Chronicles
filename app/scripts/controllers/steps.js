@@ -39,7 +39,8 @@ myApp.controller('RiddleCtrl', function ($scope, $http) {
 });
 
 
-myApp.controller('EndCtrl', function ($scope, $http) {
+myApp.controller('EndCtrl', function ($scope, $http, story) {
+  $scope.storyPath = story.getFile();
     if ($scope.currentStep.win === true) {
         $scope.showStory = true;
         $scope.tryAgain = false;
