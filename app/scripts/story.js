@@ -35,11 +35,10 @@ myApp.factory('story', function($http, $location){
     setFile: function(f){
       //TODO: Make a check using a service, if not available redirect to "#/main"
       var check = false;
-      $http.get('stories/').success(function (data) {
-        for (var i = 0 ; i < data.length; i++){
-          if (data[i].file === f){
-            story = data[i];
-            console.log("setei");
+      $http.get('stories/').then(function (data) {
+        for (var i = 0 ; i < data.data.length; i++){
+          if (data.data[i].file === f){
+            story = data.data[i];
             check = true;
           }
         }
@@ -51,31 +50,6 @@ myApp.factory('story', function($http, $location){
     },
     getName: function () {
       return story.label;
-    }
-  }
-});
-
-
-myApp.factory('check', function($http, $location){
-  return {
-    checkStory: function(f){
-      var check = false;
-      $http.get('stories/').success(function (data) {
-        for (var i = 0 ; i < data.length; i++){;
-          if (data[i].file === f){
-            console.log("setei");
-            check = true;
-            return data[i];
-          }
-        }
-        if(check === false){
-          console.log("faaalso antes de vir ao menu");
-          $location.path('/');
-          $location.replace();
-          console.log("vou retornar falso");
-          return false;
-        }
-      });
     }
   }
 });

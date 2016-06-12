@@ -7,8 +7,7 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', ['$scope', '$http', '$sce', 'story', '$routeParams', function ($scope, $http, $sce, story, $routeParams){
-    console.log("initial log");
+    .controller('PlayCtrl', ['$scope', '$http', '$sce', '$routeParams', '$location', function ($scope, $http, $sce, $routeParams, $location){
       //variables
       $scope.nbSteps = 0;
       $scope.currentStep = null;
@@ -18,10 +17,7 @@ angular.module('cApp')
       $scope.goToStep = function (step) {
         if (undefined !== step) {
           $scope.currentStep = null; // Clean data related to last step
-          $http.get('play/' + story.getFile() + '/' + step).success(function (data) {
-          //$http.get('play/' + $routeParams.story + '/' + step).success(function (data) {
-            console.log(data);
-            //$scope.storyName = data.title;
+          $http.get('play/' + $routeParams.story + '/' + step).success(function (data) {
             $scope.currentStep = data;
             $scope.currentStep.url = 'views/play_step/' + data.type + '.html';
             $scope.stepType = data.type;
@@ -34,20 +30,24 @@ angular.module('cApp')
       };
 
       if($routeParams.story !== undefined){
-        story.setFile($routeParams.story);
-        //console.log("initialp log");
-        //story.setFile($routeParams.story);
-        //if (check.checkStory($routeParams.story) !== false){
-          //console.log("not false");
-          //console.log(check.checkStory($routeParams.story));
-          //$scope.storyName = check.checkStory($routeParams.story).label;
-        //}
-        $scope.storyName = story.getName();
-        console.log(story.getFile());
-        $scope.goToStep(0); //start from 0.
-        console.log("finp log");
-
-      }
-      console.log("end log");
-
+        $http.get('stories/').then(
+          function (data) {
+            var check = false;
+            for (var i = 0 ; i < data.data.length; i++){
+              if (data.data[i].file === $routeParams.story){
+                check = true;
+                $scope.storyName = data.data[i].label;
+                $scope.goToStep(0); //start from 0.
+              }
+            }
+            if(check === false){
+              $location.path('/');
+              $location.replace();
+            }
+          },
+          function(){
+            $location.path('/');
+            $location.replace();
+            });
+          }
 }]);
