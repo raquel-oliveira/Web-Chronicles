@@ -12,7 +12,7 @@ function unpack(from) {
 
         from = graph[from].parent;
     }
-    route.push("0");
+    route.push(0);
     return route.reverse();
 }
 

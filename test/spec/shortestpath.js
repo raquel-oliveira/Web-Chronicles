@@ -9,5 +9,6 @@ describe('Shortest path: ', function(){
         expect(s.length).toBe(2);
         expect(s[0]).toBe(0);
         expect(s[1]).toBe(4);
-    })
+    });
+    it('should return')
 });
