@@ -1,0 +1,62 @@
+<story>
+    <name>Minimal story 1</name>
+    <step>
+        <id>0</id>
+        <desc>
+            <![CDATA[This is <b>First step !</b><img src="images/books.jpg" height="400" width="600">]]></desc>
+        <title>step 0 min-story!</title>
+        <multiple_choice>
+            <outcome>
+                <text>Choice 1</text>
+                <nextStep>1</nextStep>
+            </outcome>
+            <outcome>
+                <text>Choice 2</text>
+                <nextStep>2</nextStep>
+            </outcome>
+            <outcome>
+                <text>Choice 3</text>
+                <nextStep>3</nextStep>
+            </outcome>
+        </multiple_choice>
+    </step>
+    <step>
+        <id>1</id>
+        <title>End! You loose</title>
+        <desc><![CDATA[This is <b>First step !</b>]]></desc>
+        <end>
+            <win>false</win>
+        </end>
+    </step>
+    <step>
+        <title>Riddle</title>
+        <id>2</id>
+        <desc>How many is 10 in binary?</desc>
+        <riddle>
+            <question>How many is 10 in binary?</question>
+            <hint>01 => 1, 11 => 3</hint>
+            <outcome>
+                <text>2</text>
+                <nextStep>4</nextStep>
+            </outcome>
+        </riddle>
+    </step>
+    <step>
+        <id>3</id>
+        <title>Escape !</title>
+        <desc>Find your way out ...</desc>
+        <maze>
+            <rows>5</rows>
+            <columns>4</columns>
+            <nextStep>4</nextStep>
+        </maze>
+    </step>
+    <step>
+        <id>4</id>
+        <title>"End! You win"</title>
+        <desc>win !</desc>
+        <end>
+            <win>true</win>
+        </end>
+    </step>
+</story>

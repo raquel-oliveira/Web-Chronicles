@@ -56,7 +56,11 @@ function createStep(stepData) {
     var step = {};
     step.id = stepData.id[0];
 
-    step.title = stepData.title[0];
+    if (stepData.hasOwnProperty("title"))
+        step.title = stepData.title[0];
+    else
+        step.title = "";
+    
     if (stepData.hasOwnProperty("desc"))
         step.description = stepData.desc[0];
     else
