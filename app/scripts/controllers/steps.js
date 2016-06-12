@@ -47,6 +47,10 @@ myApp.controller('EndCtrl', function ($scope, $http, $routeParams) {
         $scope.winT = true;
         $scope.win = "You win";
         $scope.winStyle = {'color': 'green'};
+
+	$http.get('shortestPath/' + $scope.storyPath + '/true').success(function (data) {
+            $scope.minSteps = data;
+	});
     } else {
         $scope.showStory = false;
         $scope.winT = false;
@@ -55,11 +59,7 @@ myApp.controller('EndCtrl', function ($scope, $http, $routeParams) {
         $scope.winStyle = {'color': 'red'};
     }
 
-
-    $http.get('compute/' + $scope.storyPath + '/true').success(function (data) {
-        $scope.minSteps = data;
-
-    });
+    
 });
 
 myApp.controller('MCCtrl', function ($scope) {
