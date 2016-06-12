@@ -79,8 +79,8 @@ module.exports = function (grunt) {
                 ]
             }
         },
-
         //express server for rest API
+
         express: {
             server: {
                 options: {
@@ -88,8 +88,7 @@ module.exports = function (grunt) {
                     script: 'server.js'
                     // Override defaults here
                 }
-            }
-        },
+            }},
         // The actual grunt server settings
         connect: {
             options: {
@@ -225,13 +224,13 @@ module.exports = function (grunt) {
         wiredep: {
             app: {
                 src: ['<%= yeoman.app %>/index.html'],
-                ignorePath: /\.\.\//
+                ignorePath:  /\.\.\//
             },
             test: {
                 devDependencies: true,
                 src: '<%= karma.unit.configFile %>',
-                ignorePath: /\.\.\//,
-                fileTypes: {
+                ignorePath:  /\.\.\//,
+                fileTypes:{
                     js: {
                         block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
                         detect: {
@@ -449,8 +448,7 @@ module.exports = function (grunt) {
         }
     });
 
-
-    grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
+    grunt.registerTask('serve', 'Compile then start a express web server', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -460,7 +458,7 @@ module.exports = function (grunt) {
             'wiredep',
             'concurrent:server',
             'postcss:server',
-            'connect:livereload',
+            'express:server',
             'watch'
         ]);
     });
@@ -503,19 +501,4 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
-
-    grunt.registerTask('se', 'Compile then start a express web server', function (target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
-
-        grunt.task.run([
-            'clean:server',
-            'wiredep',
-            'concurrent:server',
-            'postcss:server',
-            'express:server',
-            'watch'
-        ]);
-    });
 };
