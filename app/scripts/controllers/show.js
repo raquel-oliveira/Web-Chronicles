@@ -66,7 +66,7 @@ angular.module('cApp')
 		}
 	    }
 
-             $http.get('compute/' + $routeParams.story + '/false').then(function (spData) {
+             $http.get('shortestPath/' + $routeParams.story + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
                     $scope.hasShortestPath = true;
                 } else {

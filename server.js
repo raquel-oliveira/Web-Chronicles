@@ -200,7 +200,7 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
-            console.log(data.story.name[0]);
+            console.log("\t" + data.story.name[0]);
             var steps = [];
 
             for (var i = 0; i < data.story.step.length; ++i) {
@@ -211,7 +211,7 @@ function readStory(story_file) {
                 file: story_file,
                 steps: steps};
         });
-        console.log("\t" + story_file);
+        console.log("\t\t" + story_file);
     });
 }
 
@@ -352,15 +352,15 @@ app.get('/hello/keys', function (req, res) {
     res.send(mykeys);
 });
 
-app.get('/compute/:name/:sizez', function (req, res) {
+app.get('/shortestPath/:storyName/:sizez', function (req, res) {
 
     //var rep = myCache.get(req.params.name+'.json');
-    var rep = stories[req.params.name];
+    var rep = stories[req.params.storyName];
     if (rep === undefined) {
         //send()
     }
 
-    sp.fillgraph(getShowStory(req.params.name).steps);
+    sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
     console.log(data);
 
