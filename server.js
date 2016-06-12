@@ -290,7 +290,6 @@ app.get('/play/:storyName/:step', function (req, res) {
 
     var sess = req.session;
     if (sess.views) {
-
         console.log('purple');
         sess.views.push('purple');
         console.dir(sess.views);
