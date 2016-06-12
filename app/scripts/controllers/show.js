@@ -78,16 +78,17 @@ angular.module('cApp')
                     step = story.steps[i];
                 }
             }
-	    console.log(step);
 	    $scope.outcomes = step.outcomes;
 
 	    $scope.step = step;
             $scope.url = 'views/show-' + step.type + '.html';
 	};
 
+    /*
+    * Check if the parameter is a valid story.
+    */
     if($routeParams.story !== undefined){
-	$http.get('show/story/'+ $routeParams.story).then(function (data) {
-    console.log(data);
+      $http.get('show/story/'+ $routeParams.story).then(function (data) {
             $scope.updateGraph(data.data);
             $scope.storyName = data.data.name;
       }, function(){

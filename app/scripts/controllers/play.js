@@ -29,6 +29,11 @@ angular.module('cApp')
         }
       };
 
+      /*
+      * Check if the parameter it's a story is path app/stories.
+      If yes, start from step 0.
+      If no, return to the main page.
+      */
       if($routeParams.story !== undefined){
         $http.get('stories/').then(
           function (data) {
@@ -45,7 +50,7 @@ angular.module('cApp')
               $location.replace();
             }
           },
-          function(){
+          function(){ //just in case.
             $location.path('/');
             $location.replace();
             });

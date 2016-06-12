@@ -38,8 +38,6 @@ function addVertex(item)
     }
 
     if(typeof item.nextStep !== 'undefined' && item.nextStep) {
-	console.log(item);
-
 
         item.nextStep.forEach(function(nextStepID) {
 
@@ -65,15 +63,18 @@ function shortestPath() {
     var iDtoExplore = [];
     iDtoExplore.push(0);
 
+
     while (iDtoExplore.length>0) {
         var indexCur = iDtoExplore.shift();
         if(graph[indexCur].end)
+
         {
             return unpack(indexCur);
         }
 
         graph[indexCur].to.forEach(function(item) {
             if(graph[item].parent===-1)
+
             {
                 graph[item].parent = indexCur;
                 iDtoExplore.push(item);
@@ -82,8 +83,6 @@ function shortestPath() {
 
 
     }
-
-    console.log('not found');
 
     var data = [];
 
