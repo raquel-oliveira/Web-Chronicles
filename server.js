@@ -5,7 +5,7 @@ const app = express();
 
 const fs = require('fs');
 const xml2js = require('xml2js');
-
+var bodyParser = require('body-parser')
 const util = require('util');
 const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
@@ -258,7 +258,7 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
-            
+
 
             console.log("\t" + data.story.name[0]);
             var steps = [];
@@ -441,6 +441,8 @@ function toXML(result, rootNameParam) {
 app.post('/stories/', function (req, res) {
 
    // console.log(req.body);
+    console.log('stories');
+    console.log(req.body);
 
     var xmltoStore = toXML(req.body.story, 'story');
 
@@ -490,6 +492,42 @@ app.get('/getLastStep', function(req, res, next) {
         res.send('no session').send(503);
 
     }
+});
+
+app.use(bodyParser.json());
+
+
+app.post('/stories/', function (req, res) {
+
+    console.log(req.body);
+
+    var xmltoStore = toXML(req.body.story,'story');
+    //console.dir(req);
+    var path = './app/stories/';
+
+
+
+    // Logic for handling missing file, wrong mimetype, no buffer, etc.
+
+
+    fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
+        if(err) {
+            res.status(400).send({
+                message: 'Problem saving the file. Please try again.'
+            });
+        }
+        else {
+            console.log("Write");
+            console.log();
+            console.log(xmltoStore);
+            res.redirect("back");
+
+        }
+    });
+
+
+
+
 });
 
 app.use(express.static(__dirname + '/app'));
