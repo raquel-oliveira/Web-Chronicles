@@ -3,7 +3,7 @@
 const express = require('express');
 const fs = require('fs');
 const xml2js = require('xml2js');
-const multer = require('multer');
+
 const util = require('util');
 const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
@@ -16,14 +16,16 @@ const STORY_PATH = './app/stories/';
 const app = express();
 
 function createStep(stepData) {
+
     var step = {};
     step.id = stepData.id[0];
+
     step.title = stepData.title[0];
     if (stepData.hasOwnProperty("desc"))
         step.description = stepData.desc[0];
     else
         step.description = "";
-
+    
     if (stepData.hasOwnProperty("multiple_choice")) {
         step = createMultipleChoiceStep(step, stepData);
     } else if (stepData.hasOwnProperty("end")) {
@@ -49,11 +51,20 @@ function createMultipleChoiceStep(step, stepData) {
     step.type = 'multiple_choice';
     step.outcomes = [];
 
-    for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
-        step.outcomes.push({
-            text: stepData.multiple_choice[0].outcome[i].text[0],
-            nextStep: stepData.multiple_choice[0].outcome[i].nextStep[0]
-        });
+    if(!Array.isArray(stepData.multiple_choice[0].outcome))
+        {
+            step.outcomes.push({
+                text: stepData.multiple_choice[0].outcome.text[0],
+                nextStep: stepData.multiple_choice[0].outcome.nextStep[0]
+            });
+        }
+    else {
+        for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
+            step.outcomes.push({
+                text: stepData.multiple_choice[0].outcome[i].text[0],
+                nextStep: stepData.multiple_choice[0].outcome[i].nextStep[0]
+            });
+        }
     }
 
     step.getPlayInfos = function () {
@@ -204,7 +215,17 @@ function readStory(story_file) {
             var steps = [];
 
             for (var i = 0; i < data.story.step.length; ++i) {
-                steps.push(createStep(data.story.step[i]));
+                try {
+                    steps.push(createStep(data.story.step[i]));
+                }
+                catch (ex)
+                {
+
+                    console.log('step '+i+' invalid ! because');
+                    console.dir(ex);
+                    console.dir(data.story.step[i]);
+                    throw(ex);
+                }
             }
             stories[story_file.slice(0, -4)] = {
                 name: data.story.name[0],
@@ -354,7 +375,6 @@ app.get('/hello/keys', function (req, res) {
 
 app.get('/shortestPath/:storyName/:sizez', function (req, res) {
 
-    //var rep = myCache.get(req.params.name+'.json');
     var rep = stories[req.params.storyName];
     if (rep === undefined) {
         //send()
@@ -372,53 +392,10 @@ app.get('/shortestPath/:storyName/:sizez', function (req, res) {
     }
 });
 
-/*app.get('/stories', function (req, res) {
- //read the dir
- console.dir('/stories');
- console.dir(myCache.keys());
-
- var toSend = [];
-
- myCache.keys().forEach(function(item)
- {
- console.log(item);
-
- if( item.split(".")[1] === 'json')
- {
- var sto = myCache.get(item);
- console.log(sto);
-
- console.log(file);
- toSend.push(file);
- }
-
- });
-
- res.send(toSend);
- });*/
-
-app.get('/show/stories', function (req, res) {
-    //read the dir
-    console.dir('/stories');
-    console.dir(myCache.keys());
-
-    var toSend = [];
-
-    myCache.keys().forEach(function (item) {
-        console.log(item);
-
-        if (item.split(".")[1] === 'json') {
-
-            toSend.push(myCache.get(item).name);
-        }
-    });
-    res.send(toSend);
-
-});
-
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
 
     var json = myCache.get(req.params.name + '.json');
+    var rep = stories[req.params.name];
     var found = false;
     json.story.step.forEach(function (item) {
         if (item.content[0].type[0] === 'end' && typeof item.content[0].win !== 'undefined' && item.content[0].win[0] === 'true') {
@@ -431,62 +408,45 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
         res.send(false + '');
 });
 
-var upload = multer({
-    dest: './app/stories/',
-    rename: function (fieldname, filename) {
-        return filename;
-    },
-    inMemory: true //This is important. It's what populates the buffer.
-    ,
-    onFileUploadStart: function (file) {
-
-    },
-    onFileUploadData: function (file, data) {
-
-    },
-    onFileUploadComplete: function (file) {
-
-    },
-    onParseStart: function () {
-
-    },
-    onParseEnd: function (req, next) {
-
-        next();
-    },
-    onError: function (e, next) {
-        if (e) {
-
-        }
-        next();
-    }
-});
 
 
-app.post('/stories/:name', upload.any(), function (req, res) {
+function toXML(result,rootNameParam)
+{
+    var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
+    var xml2 = builder.buildObject(result);
+    return builder.buildObject(result);
+}
 
-    var name = req.params.name;
-    var file = req.files.file[0];
-    var path = './app/stories/';
+app.post('/stories/', function (req, res) {
+
+    console.log(req.body);
+
+    var xmltoStore = toXML(req.body.story,'story');
+
+    //console.dir(req);
+    var path = './app/stories/.tmp/';
 
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
-    var buffer = file.buffer; //Note: buffer only populates if you set inMemory: true.
-    var fileName = file.name;
-    var stream = fs.createWriteStream(path + fileName);
-    stream.write(buffer);
-    stream.on('error', function (err) {
 
-        res.status(400).send({
-            message: 'Problem saving the file. Please try again.'
-        });
-    });
-    stream.on('finish', function () {
+    fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
+        if(err) {
+            res.status(400).send({
+                message: 'Problem saving the file. Please try again.'
+            });
+        }
+        else {
+            console.log("Write");
+            console.log();
+            console.log(xmltoStore);
+            res.redirect("back");
 
-        res.status(204);
+        }
     });
-    stream.end();
+
+
+
 
 });
 
