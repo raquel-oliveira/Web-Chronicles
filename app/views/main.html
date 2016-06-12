@@ -5,13 +5,13 @@
         <p>Choose a story: </p>
         <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
       <h2>
-          <a ng-href="#/play/{{storyPath}}" class="btn btn-lg">
+          <a ng-href="#/play/{{storyPath}}" class="myButton2">
               Play
           </a>
-          <a ng-href="#/show/{{storyPath}}" class="btn btn-lg">
+          <a ng-href="#/show/{{storyPath}}" class="myButton2">
               Show
           </a>
       </h2>
-    </div>
-  </div>
-</div>
+    </div> <!--<div class="choose-story"> -->
+  </div> <!-- <div ng-controller="SetStory"> -->
+</div> <!-- <div class="jumbotron"> -->

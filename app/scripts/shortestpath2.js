@@ -17,7 +17,7 @@ function unpack(from)
         route.push(from);
 
 
-        from = graph[from].visited;
+        from = graph[from].parent;
     }
     route.push("0");
     return route.reverse();
@@ -27,7 +27,7 @@ function addVertex(item)
 {
     var vertex = {
         end: false,
-        visited: -1,
+        parent: -1,
         to: []
     };
 
@@ -38,8 +38,6 @@ function addVertex(item)
     }
 
     if(typeof item.nextStep !== 'undefined' && item.nextStep) {
-	console.log(item);
-
 
         item.nextStep.forEach(function(nextStepID) {
 
@@ -47,18 +45,6 @@ function addVertex(item)
 
         });
     }
-    /*
-    if(typeof item.hiden !== 'undefined' ) {
-
-
-        item.hiden[0].nextStep.forEach(function(step) {
-
-
-            vertex.to.push(step._);
-        });
-
-    }
-    */
     graph[item.id] = vertex;
 }
 
@@ -71,43 +57,32 @@ function fillgraph(steps){
 
 }
 function shortestPath() {
-    //graph is arrayVertex[ vertex{id:id, end: true, visited:id to:[ids]}]
+    //graph is arrayVertex[ vertex{id:id, end: true, parent:id to:[ids]}]
     //result is an array
-
 
     var iDtoExplore = [];
     iDtoExplore.push(0);
-    //console.log(graph);
+
+
     while (iDtoExplore.length>0) {
         var indexCur = iDtoExplore.shift();
-/*	console.log(indexCur);
-	console.log(graph);*/
-        if(graph[indexCur].end === true || graph[indexCur].end ==='true')
+        if(graph[indexCur].end)
+
         {
-            console.log('end');
             return unpack(indexCur);
         }
 
         graph[indexCur].to.forEach(function(item) {
-/*	    console.log(item);
-	    console.log(graph);
-	    console.log(graph[item]);
-            console.log('add');*/
+            if(graph[item].parent===-1)
 
-            if(graph[item].visited===-1)
             {
-
-
-                graph[item].visited = indexCur;
+                graph[item].parent = indexCur;
                 iDtoExplore.push(item);
-
             }
         });
 
 
     }
-
-    console.log('not found');
 
     var data = [];
 

@@ -1,8 +1,16 @@
 <div class="multiple_choice" ng-controller='MCCtrl'>
-  <div ng-show="optionsRadio" >
-    <label ng-repeat="outcome in currentStep.outcomes">
-        <input type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{ outcome.nextStep }}">  {{ outcome.text }} </br></br></input>
-    </label>
+
+
+      <form ng-submit="goToStep(selectedAnswer)">
+        <div ng-repeat="outcome in currentStep.outcomes" ng-show="optionsRadio">
+          <label>
+          <input required type="radio" name="osef" ng-model="$parent.selectedAnswer" value="{{ outcome.nextStep }}"/>
+          {{ outcome.text }}</label>
+
+
+        </div>
+        <input class="myButton" value="Next" type="submit"/>
+      </form>
+
   </div><!-- div ng-show="optionsRadio" > -->
-  <a class="btn btn-lg btn-app" ng-click="goToStep(selectedAnswer)"> Next </a>
 </div>

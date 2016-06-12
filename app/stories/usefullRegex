@@ -1,0 +1,26 @@
+//convert previous multiplechoice
+Search      <nextStep label=\"(.*)">(.*)</nextStep>
+Replaceby   <outcome><text>$1 </text><nextStep>$2</nextStep></outcome>
+
+//create tags
+<type>(.*)</type>
+<type>$1</type><$1></$1>
+
+//
+</content>
+
+
+//
+<content>
+
+//
+<hidden>
+<riddle>
+
+//
+</hidden>
+</riddle>
+
+//
+<answer stepId="(.*)">(.*)</answer>
+<outcome><text>$2</text><nextStep>$1</nextStep></outcome>

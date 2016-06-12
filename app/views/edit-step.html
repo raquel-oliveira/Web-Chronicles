@@ -1,14 +1,14 @@
-<div ng-controller="EditCtrl">
+<div class="edit">
 
  <div>
-     <label>Nom : </label><input ng-model="storyName" type="text"/>
-     <label>Nom Ficier :</label><input ng-model="storyPath" type="text"/>
+     <label>Name : </label><input ng-model="storyName" type="text"/>
+     <label>File name :</label><input ng-model="storyPath" type="text"/>
      Create new story <input type="button" ng-click="newStory()"/>
  </div>
 <form  ng-submit="submitMyForm()">
 
-    <label>Titre : </label><input ng-model="currentStep.content.title" type="text"/>
-    <label>Desc : </label><textarea ng-model="currentStep.content.description"/></textarea>
+    <label>Title : </label><input ng-model="currentStep.content.title" type="text"/>
+    <label>Description : </label><textarea ng-model="currentStep.content.description"/></textarea>
     <label>id : </label><input ng-model="currentStep.content.id" type="number"/>
 
     <input type="radio" ng-model="stem.content.type" value="multiple_choice">multiple_choice

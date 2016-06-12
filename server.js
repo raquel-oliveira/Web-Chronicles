@@ -3,26 +3,38 @@
 const express = require('express');
 const fs = require('fs');
 const xml2js = require('xml2js');
-const multer = require('multer');
+
 const util = require('util');
 const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
+var session = require('express-session');
+// Use the session middleware
 
 
 // App
 const app = express();
 
+app.use(
+    session(
+        { secret: 'keyboard cat', cookie: { maxAge: 3600*24*6000  }}));
 function createStep(stepData) {
+
     var step = {};
     step.id = stepData.id[0];
+
     step.title = stepData.title[0];
     if (stepData.hasOwnProperty("desc"))
         step.description = stepData.desc[0];
     else
         step.description = "";
+
+    if (stepData.hasOwnProperty("given"))
+        step.given = stepData.given;
+    else
+        step.given = "";
 
     if (stepData.hasOwnProperty("multiple_choice")) {
         step = createMultipleChoiceStep(step, stepData);
@@ -42,6 +54,8 @@ function copyStepBasicData(from, to){
     to.description = from.description;
     to.type = from.type;
     to.id = from.id;
+    to.given = from.given;
+
 
     return to;
 }
@@ -49,11 +63,20 @@ function createMultipleChoiceStep(step, stepData) {
     step.type = 'multiple_choice';
     step.outcomes = [];
 
-    for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
-        step.outcomes.push({
-            text: stepData.multiple_choice[0].outcome[i].text[0],
-            nextStep: stepData.multiple_choice[0].outcome[i].nextStep[0]
-        });
+    if(!Array.isArray(stepData.multiple_choice[0].outcome))
+        {
+            step.outcomes.push({
+                text: stepData.multiple_choice[0].outcome.text[0],
+                nextStep: stepData.multiple_choice[0].outcome.nextStep[0]
+            });
+        }
+    else {
+        for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
+            step.outcomes.push({
+                text: stepData.multiple_choice[0].outcome[i].text[0],
+                nextStep: stepData.multiple_choice[0].outcome[i].nextStep[0]
+            });
+        }
     }
 
     step.getPlayInfos = function () {
@@ -153,7 +176,7 @@ function createRiddleStep(step, stepData) {
 
     step.verifyAnswer = function(data){
         var minLevDist = 100;
-
+        var trimmedText = data.tri;
         var found = false;
         var nextStep;
         //distance
@@ -200,11 +223,22 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
+
             console.log("\t" + data.story.name[0]);
             var steps = [];
 
             for (var i = 0; i < data.story.step.length; ++i) {
-                steps.push(createStep(data.story.step[i]));
+                try {
+                    steps[data.story.step[i].id[0]] = (createStep(data.story.step[i]));
+                }
+                catch (ex)
+                {
+
+                    console.log('step '+i+' invalid ! because');
+                    console.dir(ex);
+                    console.dir(data.story.step[i]);
+                    throw(ex);
+                }
             }
             stories[story_file.slice(0, -4)] = {
                 name: data.story.name[0],
@@ -234,8 +268,13 @@ function initStories() {
 initStories();
 
 app.get('/show/story/:name', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send(getShowStory(req.params.name));
+    if (req.params.name in stories) {
+	res.set('Content-Type', 'application/json');
+	res.send(getShowStory(req.params.name));
+    } else {
+        res.statusCode = 400;
+	res.send('Error: can\t find story ' + req.params.name);
+    }
 });
 
 function getShowStory(storyName) {
@@ -254,7 +293,28 @@ function getShowStory(storyName) {
 
 app.get('/play/:storyName/:step', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(getPlayStep(req.params.storyName, req.params.step));
+    var step = getPlayStep(req.params.storyName, req.params.step);
+    res.send(step);
+
+    var sess = req.session;
+    if (!sess.views) {
+
+        sess.views =[];
+    }
+    if(step.id==0)
+    {
+        sess.views =[];
+    }
+    if(step.given!=undefined&&step.given!=='')
+    {
+
+        step.given.forEach(function(item){
+            sess.views.push(item);
+        });
+        req.session.save(function(err) {
+        })
+    }
+
 });
 
 function getPlayStep(storyName, stepId) {
@@ -273,46 +333,8 @@ app.get('/stories', function (req, res) {
 app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(stories[req.params.storyName].steps[req.params.step][req.params.action](req.params.data));
-    /*var step = parseInt(req.params.step);
-    var reponse = req.params.reponse;
 
-    var result = myCache.get(req.params.name + '.json');
 
-    console.dir(result);
-    console.dir(result.story.step[step]);
-    console.log(step);
-    console.dir(result.story.step[step].hiden);
-    console.dir(result.story.step[step].hiden[0]);
-
-    var answerS = result.story.step[step].hiden[0].nextStep;
-
-    var minLevDist = 100;
-
-    var found = false;
-    //distance
-    answerS.forEach(function (answer) {
-        if (answer.$.answer == reponse) {
-
-            res.send(answer);
-            found = true;
-        }
-        var lComp = Levenshtein(answer.$.answer, reponse);
-        if (lComp < minLevDist)
-            minLevDist = lComp;
-
-    });
-
-    if (!found) {
-
-        var hint = {
-            hint: result.story.step[step].hiden[0].hint[0],
-            distance: minLevDist
-
-        };
-
-        res.statusCode = 210;
-        res.send(hint);
-    }*/
 });
 
 
@@ -342,29 +364,15 @@ function filterStep(step, filter) {
     return result;
 }
 
-app.get('/hello/', function (req, res) {
-    initCache();
-    res.send('hi');
-});
+app.get('/shortestPath/:storyName/:onlySize', function (req, res) {
 
-app.get('/hello/keys', function (req, res) {
-    var mykeys = myCache.keys();
-    res.send(mykeys);
-});
-
-app.get('/shortestPath/:storyName/:sizez', function (req, res) {
-
-    //var rep = myCache.get(req.params.name+'.json');
     var rep = stories[req.params.storyName];
-    if (rep === undefined) {
-        //send()
-    }
 
     sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
     console.log(data);
 
-    if (req.params.sizez === 'true') {
+    if (req.params.onlySize === 'true') {
         res.send(data.length + '');
     }
     else {
@@ -372,53 +380,11 @@ app.get('/shortestPath/:storyName/:sizez', function (req, res) {
     }
 });
 
-/*app.get('/stories', function (req, res) {
- //read the dir
- console.dir('/stories');
- console.dir(myCache.keys());
-
- var toSend = [];
-
- myCache.keys().forEach(function(item)
- {
- console.log(item);
-
- if( item.split(".")[1] === 'json')
- {
- var sto = myCache.get(item);
- console.log(sto);
-
- console.log(file);
- toSend.push(file);
- }
-
- });
-
- res.send(toSend);
- });*/
-
-app.get('/show/stories', function (req, res) {
-    //read the dir
-    console.dir('/stories');
-    console.dir(myCache.keys());
-
-    var toSend = [];
-
-    myCache.keys().forEach(function (item) {
-        console.log(item);
-
-        if (item.split(".")[1] === 'json') {
-
-            toSend.push(myCache.get(item).name);
-        }
-    });
-    res.send(toSend);
-
-});
-
+//TODO: update this
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
 
     var json = myCache.get(req.params.name + '.json');
+    var rep = stories[req.params.name];
     var found = false;
     json.story.step.forEach(function (item) {
         if (item.content[0].type[0] === 'end' && typeof item.content[0].win !== 'undefined' && item.content[0].win[0] === 'true') {
@@ -431,65 +397,62 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
         res.send(false + '');
 });
 
-var upload = multer({
-    dest: './app/stories/',
-    rename: function (fieldname, filename) {
-        return filename;
-    },
-    inMemory: true //This is important. It's what populates the buffer.
-    ,
-    onFileUploadStart: function (file) {
-
-    },
-    onFileUploadData: function (file, data) {
-
-    },
-    onFileUploadComplete: function (file) {
-
-    },
-    onParseStart: function () {
-
-    },
-    onParseEnd: function (req, next) {
-
-        next();
-    },
-    onError: function (e, next) {
-        if (e) {
-
-        }
-        next();
-    }
-});
 
 
-app.post('/stories/:name', upload.any(), function (req, res) {
+function toXML(result,rootNameParam)
+{
+    var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
+    var xml2 = builder.buildObject(result);
+    return builder.buildObject(result);
+}
 
-    var name = req.params.name;
-    var file = req.files.file[0];
-    var path = './app/stories/';
+//TODO: debug this
+app.post('/stories/', function (req, res) {
+
+    console.log(req.body);
+
+    var xmltoStore = toXML(req.body.story,'story');
+
+    //console.dir(req);
+    var path = './app/stories/.tmp/';
 
 
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
-    var buffer = file.buffer; //Note: buffer only populates if you set inMemory: true.
-    var fileName = file.name;
-    var stream = fs.createWriteStream(path + fileName);
-    stream.write(buffer);
-    stream.on('error', function (err) {
 
-        res.status(400).send({
-            message: 'Problem saving the file. Please try again.'
-        });
-    });
-    stream.on('finish', function () {
+    fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
+        if(err) {
+            res.status(400).send({
+                message: 'Problem saving the file. Please try again.'
+            });
+        }
+        else {
+            console.log("Write");
+            console.log();
+            console.log(xmltoStore);
+            res.redirect("back");
 
-        res.status(204);
+        }
     });
-    stream.end();
+
+
+
 
 });
 
+
+
+// Access the session as req.session
+app.get('/inventory', function(req, res, next) {
+    var sess = req.session;
+    if (sess.views) {
+        res.send(sess.views);
+    } else {
+        sess.views = [];
+        res.send(sess.views);
+    }
+
+});
 
 app.use(express.static(__dirname + '/app'));
 app.use(express.static(__dirname + '/'));

@@ -1,9 +1,10 @@
 'use strict';
+
 var myApp = angular.module('cApp');
 
-myApp.controller('RiddleCtrl', function ($scope, $http,story) {
+myApp.controller('RiddleCtrl', function ($scope, $http, $routeParams) {
     $scope.verifyAnswer = function (answer) {
-        $http.get('play/stepAction/' + story.getFile() + "/" + $scope.currentStep.id +
+        $http.get('play/stepAction/' + $routeParams.story + "/" + $scope.currentStep.id +
             '/verifyAnswer/' + answer).then(function (reponse) {
             if (reponse.data.correct === true) {
                 $scope.goToStep(reponse.data.nextStep);
@@ -39,14 +40,18 @@ myApp.controller('RiddleCtrl', function ($scope, $http,story) {
 });
 
 
-myApp.controller('EndCtrl', function ($scope, $http, story) {
-  $scope.storyPath = story.getFile();
+myApp.controller('EndCtrl', function ($scope, $http, $routeParams) {
+  $scope.storyPath = $routeParams.story;
     if ($scope.currentStep.win === true) {
         $scope.showStory = true;
         $scope.tryAgain = false;
         $scope.winT = true;
         $scope.win = "You win";
         $scope.winStyle = {'color': 'green'};
+
+	$http.get('shortestPath/' + $scope.storyPath + '/true').success(function (data) {
+            $scope.minSteps = data;
+	});
     } else {
         $scope.showStory = false;
         $scope.winT = false;
@@ -56,10 +61,6 @@ myApp.controller('EndCtrl', function ($scope, $http, story) {
     }
 
 
-    $http.get('compute/' + $scope.storyPath + '/true').success(function (data) {
-        $scope.minSteps = data;
-
-    });
 });
 
 myApp.controller('MCCtrl', function ($scope) {

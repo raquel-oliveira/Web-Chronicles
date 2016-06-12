@@ -1,8 +1,9 @@
 <div class="riddle" ng-controller="RiddleCtrl">
+  <div><b>Question : </b>{{ currentStep.question }}</div>
     <form novalidate>
         <input ng-model="answer" type="text"/>
 
-        <a class="btn btn-lg btn-app" ng-click="verifyAnswer(answer)">Next</a>
+        <a class="myButton" ng-click="verifyAnswer(answer)">Next</a>
         <div ng-show="showhint">
 
             <div>Hint: <span ng-bind="hint"></span></div>
