@@ -22,9 +22,9 @@
     <step>
         <id>1</id>
         <title>Montain</title>
-        <description>They told you, a long time ago there was only happy people that live here, that received watter
+        <desc>They told you, a long time ago there was only happy people that live here, that received watter
             from the FORBIDDEN MOUNTAIN (in this time it was called HAPPY MOUNTAIN).
-        </description>
+        </desc>
         <multiple_choice>
             <outcome>
                 <text>Go to Forbidden mountain</text>
@@ -43,9 +43,9 @@
     <step>
         <id>2</id>
         <title>ezaaqaqq</title>
-        <description>And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person
+        <desc>And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person
             that always belived THIS time he wouldn't be dissapointed).
-        </description>
+        </desc>
         <riddle>
             <question>Where is Roberto? (right/left)</question>
             <hint>try the other directions</hint>
@@ -58,9 +58,9 @@
     <step>
         <id>3</id>
         <title>dzsqdq</title>
-        <description>And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person
+        <desc>And you, with your broken heart of old expectation decided to go find 'Roberto'(the only person
             that always belived THIS time he wouldn't be dissapointed).
-        </description>
+        </desc>
         <riddle>
             <question>Where is Roberto? (right/left)</question>
             <hint>try the other directions</hint>
@@ -73,9 +73,9 @@
     <step>
         <id>4</id>
         <title>dzqsdqsldp</title>
-        <description>The route to get in the Happy mountain was dangerous and protected by the guardians, so he die
+        <desc>The route to get in the Happy mountain was dangerous and protected by the guardians, so he die
             by a shot from the major protector of the valley
-        </description>
+        </desc>
         <end>
             <win>false</win>
         </end>
@@ -83,7 +83,7 @@
     <step>
         <id>5</id>
         <title>dloap</title>
-        <description>He slept so deeply that he got in a coma</description>
+        <desc>He slept so deeply that he got in a coma</desc>
         <end>
             <win>false</win>
         </end>
@@ -91,9 +91,9 @@
     <step>
         <id>6</id>
         <title>dzazsqdsqd</title>
-        <description>Roberto listen the story, got excited but his mother didn't let him go to the mountain. So
+        <desc>Roberto listen the story, got excited but his mother didn't let him go to the mountain. So
             everybody lived dreaming about a better day
-        </description>
+        </desc>
         <end>
             <win>true</win>
         </end>
