@@ -31,6 +31,11 @@ function createStep(stepData) {
     else
         step.description = "";
 
+    if (stepData.hasOwnProperty("given"))
+        step.given = stepData.given;
+    else
+        step.given = "";
+
     if (stepData.hasOwnProperty("multiple_choice")) {
         step = createMultipleChoiceStep(step, stepData);
     } else if (stepData.hasOwnProperty("end")) {
@@ -50,6 +55,7 @@ function copyStepBasicData(from, to){
     to.type = from.type;
     to.id = from.id;
     to.given = from.given;
+
 
     return to;
 }
@@ -170,7 +176,7 @@ function createRiddleStep(step, stepData) {
 
     step.verifyAnswer = function(data){
         var minLevDist = 100;
-
+        var trimmedText = data.tri;
         var found = false;
         var nextStep;
         //distance
@@ -217,6 +223,7 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
+
             console.log("\t" + data.story.name[0]);
             var steps = [];
 
@@ -286,28 +293,28 @@ function getShowStory(storyName) {
 
 app.get('/play/:storyName/:step', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(getPlayStep(req.params.storyName, req.params.step));
+    var step = getPlayStep(req.params.storyName, req.params.step);
+    res.send(step);
 
     var sess = req.session;
-    if (sess.views) {
-        console.log('purple');
-        sess.views.push('purple');
-        console.dir(sess.views);
-        console.dir(sess);
+    if (!sess.views) {
+
+        sess.views =[];
+    }
+    if(step.id==0)
+    {
+        sess.views =[];
+    }
+    if(step.given!=undefined&&step.given!=='')
+    {
+
+        step.given.forEach(function(item){
+            sess.views.push(item);
+        });
         req.session.save(function(err) {
-            // session saved
-            console.dir('session saved !');
         })
     }
-    else {
-        sess.views =[];
-        sess.views.push('orange');
-    }
-    if(req.params.step.given!=undefined)
-    {
-        console.log('tomato');
 
-    }
 });
 
 function getPlayStep(storyName, stepId) {
@@ -357,28 +364,15 @@ function filterStep(step, filter) {
     return result;
 }
 
-app.get('/hello/', function (req, res) {
-    initCache();
-    res.send('hi');
-});
-
-app.get('/hello/keys', function (req, res) {
-    var mykeys = myCache.keys();
-    res.send(mykeys);
-});
-
-app.get('/shortestPath/:storyName/:sizez', function (req, res) {
+app.get('/shortestPath/:storyName/:onlySize', function (req, res) {
 
     var rep = stories[req.params.storyName];
-    if (rep === undefined) {
-        //send()
-    }
 
     sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
     console.log(data);
 
-    if (req.params.sizez === 'true') {
+    if (req.params.onlySize === 'true') {
         res.send(data.length + '');
     }
     else {
@@ -386,6 +380,7 @@ app.get('/shortestPath/:storyName/:sizez', function (req, res) {
     }
 });
 
+//TODO: update this
 app.get('/stories/:name/haveHappyEnd', function (req, res) {
 
     var json = myCache.get(req.params.name + '.json');
@@ -411,6 +406,7 @@ function toXML(result,rootNameParam)
     return builder.buildObject(result);
 }
 
+//TODO: debug this
 app.post('/stories/', function (req, res) {
 
     console.log(req.body);
@@ -450,35 +446,12 @@ app.post('/stories/', function (req, res) {
 app.get('/inventory', function(req, res, next) {
     var sess = req.session;
     if (sess.views) {
-
-        //res.write('<p>views: ' + sess.views + '</p>');
-        //res.write('<p>expires in: ' + (sess.cookie.maxAge / 1000) + 's</p>');
-        sess.views.push('blue');
-        console.dir(sess);
         res.send(sess.views);
     } else {
         sess.views = [];
-        sess.views.push('rose');
         res.send(sess.views);
     }
-    //next()
-});
-app.get('/inventory/add/:add', function(req, res, next) {
-    var sess = req.session;
 
-    if (sess.views) {
-        sess.views.push(req.params.add);
-        sess.views.push('green');
-        res.send(sess.views);
-
-        res.end();
-    } else {
-        sess.views = [];
-        sess.views.push('tellow');
-        sess.views.push(req.params.add);
-        res.send(sess.views);
-    }
-    next()
 });
 
 app.use(express.static(__dirname + '/app'));
