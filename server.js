@@ -10,6 +10,7 @@ const sp = require('./app/scripts/shortestpath2.js');
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
+const utils_text = require('./lib/utils_text.js');
 var session = require('express-session');
 // Use the session middleware
 
@@ -87,8 +88,6 @@ function copyStepBasicData(from, to){
     to.type = from.type;
     to.id = from.id;
     to.given = from.given;
-
-
     return to;
 }
 function createMultipleChoiceStep(step, stepData) {
@@ -208,17 +207,20 @@ function createRiddleStep(step, stepData) {
 
     step.verifyAnswer = function(data){
         var minLevDist = 100;
-        var trimmedText = data.tri;
+
+        var trimmedAnswer = utils_text.convert(data);
         var found = false;
         var nextStep;
         //distance
         step.outcomes.forEach(function (outcome) {
-            if (outcome.text == data) {
+            var outcomeT = utils_text.convert(outcome.text);
+            console.log('comp of <'+trimmedAnswer+'> and '+outcomeT);
+            if (outcomeT == trimmedAnswer) {
                 found = true;
                 nextStep = outcome.nextStep;
                 return;
             }
-            var lComp = Levenshtein(outcome.text, data);
+            var lComp = Levenshtein(outcomeT, trimmedAnswer);
             if (lComp < minLevDist)
                 minLevDist = lComp;
         });

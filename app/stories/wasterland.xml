@@ -3,9 +3,9 @@
 
     <step>
         <id>0</id>
-        <given>vault 13 combinaison</given>
+
         <desc>
-            <![CDATA[ <img src="images/13.png" height="100" width="100"><div>Lacivilisation est tombée en ruines à la suite d'une guerre nucléaire.
+            <![CDATA[ <img src="images/13.png" height="100" width="100"/><div>Lacivilisation est tombée en ruines à la suite d'une guerre nucléaire.
                 Pour se protéger des explosions atomiques, certaines personnes ont trouvé refuge dans des abris anti-atomiques souterrains (vault en anglais).
 
                 Vous êtes est un habitant d'un de ces abris souterrains, l'Abri 13, qui est sélectionné pour être le premier à affronter le monde extérieur.
@@ -20,14 +20,18 @@
 
             <outcome><text>Sortir dans le monde exterieur </text><nextStep>2</nextStep></outcome>
 
+            <outcome><text>Attaquer les habitants </text><nextStep>13</nextStep></outcome>
+
         </multiple_choice>
         <title>War, war nevers changes.</title>
 
     </step>
     <step>
         <id>1</id>
+        <given>vault 13 combinaison</given>
+        <given>gun</given>
         <title>Exploration de l'abri</title>
-        <desc> Vous ne trouvez rien d'utile </desc>
+        <desc> Vous avez recu 2 objets !</desc>
 
         <type>multiple_choice</type>
         <multiple_choice>
@@ -37,14 +41,17 @@
     </step>
     <step>
         <id>2</id>
-        <desc> You have exited the vault by fighting you way out against rats.</desc>
+        <desc> Pleins de rats ! Que faites vous ?</desc>
         <title>Grotte</title>
         <type>multiple_choice</type>
         <multiple_choice>
-
             <outcome>
-                <text>Aller sur la carte du monde </text>
+                <text>Courrir</text>
                 <nextStep>3</nextStep>
+            </outcome>
+            <outcome>
+                <text>Se battre</text>
+                <nextStep>12</nextStep>
             </outcome>
         </multiple_choice>
 
@@ -56,7 +63,6 @@
         <type>riddle</type>
         <riddle>
             <question>Ou aller ?</question>
-            <outcome><text>abri13</text><nextStep>4</nextStep></outcome>
             <outcome><text>abri 13</text><nextStep>4</nextStep></outcome>
             <outcome><text>sables ombragés</text><nextStep>10</nextStep></outcome>
             <outcome><text>cathedrale</text><nextStep>11</nextStep></outcome>
@@ -178,6 +184,38 @@
         </desc>
         <type>end</type><end><win>true</win>
     </end>
+
+    </step>
+    <step>
+        <id>12</id>
+        <desc> Vous combatez contre les rats</desc>
+        <title>Grotte</title>
+        <type>multiple_choice</type>
+        <multiple_choice>
+            <outcome>
+                <text>Courrir</text>
+                <nextStep>3</nextStep>
+            </outcome>
+            <outcome>
+                <text>Se battre</text>
+                <nextStep>12</nextStep>
+                <need>gun</need>
+            </outcome>
+            <outcome>
+                <text>Se battre</text>
+                <nextStep>13</nextStep>
+            </outcome>
+        </multiple_choice>
+
+    </step>
+    <step>
+        <id>13</id>
+        <desc> <![CDATA[ <img src="images/wasterland_death.jpg" height="480" width="640"/> <div>Le desert aura eu raison de vous !<div> ]]></desc>
+        <title>Vous êtes mort :(</title>
+        <type>end</type>
+        <end>
+            <win>false</win>
+        </end>
 
     </step>
 </story>
