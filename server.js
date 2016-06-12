@@ -352,15 +352,15 @@ app.get('/hello/keys', function (req, res) {
     res.send(mykeys);
 });
 
-app.get('/compute/:name/:sizez', function (req, res) {
+app.get('/shortestPath/:storyName/:sizez', function (req, res) {
 
     //var rep = myCache.get(req.params.name+'.json');
-    var rep = stories[req.params.name];
+    var rep = stories[req.params.storyName];
     if (rep === undefined) {
         //send()
     }
 
-    sp.fillgraph(getShowStory(req.params.name).steps);
+    sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
     console.log(data);
 
