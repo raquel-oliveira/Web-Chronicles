@@ -7,7 +7,7 @@
  * # PlayCtrl
  */
 angular.module('cApp')
-    .controller('PlayCtrl', ['$scope', '$http', '$sce', 'story', '$routeParams', function ($scope, $http, $sce, story, $routeParams){
+    .controller('PlayCtrl', ['$scope', '$http', '$sce', 'story', '$routeParams', '$location', function ($scope, $http, $sce, story, $routeParams, $location){
 
       //variables
       $scope.nbSteps = 0;

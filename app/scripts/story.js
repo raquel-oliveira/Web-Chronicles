@@ -8,21 +8,18 @@ myApp.controller('SetStory', function ($scope, $http, story){
   $http.get('stories/').success(function (data) {
             $scope.stories = data;
             $scope.selected = $scope.stories[0];
-            console.log($scope.selected );
             story.setStory($scope.selected);
             $scope.storyPath = story.getFile();
 
         });
 
     $scope.changeStory = function () {
-      $http.get('show/stories/' + $scope.selected.file).success(function (data) {
-               story.setStory($scope.selected);
-               $scope.storyPath = story.getFile();
-           });
-       };
+      story.setStory($scope.selected);
+      $scope.storyPath = story.getFile();
+    };
 });
 
-myApp.factory('story', function($http){
+myApp.factory('story', function($http, $location){
   var story = {"file": "win", "label":"Want to win ?"};
   return {
     setStory: function (st){
@@ -36,7 +33,7 @@ myApp.factory('story', function($http){
       return story.file;
     },
     setFile: function(f){
-      //TODO: Make a check using a service, if not available redirect to "#/play"
+      //TODO: Make a check using a service, if not available redirect to "#/main"
       var check = false;
       $http.get('stories/').success(function (data) {
         for (var i = 0 ; i < data.length; i++){
@@ -46,8 +43,8 @@ myApp.factory('story', function($http){
           }
         }
         if(check === false){
-          alert("This is story is not available!");
-
+          $location.path('/');
+          $location.replace();
         }
       });
     },
