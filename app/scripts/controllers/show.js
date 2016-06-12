@@ -9,7 +9,7 @@ var x2js = new X2JS();
  * # ShowCtrl
  */
 angular.module('cApp')
-    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', 'graph', function ($scope, $http, $routeParams, graph) {
         $scope.view = "show";
         $scope.storyName = null;
         $scope.network = null;
@@ -21,58 +21,18 @@ angular.module('cApp')
         $scope.showDatas = false;
         $scope.hasShortestPath = true;
 
-        function addEdge(edges, from, to) {
-            edges.add({
-                id: edges.length,
-                from: from,
-                to: to,
-                arrows: {to: true}
-            });
-	}
-
-	function addNode(nodes, id, color, fontColor) {
-	    if (typeof color === "undefined") { color = "#D2E5FF"; }
-	    if (typeof fontColor === "undefined") { fontColor = "#343434"; }
-
-
-            nodes.add({
-                id: id,
-                label: id,
-		color: color,
-		font: { color: fontColor }
-            });
-	}
-
-
         $scope.updateGraph = function (story) {
-	    var nodes = new vis.DataSet([]);
-            var edges = new vis.DataSet([]);
-
-	    for (var i = 0; i < story.steps.length; ++i) {
-		var color, fontColor;
-
-		if (story.steps[i].type === 'end') {
-                    color = (story.steps[i].win === 'false') ?
-                        '#882222' : '#228822';
-		    fontColor = "#FFFFFF";
-		}
-
-		addNode(nodes, parseInt(story.steps[i].id), color, fontColor);
-
-		if (typeof story.steps[i].nextStep !== "undefined") {
-                    for (let j = 0; j < story.steps[i].nextStep.length; ++j) {
-                        addEdge(edges, parseInt(story.steps[i].id), parseInt(story.steps[i].nextStep[j]));
-                    }
-		}
-	    }
-
-             $http.get('shortestPath/' + $routeParams.story + '/false').then(function (spData) {
+	    var graphData = graph.getGraphData(story);
+	    var nodes = graphData.nodes;
+            var edges = graphData.edges;
+	    
+            $http.get('shortestPath/' + $routeParams.story + '/false').then(function (spData) {
                 if (spData.data.length > 0) {
                     $scope.hasShortestPath = true;
                 } else {
                     $scope.hasShortestPath = false;
                 }
-
+		
                 var edgesData = edges.get();
                 for (var i = 0; i < spData.data.length - 1; ++i) {
                     for (var j = 0; j < edgesData.length; ++j) {
