@@ -9,7 +9,7 @@ var x2js = new X2JS();
  * # ShowCtrl
  */
 angular.module('cApp')
-    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', '$location', function ($scope, $http, $routeParams, $location) {
         $scope.view = "show";
         $scope.storyName = null;
         $scope.network = null;
@@ -126,9 +126,13 @@ angular.module('cApp')
 	};
 
     if($routeParams.story !== undefined){
-	$http.get('show/story/'+ $routeParams.story).success(function (data) {
-            $scope.updateGraph(data);
-            $scope.storyName = data.name;
+	$http.get('show/story/'+ $routeParams.story).then(function (data) {
+    console.log(data);
+            $scope.updateGraph(data.data);
+            $scope.storyName = data.data.name;
+      }, function(){
+        $location.path('/');
+        $location.replace();
       });
     }
 }]);
