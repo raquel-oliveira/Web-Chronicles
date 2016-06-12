@@ -74,7 +74,6 @@ function shortestPath() {
     return [];
 }
 
-
 if (typeof module !== 'undefined') {
     module.exports = {
         unpack: unpack,
