@@ -12,22 +12,22 @@ myApp.controller('RiddleCtrl', function ($scope, $http,story) {
                 $scope.hint = reponse.data.hint;
                 $scope.showhint = true;
                 $scope.distance = reponse.data.distance;
-                $scope.hint.close = 'Not even close';
+                $scope.close = 'Not even close';
 
                 if ($scope.distance < 2) {
-                    $scope.hint.close = 'Hot as the sun';
+                    $scope.close = 'Hot as the sun';
                 }
                 else if ($scope.distance < 4) {
-                    $scope.hint.close = 'Warm';
+                    $scope.close = 'Warm';
                 }
                 else if ($scope.distance < 6) {
-                    $scope.hint.close = 'Try harder';
+                    $scope.close = 'Try harder';
                 }
                 else if ($scope.distance < 10) {
-                    $scope.hint.close = 'Cold';
+                    $scope.close = 'Cold';
                 }
                 else if ($scope.distance < 15) {
-                    $scope.hint.close = 'Frozen';
+                    $scope.close = 'Frozen';
                 }
             }
         });
