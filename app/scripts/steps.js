@@ -1,10 +1,11 @@
+
 function step(data){
-    var step;
+    var stp;
     switch(data.type){
         case "riddle":
-            step = new riddle(data);
+            stp = new riddle(data);
     }
-    return step;
+    return stp;
 }
 
 function setTitleDescription(step, data){

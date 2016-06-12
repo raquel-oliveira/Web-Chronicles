@@ -1,6 +1,7 @@
+'use strict';
 var myApp = angular.module('cApp');
 
-myApp.factory('graph', function($http) {
+myApp.factory('graph', function() {
     function addEdge(edges, from, to) {
         edges.add({
             id: edges.length,
@@ -9,12 +10,12 @@ myApp.factory('graph', function($http) {
             arrows: {to: true}
         });
     }
-    
+
     function addNode(nodes, id, color, fontColor) {
 	if (typeof color === "undefined") { color = "#D2E5FF"; }
 	if (typeof fontColor === "undefined") { fontColor = "#343434"; }
-	
-	
+
+
         nodes.add({
                 id: id,
             label: id,
@@ -45,11 +46,11 @@ myApp.factory('graph', function($http) {
                     }
 		}
 	    }
-	    
+
 	    return {
 		nodes : nodes,
 		edges : edges,
 	    };
 	}
-    }
+};
 });

@@ -1,4 +1,5 @@
 'use strict';
+
 var myApp = angular.module('cApp');
 
 myApp.controller('RiddleCtrl', function ($scope, $http, $routeParams) {
@@ -59,7 +60,7 @@ myApp.controller('EndCtrl', function ($scope, $http, $routeParams) {
         $scope.winStyle = {'color': 'red'};
     }
 
-    
+
 });
 
 myApp.controller('MCCtrl', function ($scope) {
