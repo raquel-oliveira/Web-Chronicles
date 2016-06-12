@@ -1,6 +1,7 @@
 <div class="jumbotron">
   <h1>Browser Chronicles</h1>
   <div ng-controller="SetStory">
+
     <div class="choose-story">
         <p>Choose a story: </p>
         <select ng-model="selected" ng-change="changeStory()" ng-options="story as story.label for story in stories track by story.file"></select>
@@ -13,5 +14,6 @@
           </a>
       </h2>
     </div> <!--<div class="choose-story"> -->
+      <a ng-hide="!haveSession" ng-href="#/play/{{continue.name}}/continue" class="myButton2"> Continue story {{continue.name}} at Step {{continue.step}} </a>
   </div> <!-- <div ng-controller="SetStory"> -->
 </div> <!-- <div class="jumbotron"> -->

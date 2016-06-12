@@ -20,6 +20,37 @@ const app = express();
 app.use(
     session(
         { secret: 'keyboard cat', cookie: { maxAge: 3600*24*6000  }}));
+
+
+function update(sess,story,step,create)
+{
+    console.dir(story);
+    console.dir(step);
+    console.dir(sess.view);
+
+
+    if(create)
+    {
+        sess.views = {story:story,step:step,item:{}}
+        sess.views.item[story]=[];
+    }
+    if(step==0)
+    {
+        sess.views.item[story]=[];
+    }
+
+    sess.views.story=story;
+    sess.views.step=step;
+
+    sess.save(function(err) {
+        console.dir(sess.views);
+    })
+
+
+}
+
+
+
 function createStep(stepData) {
 
     var step = {};
@@ -45,7 +76,6 @@ function createStep(stepData) {
     } else if (stepData.hasOwnProperty("riddle")) {
         step = createRiddleStep(step, stepData);
     }
-
     return step;
 }
 
@@ -298,18 +328,17 @@ app.get('/play/:storyName/:step', function (req, res) {
 
     var sess = req.session;
     if (!sess.views) {
-
-        sess.views =[];
+        console.log('creating session');
+        update(sess,req.params.storyName,req.params.step,true);
     }
-    if(step.id==0)
-    {
-        sess.views =[];
+    else {
+        console.log('update session');
+        update(sess,req.params.storyName,req.params.step,false)
     }
     if(step.given!=undefined&&step.given!=='')
     {
-
         step.given.forEach(function(item){
-            sess.views.push(item);
+            sess.views.item[req.params.storyName].push(item);
         });
         req.session.save(function(err) {
         })
@@ -448,8 +477,19 @@ app.get('/inventory', function(req, res, next) {
     if (sess.views) {
         res.send(sess.views);
     } else {
-        sess.views = [];
-        res.send(sess.views);
+        res.send([]);
+    }
+
+});
+
+app.get('/getLastStep', function(req, res, next) {
+    var sess = req.session;
+    if (sess.views) {
+        res.redirect('/play/'+sess.views.story+"/"+sess.views.step);
+        //res.send(sess.views);
+    } else {
+        res.send('no session',503);
+
     }
 
 });
@@ -457,6 +497,9 @@ app.get('/inventory', function(req, res, next) {
 app.use(express.static(__dirname + '/app'));
 app.use(express.static(__dirname + '/'));
 
+app.get('*', function(req, res){
+    res.send('404 not found', 404);
+});
 
 app.listen(PORT);
 
