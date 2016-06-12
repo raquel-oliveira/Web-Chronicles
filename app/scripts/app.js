@@ -27,7 +27,7 @@ angular
       })
       .when('/about', {
         templateUrl: 'views/about.html',
-        
+
       })
       .when('/contact', {
         templateUrl: 'views/contact.html',
@@ -53,11 +53,6 @@ angular
         templateUrl: 'views/show.html',
         controller: 'ShowCtrl',
         controllerAs: 'show'
-      })
-      .when('/edit', {
-        templateUrl: 'views/edit-step.html',
-        controller: 'EditCtrl',
-        controllerAs: 'edit'
       })
       .when('/help', {
         templateUrl: 'views/403.html',

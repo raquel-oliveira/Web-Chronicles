@@ -11,7 +11,7 @@ const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
 
 // Constants
-const PORT = 8080;
+const PORT = 9000;
 const STORY_PATH = './app/stories/';
 var session = require('express-session');
 // Use the session middleware
@@ -256,9 +256,9 @@ function readStory(story_file) {
 }
 
 function initStories() {
-    console.log('Init stories...');
+    //console.log('Init stories...');
     fs.readdir('./app/stories', function (err, files) {
-        console.log("stories list: ");
+        //console.log("stories list: ");
         files.filter(function (file) {
             var parts = file.split(".");
             if (parts[1] === 'xml') {
@@ -323,9 +323,9 @@ app.get('/play/:storyName/:step', function (req, res) {
 
 function getPlayStep(storyName, stepId) {
     var storyRaw = stories[storyName];
-    console.log(storyName);
+    //console.log(storyName);
     var stepRaw = storyRaw.steps[stepId];
-    console.log(stepRaw.getPlayInfos());
+    //console.log(stepRaw.getPlayInfos());
     return stepRaw.getPlayInfos();
 }
 
@@ -372,7 +372,7 @@ app.get('/shortestPath/:storyName/:onlySize', function (req, res) {
 
     sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
-    console.log(data);
+    //console.log(data);
 
     if (req.params.onlySize === 'true') {
         res.send(data.length + '');
@@ -397,58 +397,6 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
     })
     if (!found)
         res.send(false + '');
-});
-
-
-function toXML(result, rootNameParam) {
-    var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
-    var xml2 = builder.buildObject(result);
-    return builder.buildObject(result);
-}
-
-//TODO: debug this
-app.post('/stories/', function (req, res) {
-
-    console.log(req.body);
-
-    var xmltoStore = toXML(req.body.story, 'story');
-
-    //console.dir(req);
-    var path = './app/stories/.tmp/';
-
-
-    // Logic for handling missing file, wrong mimetype, no buffer, etc.
-
-
-    fs.writeFile(STORY_PATH + req.body.story.file + '.xml', xmltoStore, function (err) {
-        if (err) {
-            res.status(400).send({
-                message: 'Problem saving the file. Please try again.'
-            });
-        }
-        else {
-            console.log("Write");
-            console.log();
-            console.log(xmltoStore);
-            res.redirect("back");
-
-        }
-    });
-
-
-});
-
-
-// Access the session as req.session
-app.get('/inventory', function (req, res, next) {
-    var sess = req.session;
-    if (sess.views) {
-        res.send(sess.views);
-    } else {
-        sess.views = [];
-        res.send(sess.views);
-    }
-
 });
 
 app.use(express.static(__dirname + '/app'));
