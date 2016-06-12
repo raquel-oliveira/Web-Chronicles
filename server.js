@@ -1,12 +1,15 @@
 'use strict';
 
 const express = require('express');
+const app = express();
+
 const fs = require('fs');
 const xml2js = require('xml2js');
 
 const util = require('util');
 const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
+
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
@@ -16,7 +19,7 @@ var session = require('express-session');
 
 
 // App
-const app = express();
+
 
 
 app.use(
@@ -49,7 +52,6 @@ function update(sess,story,step,create)
     })
 }
 
-
 function createStep(stepData) {
 
     var step = {};
@@ -59,7 +61,7 @@ function createStep(stepData) {
         step.title = stepData.title[0];
     else
         step.title = "";
-    
+
     if (stepData.hasOwnProperty("desc"))
         step.description = stepData.desc[0];
     else
@@ -82,7 +84,7 @@ function createStep(stepData) {
     return step;
 }
 
-function copyStepBasicData(from, to){
+function copyStepBasicData(from, to) {
     to.title = from.title;
     to.description = from.description;
     to.type = from.type;
@@ -94,13 +96,12 @@ function createMultipleChoiceStep(step, stepData) {
     step.type = 'multiple_choice';
     step.outcomes = [];
 
-    if(!Array.isArray(stepData.multiple_choice[0].outcome))
-        {
-            step.outcomes.push({
-                text: stepData.multiple_choice[0].outcome.text[0],
-                nextStep: stepData.multiple_choice[0].outcome.nextStep[0]
-            });
-        }
+    if (!Array.isArray(stepData.multiple_choice[0].outcome)) {
+        step.outcomes.push({
+            text: stepData.multiple_choice[0].outcome.text[0],
+            nextStep: stepData.multiple_choice[0].outcome.nextStep[0]
+        });
+    }
     else {
         for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
             step.outcomes.push({
@@ -196,7 +197,7 @@ function createRiddleStep(step, stepData) {
         var r = copyStepBasicData(step, {
             question: step.question,
             hint: step.hint,
-	    outcomes: step.outcomes,
+            outcomes: step.outcomes,
             nextStep: []
         });
         for (var i = 0; i < step.outcomes.length; ++i) {
@@ -205,7 +206,7 @@ function createRiddleStep(step, stepData) {
         return r;
     };
 
-    step.verifyAnswer = function(data){
+    step.verifyAnswer = function (data) {
         var minLevDist = 100;
 
         var trimmedAnswer = utils_text.convert(data);
@@ -265,10 +266,8 @@ function readStory(story_file) {
                 try {
                     steps[data.story.step[i].id[0]] = (createStep(data.story.step[i]));
                 }
-                catch (ex)
-                {
-
-                    console.log('step '+i+' invalid ! because');
+                catch (ex) {
+                    console.log('step ' + i + ' invalid ! because');
                     console.dir(ex);
                     console.dir(data.story.step[i]);
                     throw(ex);
@@ -277,7 +276,8 @@ function readStory(story_file) {
             stories[story_file.slice(0, -4)] = {
                 name: data.story.name[0],
                 file: story_file,
-                steps: steps};
+                steps: steps
+            };
         });
         console.log("\t\t" + story_file);
     });
@@ -303,11 +303,11 @@ initStories();
 
 app.get('/show/story/:name', function (req, res) {
     if (req.params.name in stories) {
-	res.set('Content-Type', 'application/json');
-	res.send(getShowStory(req.params.name));
+        res.set('Content-Type', 'application/json');
+        res.send(getShowStory(req.params.name));
     } else {
         res.statusCode = 400;
-	res.send('Error: can\t find story ' + req.params.name);
+        res.send('Error: can\t find story ' + req.params.name);
     }
 });
 
@@ -332,11 +332,12 @@ app.get('/play/:storyName/:step', function (req, res) {
 
     var sess = req.session;
     if (!sess.views) {
-        console.log('creating session');
+
+        //console.log('creating session');
         update(sess,req.params.storyName,req.params.step,true);
     }
     else {
-        console.log('update session');
+        //console.log('update session');
         update(sess,req.params.storyName,req.params.step,false)
     }
     if(step.given!=undefined&&step.given!=='')
@@ -344,7 +345,7 @@ app.get('/play/:storyName/:step', function (req, res) {
         step.given.forEach(function(item){
             sess.views.item[req.params.storyName].push(item);
         });
-        req.session.save(function(err) {
+        req.session.save(function (err) {
         })
     }
 
@@ -352,9 +353,9 @@ app.get('/play/:storyName/:step', function (req, res) {
 
 function getPlayStep(storyName, stepId) {
     var storyRaw = stories[storyName];
-    console.log(storyName);
+    //console.log(storyName);
     var stepRaw = storyRaw.steps[stepId];
-    console.log(stepRaw.getPlayInfos());
+    //console.log(stepRaw.getPlayInfos());
     return stepRaw.getPlayInfos();
 }
 
@@ -369,7 +370,6 @@ app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
 
 
 });
-
 
 
 function getStoriesNamesList() {
@@ -398,12 +398,11 @@ function filterStep(step, filter) {
 }
 
 app.get('/shortestPath/:storyName/:onlySize', function (req, res) {
-
     var rep = stories[req.params.storyName];
 
     sp.fillgraph(getShowStory(req.params.storyName).steps);
     var data = sp.shortestPath();
-    console.log(data);
+    //console.log(data);
 
     if (req.params.onlySize === 'true') {
         res.send(data.length + '');
@@ -431,9 +430,7 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
 });
 
 
-
-function toXML(result,rootNameParam)
-{
+function toXML(result, rootNameParam) {
     var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
     var xml2 = builder.buildObject(result);
     return builder.buildObject(result);
@@ -442,9 +439,9 @@ function toXML(result,rootNameParam)
 //TODO: debug this
 app.post('/stories/', function (req, res) {
 
-    console.log(req.body);
+   // console.log(req.body);
 
-    var xmltoStore = toXML(req.body.story,'story');
+    var xmltoStore = toXML(req.body.story, 'story');
 
     //console.dir(req);
     var path = './app/stories/.tmp/';
@@ -453,8 +450,8 @@ app.post('/stories/', function (req, res) {
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
 
-    fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
-        if(err) {
+    fs.writeFile(STORY_PATH + req.body.story.file + '.xml', xmltoStore, function (err) {
+        if (err) {
             res.status(400).send({
                 message: 'Problem saving the file. Please try again.'
             });
@@ -469,14 +466,11 @@ app.post('/stories/', function (req, res) {
     });
 
 
-
-
 });
 
 
-
 // Access the session as req.session
-app.get('/inventory', function(req, res, next) {
+app.get('/inventory', function (req, res, next) {
     var sess = req.session;
     if (sess.views) {
         res.send(sess.views);

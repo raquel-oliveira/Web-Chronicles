@@ -1,5 +1,5 @@
 <story>
-    <name>Raquel</name>
+    <name>All kind of steps</name>
     <step>
         <id>0</id>
         <title>Multiple choice</title>
@@ -31,7 +31,7 @@
         <desc>Description riddle</desc>
         <riddle>
             <question>bonjour ou aaa</question>
-            <hint>La réponse est dans la question</hint>
+            <hint>The answer is in the question</hint>
             <outcome>
                 <text>bonjour</text>
                 <nextStep>4</nextStep>
