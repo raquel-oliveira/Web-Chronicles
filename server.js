@@ -10,11 +10,16 @@ const sp = require('./app/scripts/shortestpath2.js');
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
+var session = require('express-session');
+// Use the session middleware
 
 
 // App
 const app = express();
 
+app.use(
+    session(
+        { secret: 'keyboard cat', cookie: { maxAge: 3600*24*6000  }}));
 function createStep(stepData) {
 
     var step = {};
@@ -25,7 +30,7 @@ function createStep(stepData) {
         step.description = stepData.desc[0];
     else
         step.description = "";
-    
+
     if (stepData.hasOwnProperty("multiple_choice")) {
         step = createMultipleChoiceStep(step, stepData);
     } else if (stepData.hasOwnProperty("end")) {
@@ -44,6 +49,7 @@ function copyStepBasicData(from, to){
     to.description = from.description;
     to.type = from.type;
     to.id = from.id;
+    to.given = from.given;
 
     return to;
 }
@@ -276,6 +282,28 @@ function getShowStory(storyName) {
 app.get('/play/:storyName/:step', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(getPlayStep(req.params.storyName, req.params.step));
+
+    var sess = req.session;
+    if (sess.views) {
+
+        console.log('purple');
+        sess.views.push('purple');
+        console.dir(sess.views);
+        console.dir(sess);
+        req.session.save(function(err) {
+            // session saved
+            console.dir('session saved !');
+        })
+    }
+    else {
+        sess.views =[];
+        sess.views.push('orange');
+    }
+    if(req.params.step.given!=undefined)
+    {
+        console.log('tomato');
+
+    }
 });
 
 function getPlayStep(storyName, stepId) {
@@ -294,46 +322,8 @@ app.get('/stories', function (req, res) {
 app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
     res.set('Content-Type', 'application/json');
     res.send(stories[req.params.storyName].steps[req.params.step][req.params.action](req.params.data));
-    /*var step = parseInt(req.params.step);
-    var reponse = req.params.reponse;
 
-    var result = myCache.get(req.params.name + '.json');
 
-    console.dir(result);
-    console.dir(result.story.step[step]);
-    console.log(step);
-    console.dir(result.story.step[step].hiden);
-    console.dir(result.story.step[step].hiden[0]);
-
-    var answerS = result.story.step[step].hiden[0].nextStep;
-
-    var minLevDist = 100;
-
-    var found = false;
-    //distance
-    answerS.forEach(function (answer) {
-        if (answer.$.answer == reponse) {
-
-            res.send(answer);
-            found = true;
-        }
-        var lComp = Levenshtein(answer.$.answer, reponse);
-        if (lComp < minLevDist)
-            minLevDist = lComp;
-
-    });
-
-    if (!found) {
-
-        var hint = {
-            hint: result.story.step[step].hiden[0].hint[0],
-            distance: minLevDist
-
-        };
-
-        res.statusCode = 210;
-        res.send(hint);
-    }*/
 });
 
 
@@ -450,6 +440,42 @@ app.post('/stories/', function (req, res) {
 
 });
 
+
+
+// Access the session as req.session
+app.get('/inventory', function(req, res, next) {
+    var sess = req.session;
+    if (sess.views) {
+
+        //res.write('<p>views: ' + sess.views + '</p>');
+        //res.write('<p>expires in: ' + (sess.cookie.maxAge / 1000) + 's</p>');
+        sess.views.push('blue');
+        console.dir(sess);
+        res.send(sess.views);
+    } else {
+        sess.views = [];
+        sess.views.push('rose');
+        res.send(sess.views);
+    }
+    //next()
+});
+app.get('/inventory/add/:add', function(req, res, next) {
+    var sess = req.session;
+
+    if (sess.views) {
+        sess.views.push(req.params.add);
+        sess.views.push('green');
+        res.send(sess.views);
+
+        res.end();
+    } else {
+        sess.views = [];
+        sess.views.push('tellow');
+        sess.views.push(req.params.add);
+        res.send(sess.views);
+    }
+    next()
+});
 
 app.use(express.static(__dirname + '/app'));
 app.use(express.static(__dirname + '/'));
