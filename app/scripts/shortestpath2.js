@@ -71,11 +71,7 @@ function shortestPath() {
 
 
     }
-
-    var data = [];
-
-    return data;
-
+    return [];
 }
 
 
