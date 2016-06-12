@@ -28,7 +28,7 @@ module.exports = function (config) {
             // 'app/scripts/**/*.js',
             // 'libs/**/*.js',
             'app/scripts/shortestpath2.js',
-            'test/spec/**/*.js'
+            'test/spec/shortestpath.js'
         ],
 
 
