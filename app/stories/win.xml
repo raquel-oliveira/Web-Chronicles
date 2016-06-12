@@ -1,0 +1,49 @@
+<story>
+    <name>Want to win ?</name>
+    <step>
+        <id>0</id>
+        <title>Be sure</title>
+        <desc>Do you really want to win?</desc>
+        <multiple_choice>
+            <outcome>
+                <text>Yes</text>
+                <nextStep>1</nextStep>
+            </outcome>
+            <outcome>
+                <text>No</text>
+                <nextStep>3</nextStep>
+            </outcome>
+        </multiple_choice>
+    </step>
+    <step>
+        <id>1</id>
+        <title>Welcome!</title>
+        <desc>Are you sure about it?</desc>
+        <multiple_choice>
+            <outcome>
+                <text>Choice A</text>
+                <nextStep>2</nextStep>
+            </outcome>
+            <outcome>
+                <text>Choice B</text>
+                <nextStep>3</nextStep>
+            </outcome>
+        </multiple_choice>
+    </step>
+    <step>
+        <id>2</id>
+        <title>Bad choice</title>
+        <desc>Dead :(</desc>
+        <end>
+            <win>false</win>
+        </end>
+    </step>
+    <step>
+        <id>3</id>
+        <title>Good choice</title>
+        <desc>win !</desc>
+        <end>
+            <win>true</win>
+        </end>
+    </step>
+</story>

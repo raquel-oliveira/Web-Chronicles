@@ -1,132 +1,171 @@
 <story>
-    <name>"Fallout 0"</name>
-
+    <name>Fallout 0</name>
     <step>
         <id>0</id>
-        <given>vault 13 combinaison</given>
-        <desc>
-            <![CDATA[ <img src="images/13.png" height="100" width="100">civilisation est tombée en ruines à la suite d'une guerre nucléaire.
-                Pour se protéger des explosions atomiques, certaines personnes ont trouvé refuge dans des abris anti-atomiques souterrains (vault en anglais).
-
-                Vous êtes est un habitant d'un de ces abris souterrains, l'Abri 13, qui est sélectionné pour être le premier à affronter le monde extérieur.
-                Le 5 décembre 2161, la puce servant à filtrer l'eau contaminée (water chip) vient de tomber en panne : <br></br>
-                    votre mission sera d'aller affronter le monde extérieur pour trouver une puce de rechange avant que les réserves d'eau de l'abri ne s'épuisent.
-                Votre seule information de départ est l'existence d'un autre abri construit à l'Est qui, peut-être, aurait cette puce.]]></desc>
-        <type>multiple_choice</type>
-        <multiple_choice>
-
-            <outcome><text>Explorer l'abri</text><nextStep>1</nextStep></outcome>
-
-            <outcome><text>Sortir dans le monde exterieur </text><nextStep>2</nextStep></outcome>
-
-        </multiple_choice>
         <title>War, war nevers changes.</title>
+        <desc>
+            La civilisation est tombée en ruines à la suite d'une guerre nucléaire. Pour se protéger des explosions
+            atomiques, certaines personnes ont trouvé refuge dans des abris anti-atomiques souterrains (vault en
+            anglais) qui ont été construits.
 
+            Vous êtes est un habitant d'un de ces abris souterrains, l'Abri 13, qui est sélectionné pour être le
+            premier à affronter le monde extérieur. Le 5 décembre 2161, la puce servant à filtrer l'eau contaminée
+            (water chip) vient de tomber en panne : votre mission sera d'aller affronter le monde extérieur pour
+            trouver une puce de rechange avant que les réserves d'eau de l'abri ne s'épuisent.
+            Votre seule information de départ est l'existence d'un autre abri construit à l'Est qui, peut-être,
+            aurait cette puce.
+        </desc>
+        <multiple_choice>
+            <outcome>
+                <text>Explorer l'abri</text>
+                <nextStep>1</nextStep>
+            </outcome>
+            <outcome>
+                <text>Sortir dans le monde exterieur</text>
+                <nextStep>2</nextStep>
+            </outcome>
+        </multiple_choice>
     </step>
     <step>
         <id>1</id>
         <title>Exploration de l'abri</title>
-        <desc> Vous ne trouvez rien d'utile </desc>
-
-        <type>multiple_choice</type>
+        <desc>Vous ne trouvez rien d'utile</desc>
         <multiple_choice>
-        <outcome><text>Quitter l'abri </text><nextStep>2</nextStep></outcome>
-    </multiple_choice>
-
+            <outcome>
+                <text>Quitter l'abri</text>
+                <nextStep>2</nextStep>
+            </outcome>
+        </multiple_choice>
     </step>
     <step>
         <id>2</id>
-        <desc> You have exited the vault by fighting you way out against rats.</desc>
-        <title>Grotte</title>
-        <type>multiple_choice</type>
+        <desc>You have exited the vault by fighting you way out against rats.</desc>
         <multiple_choice>
-
             <outcome>
-                <text>Aller sur la carte du monde </text>
+                <text>Aller sur la carte du monde</text>
                 <nextStep>3</nextStep>
             </outcome>
         </multiple_choice>
-
     </step>
     <step>
         <id>3</id>
-        <title>Carte du monde</title>
-        <desc> Vous êtes sur la carte du monde, ou voulez vous aller ?</desc>
-        <type>riddle</type>
+        <desc>Vous êtes sur la carte du monde</desc>
         <riddle>
-            <question>Ou aller ?</question>
-            <outcome><text>abri13</text><nextStep>4</nextStep></outcome>
-            <outcome><text>abri 13</text><nextStep>4</nextStep></outcome>
-            <outcome><text>sables ombragés</text><nextStep>10</nextStep></outcome>
-            <outcome><text>cathedrale</text><nextStep>11</nextStep></outcome>
-            <outcome><text>base des super mutants</text><nextStep>11</nextStep></outcome>
-            <outcome><text>confrérie de l'acier</text><nextStep>11</nextStep></outcome>
+            <question>Ou voulez-vous aller?</question>
             <hint>On vous à parlé de l'abri 13</hint>
+            <outcome>
+                <text>abri13</text>
+                <nextStep>4</nextStep>
+            </outcome>
+            <outcome>
+                <text>abri 13</text>
+                <nextStep>4</nextStep>
+            </outcome>
+            <outcome>
+                <text>sables ombragés</text>
+                <nextStep>10</nextStep>
+            </outcome>
+            <outcome>
+                <text>cathedrale</text>
+                <nextStep>11</nextStep>
+            </outcome>
+            <outcome>
+                <text>base des super mutants</text>
+                <nextStep>11</nextStep>
+            </outcome>
+            <outcome>
+                <text>confrérie de l'acier</text>
+                <nextStep>11</nextStep>
+            </outcome>
         </riddle>
-
     </step>
     <step>
-
-
         <id>4</id>
         <title>Abri 13</title>
-        <desc> Vous repérez un groupe de pillards qui garde la porte de l'abri. Ils ne vous ont pas encore remarqué. </desc>
-
-
-        <type>multiple_choice</type>
-        <multiple_choice><outcome><text>Fuir </text><nextStep>3</nextStep></outcome>
-        <outcome><text>Discuter </text><nextStep>5</nextStep></outcome>
-        <outcome><text>Combatre </text><nextStep>7</nextStep></outcome>
-        <outcome><text>S'infiltrer </text><nextStep>7</nextStep></outcome>
+        <desc>
+            Vous repérez un groupe de pillards qui garde la porte de l'abri. Ils ne vous ont pas encore
+            remarqué.
+        </desc>
+        <multiple_choice>
+            <outcome>
+                <text>Fuir</text>
+                <nextStep>3</nextStep>
+            </outcome>
+            <outcome>
+                <text>Discuter</text>
+                <nextStep>5</nextStep>
+            </outcome>
+            <outcome>
+                <text>Combattre</text>
+                <nextStep>7</nextStep>
+            </outcome>
+            <outcome>
+                <text>S'infiltrer</text>
+                <nextStep>7</nextStep>
+            </outcome>
         </multiple_choice>
-
     </step>
     <step>
-
         <id>5</id>
         <title>Discuter avec les pillard</title>
-        <desc> Avez vous au moins 8 points de charisme ? </desc>
-
-        <type>multiple_choice</type><multiple_choice>
-        <outcome><text>Oui </text><nextStep>6</nextStep></outcome>
-        <outcome><text>Non </text><nextStep>7</nextStep></outcome>
-    </multiple_choice>
-
+        <desc>Avez vous au moins 8 points de charisme ?</desc>
+        <multiple_choice>
+            <outcome>
+                <text>Oui</text>
+                <nextStep>6</nextStep>
+            </outcome>
+            <outcome>
+                <text>Non</text>
+                <nextStep>7</nextStep>
+            </outcome>
+        </multiple_choice>
     </step>
-
     <step>
-
         <id>6</id>
         <title>Prochaine destination ?</title>
-        <desc> Vous vous présentez comme un découvreur de trésor et vous parvenez à gagner l'aide des pillards pour la fouille de l'abri 13, en échange de 30% des gains.
-            Néanmoins l'abri est complètement détruit. La pluparts des tunnels ont subit des éboulements. Ne sachant ou aller, vous questionnez les pillards.
-            Il vous indiquent un petit village, --les sables ombragés-- il s'est indiqué dans votre carte du monde mais n'oubliez pas sa position: "les sables ombragés" </desc>
-
-        <type>multiple_choice</type><multiple_choice>        <outcome><text>les sables ombragés direct </text><nextStep>10</nextStep></outcome>
-        <outcome><text>carte du monde  </text><nextStep>3</nextStep></outcome></multiple_choice>
-
+        <desc>
+            Vous vous présentez comme un découvreur de trésor et vous parvenez à gagner l'aide des pillards
+            pour la fouille de l'abri 13, en échange de 30% des gains.
+            Néanmoins l'abri est complètement détruit. La pluparts des tunnels ont subit des éboulements. Ne sachant
+            ou aller, vous questionnez les pillards.
+            Il vous indiquent un petit village, --les sables ombragés-- il s'est indiqué dans votre carte du monde
+            mais n'oubliez pas sa position: "les sables ombragés"
+        </desc>
+        <multiple_choice>
+            <outcome>
+                <text>les sables ombragés direct</text>
+                <nextStep>10</nextStep>
+            </outcome>
+            <outcome>
+                <text>carte du monde</text>
+                <nextStep>3</nextStep>
+            </outcome>
+        </multiple_choice>
     </step>
     <step>
-        <title>Outch !!!</title>
         <id>7</id>
         <desc>
-            Voyant votre faiblesse, ils profitent de votre ignorance de leur pratiques pour vous cogner avec une grosse massue sur la tête.
+            Voyant votre faiblesse, ils profitent de votre ignorance de leur pratiques pour vous cogner avec une
+            grosse massue sur la tête.
             Vous perdez 9hp.
             Vous vous réveillez dans une cellule. Une personne s'approche de vous:
             - Je suis Trudi, moi aussi je me suis fait kidnapper. Je viens des --sables ombragés--.
             - Ca fait combien de temps que vous êtes ici ?
             - Quelques mois, je ne compte plus ...
             Après quelques commodités, vous viens l'idée de vous enfuire.
-
-
         </desc>
-
-        <type>multiple_choice</type><multiple_choice>     <outcome><text>Tenter de crocheter la serrure </text><nextStep>9</nextStep></outcome>
-        <outcome><text>Discuter avec le garde </text><nextStep>8</nextStep></outcome></multiple_choice>
-
+        <multiple_choice>
+            <outcome>
+                <text>Tenter de crocheter la serrure</text>
+                <nextStep>9</nextStep>
+            </outcome>
+            <outcome>
+                <text>Discuter avec le garde</text>
+                <nextStep>8</nextStep>
+            </outcome>
+        </multiple_choice>
     </step>
     <step>
-        <title>Run </title>
         <id>8</id>
         <desc>
             Vous êtes surprit par la réaction du garde.
@@ -134,17 +173,19 @@
             Je vous aide et vous m'aidez à me trouver une place pépère.
             Trudy: ça marche !
             Vous suivez le garde. Il vous conduit à travers un couloir jusqu'à une porte isolée.
-            Tout le monde roupille et vous ne tardez pas à prendre la direction des sables ombragés, pour ramener Trudi à sa famille.
+            Tout le monde roupille et vous ne tardez pas à prendre la direction des sables ombragés, pour ramener
+            Trudi à sa famille.
         </desc>
-
-        <type>multiple_choice</type><multiple_choice><outcome><text>sables ombragés </text><nextStep>11</nextStep></outcome></multiple_choice>
-
+        <multiple_choice>
+            <outcome>
+                <text>sables ombragés</text>
+                <nextStep>11</nextStep>
+            </outcome>
+        </multiple_choice>
     </step>
     <step>
-        <title>Crochetez la serrure !</title>
         <id>9</id>
-        <desc> Maze</desc>
-        <type>maze</type>
+        <desc>Maze</desc>
         <maze>
             <rows>5</rows>
             <columns>5</columns>
@@ -152,31 +193,38 @@
         </maze>
     </step>
     <step>
-        <title>Wip</title>
         <id>10</id>
-        <desc> Sables ombragés. On vous apprend la position de ... todo </desc>
-        <type>end</type><end><win>false</win></end>
+        <desc>Sables ombragés. On vous apprend la position de ... todo</desc>
+        <end>
+            <win>false</win>
+        </end>
     </step>
     <step>
-        <title>End</title>
         <id>11</id>
         <desc>
-            Vous arrivez aux sables ombragés, village prospère. Mais ils ont quelques soucis (radscorpion,vols,pillages,agriculture) et vous décidez de les aider.
+            Vous arrivez aux sables ombragés, village prospère. Mais ils ont quelques soucis
+            (radscorpion,vols,pillages,agriculture) et vous décidez de les aider.
             Aux bout de quelques mois, la ville se sent beaucoup plus en sécurité avec vous comme shérif.
-            Vous dévellopez une technique innovante pour s'assurer de la qualitée de l'eau: l'eau pure ne pétille pas en contact avec des vapeurs de bouses de brahmines.
+            Vous dévellopez une technique innovante pour s'assurer de la qualitée de l'eau: l'eau pure ne pétille
+            pas en contact avec des vapeurs de bouses de brahmines.
             Mais les autres habitants de l'abris sont sur leur dernières réserves, il faut trouver la puce !
-            Vous décidez de retourner à votre abri pour prendre la veille puce pour comprendre comment elle fonctionne.
-            Vous étudiez la puce et quelquechose vous parait étrange, pourquoi la puce est relié à une alarme ? Une idée vous vient !
-            Vous appuyez sur les commandes pour remplir le réservoir. Il se remplit doucement. Aucune alarme ne se déclenche.
-            Vous vous empressez de prélever un échantillon et utilisez votre technique révolutionaire pour conclure que l'eau est pure.
+            Vous décidez de retourner à votre abri pour prendre la veille puce pour comprendre comment elle
+            fonctionne.
+            Vous étudiez la puce et quelquechose vous parait étrange, pourquoi la puce est relié à une alarme ? Une
+            idée vous vient !
+            Vous appuyez sur les commandes pour remplir le réservoir. Il se remplit doucement. Aucune alarme ne se
+            déclenche.
+            Vous vous empressez de prélever un échantillon et utilisez votre technique révolutionaire pour conclure
+            que l'eau est pure.
 
-            En réalitée la puce d'eau ne faisait que vérifier le niveau de pureté de l'eau et déclencher une alarme en cas de puretée trop faible ou de défaillance.
+            En réalitée la puce d'eau ne faisait que vérifier le niveau de pureté de l'eau et déclencher une alarme
+            en cas de puretée trop faible ou de défaillance.
             Elle n'est pas utile au filtrage de l'eau !
 
             Bravo vous avez sauvé l'abri !
         </desc>
-        <type>end</type><end><win>true</win>
-    </end>
-
+        <end>
+            <win>true</win>
+        </end>
     </step>
 </story>
