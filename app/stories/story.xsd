@@ -1,38 +1,44 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="story">
     <xs:complexType>
+      
       <xs:sequence>
         <xs:element type="xs:string" name="name"/>
+	
         <xs:element name="step" maxOccurs="unbounded" minOccurs="1">
           <xs:complexType>
-            <xs:sequence>
-              <xs:element type="xs:byte" name="id"/>
-              <xs:element type="xs:string" name="title"/>
-              <xs:element type="xs:string" name="desc"/>
-              <xs:element name="multiple_choice" minOccurs="0">
+            <xs:all>
+              <xs:element type="xs:string" name="title" minOccurs="0" maxOccurs="1" />
+              <xs:element type="xs:string" name="desc" minOccurs="0" maxOccurs="1" />
+              <xs:element type="xs:unsignedShort" name="id" minOccurs="1" maxOccurs="1" />
+	      
+              <xs:element name="multiple_choice" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="outcome" maxOccurs="unbounded" minOccurs="1">
                       <xs:complexType>
-                        <xs:sequence>
+                        <xs:all>
                           <xs:element type="xs:string" name="text"/>
-                          <xs:element type="xs:byte" name="nextStep"/>
-                        </xs:sequence>
+                          <xs:element type="xs:unsignedShort" name="nextStep"/>
+                        </xs:all>
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="maze" minOccurs="0">
+	      
+              <xs:element name="maze" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element type="xs:byte" name="rows"/>
-                    <xs:element type="xs:byte" name="columns"/>
-                    <xs:element type="xs:byte" name="nextStep"/>
-                  </xs:sequence>
+                  <xs:all>
+                    <xs:element type="xs:unsignedByte" name="rows"/>
+                    <xs:element type="xs:unsignedByte" name="columns"/>
+                    <xs:element type="xs:unsignedShort" name="nextStep"/>
+                  </xs:all>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="riddle" minOccurs="0">
+	      
+              <xs:element name="riddle" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element type="xs:string" name="question"/>
@@ -41,24 +47,27 @@
                       <xs:complexType>
                         <xs:sequence>
                           <xs:element type="xs:string" name="text"/>
-                          <xs:element type="xs:byte" name="nextStep"/>
+                          <xs:element type="xs:unsignedShort" name="nextStep"/>
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="end" minOccurs="1">
+	      
+              <xs:element name="end" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element type="xs:string" name="win"/>
+                    <xs:element type="xs:boolean" name="win"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-            </xs:sequence>
+	      
+            </xs:all>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+      
     </xs:complexType>
   </xs:element>
 </xs:schema>
