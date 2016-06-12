@@ -1,6 +1,6 @@
 # Team C
 
-Browser Chronicles - A browser-based gamebook platform. More info: https://d1b10bmlvqabco.cloudfront.net/attach/iok9b721bcu3i/ijibz99cthmum/ip34gelvqiuo/Track.pdf
+Browser Chronicles - A browser-based gamebook platform. [More Info](https://d1b10bmlvqabco.cloudfront.net/attach/iok9b721bcu3i/ijibz99cthmum/ip34gelvqiuo/Track.pdf)
 
 ![alt tag](app/images/books.jpg?raw=true "Chronicles")
 
@@ -21,70 +21,39 @@ Run `grunt` for building and `grunt serve` for preview.
 
 Running `grunt test` will run the unit tests with karma.
 
-## Change Log ##
---------------
 
-### 06 June 2016 ###
+## Tags ##
 
-* Set up initial.
-* Create simple views.
-* View show with story option to see it.
-* View show with basic graph.
-* Graph with number id in the node.
-* Add template rapport.
-* Implement Simple Rest API.
-* Add initial xsd, dtd...
-* Implement multiple_choice
-* Implement end
+### vFinal ###
 
-### 07 June 2016 ###
+In this tag it's possible to see:
 
-* add new stories examples.
-* implement simple css.
-* modify the express server to serve static files (angular).
-* change the story xsd.
-* use node to serve file data for the play view.
-* improve the way of extends our step types, add html fragments.
-* correct show to support api calls.
-* Implement riddle.
-* Show message end (you win/you lose) colorful.
-* fix links in the graph (problem was in the format riddle).
-* Separate controller responsible of step of type 'end'.
-* fix problem in view 'show' to choose story.
-* add arrow to the graph and add border to the view 'show'
-* Update differents .html referents of the types.
-* Initial shortest path
-* Implement: when there is only one option, just show button 'next'
-* Show information about the node when click it (view 'show')
-
-### 08 June 2016 ###
-
-* Implement type maze
-* Highlight shortest path in the graph at green
-* Show minimum number of steps in view 'show'
-* Add Levenshtein distance to hint answer.
-* Modify the client-side riddle to show the minimal distance between given answers and valid answers.
-* Only show number of steps and min number of steps if the player wins.
-* Display error if there's no path from start to end.
-* Display next button only when player reached end (maze).
-* Fix bug show riddle links.
-* Fix multiple selectNode events.
-* Fix shortest path.
-* Separate controllers
-
-### 09 June 2016 ###
-
-* Add verification if there is a button choose.
-* Delete unused code.
+* Some stories by default to test the application
+* The play view loads the story corresponding to a parameter given in the URL. Example: `http://localhost:9000/#/play/disappointment`
+* The show view loads the story corresponding to a parameter given in the URL. Example: `http://localhost:9000/#/show/disappointment`
+* About the show view:
+   * By default, every story starts in the node 0
+   * Every node of type end it's fill by a color (Green if it's a happy ending, red otherwise).
+   * To know information about the node, click on it. These information will appear on the bottom of the graph.
+   * If there is no path from the start to the victory, it show a warning (message with red color).
+* About the play view:
+   * When the game is finished a big colored text will appear informing if he wins or not.
+   * In case of victory, a short sentence inform the player about the number of steps he did and the minimum number of steps required from the start to a successful end.
+* Riddle answer flexibility
+  In this version, when the player tries to give a answer of a step of type riddle, its shows the distance based in Levenshtein (purely lexical, that means if the answer is "LEFT" and the player typer "left", the distance == 4). A better approach it's done in the tag evolution.
+* Rich text
+  The stories' description accept html format.
 
 
-### 10 June 2016 ###
 
-### 11 June 2016 ###
+### evolution ###
 
-### 12 June 2016 ###
+In this tag we have the same base of the content in the tag vFinal, but with some evolutions as:
 
-
+* Persistence
+   * After the player starts to play a story, if he return to the mais page `http://localhost:9000/#/` a button will appear that can redictly him to continue the story. If he already play the story he can not do it again (in the same session, needs to restart the server(this way the data is clean)).
+* Riddle with flexibility
+   * This time, the game accepts answer closes, exemple: the ansr is: "left", it accepts "l  #Ã©ft$@"
 
 ## Mainteneurs ##
 ------------------
@@ -96,6 +65,6 @@ Mainteneurs actuels
 * [Lopes de Oliveira Raquel](mailto:oliveira.raquel.lopes@gmail.com)
 * [Merino Mathieu](mailto:mathieu.merino@outlook.com)
 
-Ce projet a été parrainé par
+Ce projet a Ã©tÃ© parrainÃ© par
 
- * Polytech Nice Sophia
+* Polytech Nice Sophia
