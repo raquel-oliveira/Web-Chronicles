@@ -1,12 +1,15 @@
 'use strict';
 
 const express = require('express');
+const app = express();
+
 const fs = require('fs');
 const xml2js = require('xml2js');
 
 const util = require('util');
 const Levenshtein = require('levenshtein');
 const sp = require('./app/scripts/shortestpath2.js');
+
 // Constants
 const PORT = 8080;
 const STORY_PATH = './app/stories/';
@@ -15,11 +18,11 @@ var session = require('express-session');
 
 
 // App
-const app = express();
+
 
 app.use(
     session(
-        { secret: 'keyboard cat', cookie: { maxAge: 3600*24*6000  }}));
+        {secret: 'keyboard cat', cookie: {maxAge: 3600 * 24 * 6000}}));
 function createStep(stepData) {
 
     var step = {};
@@ -29,7 +32,7 @@ function createStep(stepData) {
         step.title = stepData.title[0];
     else
         step.title = "";
-    
+
     if (stepData.hasOwnProperty("desc"))
         step.description = stepData.desc[0];
     else
@@ -53,7 +56,7 @@ function createStep(stepData) {
     return step;
 }
 
-function copyStepBasicData(from, to){
+function copyStepBasicData(from, to) {
     to.title = from.title;
     to.description = from.description;
     to.type = from.type;
@@ -67,13 +70,12 @@ function createMultipleChoiceStep(step, stepData) {
     step.type = 'multiple_choice';
     step.outcomes = [];
 
-    if(!Array.isArray(stepData.multiple_choice[0].outcome))
-        {
-            step.outcomes.push({
-                text: stepData.multiple_choice[0].outcome.text[0],
-                nextStep: stepData.multiple_choice[0].outcome.nextStep[0]
-            });
-        }
+    if (!Array.isArray(stepData.multiple_choice[0].outcome)) {
+        step.outcomes.push({
+            text: stepData.multiple_choice[0].outcome.text[0],
+            nextStep: stepData.multiple_choice[0].outcome.nextStep[0]
+        });
+    }
     else {
         for (var i = 0; i < stepData.multiple_choice[0].outcome.length; ++i) {
             step.outcomes.push({
@@ -169,7 +171,7 @@ function createRiddleStep(step, stepData) {
         var r = copyStepBasicData(step, {
             question: step.question,
             hint: step.hint,
-	    outcomes: step.outcomes,
+            outcomes: step.outcomes,
             nextStep: []
         });
         for (var i = 0; i < step.outcomes.length; ++i) {
@@ -178,7 +180,7 @@ function createRiddleStep(step, stepData) {
         return r;
     };
 
-    step.verifyAnswer = function(data){
+    step.verifyAnswer = function (data) {
         var minLevDist = 100;
         var trimmedText = data.tri;
         var found = false;
@@ -235,10 +237,9 @@ function readStory(story_file) {
                 try {
                     steps[data.story.step[i].id[0]] = (createStep(data.story.step[i]));
                 }
-                catch (ex)
-                {
+                catch (ex) {
 
-                    console.log('step '+i+' invalid ! because');
+                    console.log('step ' + i + ' invalid ! because');
                     console.dir(ex);
                     console.dir(data.story.step[i]);
                     throw(ex);
@@ -247,7 +248,8 @@ function readStory(story_file) {
             stories[story_file.slice(0, -4)] = {
                 name: data.story.name[0],
                 file: story_file,
-                steps: steps};
+                steps: steps
+            };
         });
         console.log("\t\t" + story_file);
     });
@@ -273,11 +275,11 @@ initStories();
 
 app.get('/show/story/:name', function (req, res) {
     if (req.params.name in stories) {
-	res.set('Content-Type', 'application/json');
-	res.send(getShowStory(req.params.name));
+        res.set('Content-Type', 'application/json');
+        res.send(getShowStory(req.params.name));
     } else {
         res.statusCode = 400;
-	res.send('Error: can\t find story ' + req.params.name);
+        res.send('Error: can\t find story ' + req.params.name);
     }
 });
 
@@ -303,19 +305,17 @@ app.get('/play/:storyName/:step', function (req, res) {
     var sess = req.session;
     if (!sess.views) {
 
-        sess.views =[];
+        sess.views = [];
     }
-    if(step.id==0)
-    {
-        sess.views =[];
+    if (step.id == 0) {
+        sess.views = [];
     }
-    if(step.given!=undefined&&step.given!=='')
-    {
+    if (step.given != undefined && step.given !== '') {
 
-        step.given.forEach(function(item){
+        step.given.forEach(function (item) {
             sess.views.push(item);
         });
-        req.session.save(function(err) {
+        req.session.save(function (err) {
         })
     }
 
@@ -340,7 +340,6 @@ app.get('/play/stepAction/:storyName/:step/:action/:data', function (req, res) {
 
 
 });
-
 
 
 function getStoriesNamesList() {
@@ -369,7 +368,6 @@ function filterStep(step, filter) {
 }
 
 app.get('/shortestPath/:storyName/:onlySize', function (req, res) {
-
     var rep = stories[req.params.storyName];
 
     sp.fillgraph(getShowStory(req.params.storyName).steps);
@@ -402,9 +400,7 @@ app.get('/stories/:name/haveHappyEnd', function (req, res) {
 });
 
 
-
-function toXML(result,rootNameParam)
-{
+function toXML(result, rootNameParam) {
     var builder = new xml2js.Builder({rootName: rootNameParam, explicitArray: true});
     var xml2 = builder.buildObject(result);
     return builder.buildObject(result);
@@ -415,7 +411,7 @@ app.post('/stories/', function (req, res) {
 
     console.log(req.body);
 
-    var xmltoStore = toXML(req.body.story,'story');
+    var xmltoStore = toXML(req.body.story, 'story');
 
     //console.dir(req);
     var path = './app/stories/.tmp/';
@@ -424,8 +420,8 @@ app.post('/stories/', function (req, res) {
     // Logic for handling missing file, wrong mimetype, no buffer, etc.
 
 
-    fs.writeFile(STORY_PATH+req.body.story.file+'.xml', xmltoStore, function (err) {
-        if(err) {
+    fs.writeFile(STORY_PATH + req.body.story.file + '.xml', xmltoStore, function (err) {
+        if (err) {
             res.status(400).send({
                 message: 'Problem saving the file. Please try again.'
             });
@@ -440,14 +436,11 @@ app.post('/stories/', function (req, res) {
     });
 
 
-
-
 });
 
 
-
 // Access the session as req.session
-app.get('/inventory', function(req, res, next) {
+app.get('/inventory', function (req, res, next) {
     var sess = req.session;
     if (sess.views) {
         res.send(sess.views);
