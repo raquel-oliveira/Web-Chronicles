@@ -9,7 +9,7 @@ var x2js = new X2JS();
  * # ShowCtrl
  */
 angular.module('cApp')
-    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', 'graph', '$location' function ($scope, $http, $routeParams, graph, $location) {
+    .controller('ShowCtrl', ['$scope', '$http', '$routeParams', 'graph', '$location', function ($scope, $http, $routeParams, graph, $location) {
         $scope.view = "show";
         $scope.storyName = null;
         $scope.network = null;

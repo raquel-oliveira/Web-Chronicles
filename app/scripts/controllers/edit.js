@@ -7,13 +7,13 @@ angular.module('cApp').controller('EditCtrl', function ($scope, $http) {
         console.log('adding a step');
         console.dir($scope.currentStep);
         $scope.currentStep = {};
-    }
+    };
 
     $scope.newStory=function(){
-        $scope.story = {name:$scope.storyName, file:$scope.storyPath, step:[]}
+        $scope.story = {name:$scope.storyName, file:$scope.storyPath, step:[]};
         console.log('creating story');
         console.dir($scope.story);
-    }
+    };
 
     $scope.submitMyForm=function(){
         console.dir('salut');
@@ -24,5 +24,5 @@ angular.module('cApp').controller('EditCtrl', function ($scope, $http) {
         /* post to server*/
         $http.post('/stories/', data);
 
-    }
+    };
 });
