@@ -81,10 +81,7 @@ body {
 
   .about{
     font-size: 25px;
-  }
-
-  .contact{
-
+    text-align: justify;
   }
 
   .title{
