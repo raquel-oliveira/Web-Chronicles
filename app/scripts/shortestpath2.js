@@ -4,11 +4,6 @@
 'use strict';
 var graph = [];
 
-function hello2()
-{
-    console.log('hello from the inside');
-}
-
 function unpack(from)
 {
     var route = [];
@@ -103,7 +98,7 @@ function shortestPath() {
 
 
 
-module.exports = {
+/*module.exports = {
 
 
     hello2: hello2,
@@ -114,4 +109,4 @@ module.exports = {
     shortestPath: shortestPath,
 
 
-};
+};*/
