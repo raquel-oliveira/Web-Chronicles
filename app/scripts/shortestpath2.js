@@ -71,10 +71,7 @@ function shortestPath() {
 
 
     }
-
-    var data = [];
-
-    return data;
+    return [];
 }
 
 if (typeof module !== 'undefined') {
