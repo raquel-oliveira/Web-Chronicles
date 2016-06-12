@@ -4,11 +4,9 @@
 'use strict';
 var graph = [];
 
-function unpack(from)
-{
+function unpack(from) {
     var route = [];
-    while(from!==0)
-    {
+    while (from !== 0) {
         route.push(from);
 
 
@@ -18,8 +16,7 @@ function unpack(from)
     return route.reverse();
 }
 
-function addVertex(item)
-{
+function addVertex(item) {
     var vertex = {
         end: false,
         parent: -1,
@@ -27,14 +24,14 @@ function addVertex(item)
     };
 
     if (item.type === 'end' &&
-	typeof item.win !== 'undefined' &&
-	item.win === true) {
+        typeof item.win !== 'undefined' &&
+        item.win === true) {
         vertex.end = true;
     }
 
-    if(typeof item.nextStep !== 'undefined' && item.nextStep) {
+    if (typeof item.nextStep !== 'undefined' && item.nextStep) {
 
-        item.nextStep.forEach(function(nextStepID) {
+        item.nextStep.forEach(function (nextStepID) {
 
             vertex.to.push(nextStepID);
 
@@ -43,10 +40,10 @@ function addVertex(item)
     graph[item.id] = vertex;
 }
 
-function fillgraph(steps){
+function fillgraph(steps) {
     graph = {};
 
-    steps.forEach(function(item) {
+    steps.forEach(function (item) {
         addVertex(item);
     });
 
@@ -59,18 +56,14 @@ function shortestPath() {
     iDtoExplore.push(0);
 
 
-    while (iDtoExplore.length>0) {
+    while (iDtoExplore.length > 0) {
         var indexCur = iDtoExplore.shift();
-        if(graph[indexCur].end)
-
-        {
+        if (graph[indexCur].end) {
             return unpack(indexCur);
         }
 
-        graph[indexCur].to.forEach(function(item) {
-            if(graph[item].parent===-1)
-
-            {
+        graph[indexCur].to.forEach(function (item) {
+            if (graph[item].parent === -1) {
                 graph[item].parent = indexCur;
                 iDtoExplore.push(item);
             }
@@ -82,28 +75,13 @@ function shortestPath() {
     var data = [];
 
     return data;
-
 }
 
-
-
-function exports()
-{
-    try{
-
-
-        module.exports = {
-            unpack: unpack,
-            addVertex: addVertex,
-            fillgraph: fillgraph,
-            shortestPath: shortestPath
-        };
-    }
-    catch(ex)
-    {
-        console.log('err');
-    }
-
+if (typeof module !== 'undefined') {
+    module.exports = {
+        unpack: unpack,
+        addVertex: addVertex,
+        fillgraph: fillgraph,
+        shortestPath: shortestPath,
+    };
 }
-
-exports();
