@@ -258,6 +258,7 @@ function readStory(story_file) {
                 console.log("Error during parsing " + story_file);
                 return;
             }
+            
 
             console.log("\t" + data.story.name[0]);
             var steps = [];

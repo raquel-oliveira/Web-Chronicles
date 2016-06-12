@@ -8,8 +8,6 @@ function unpack(from) {
     var route = [];
     while (from !== 0) {
         route.push(from);
-
-
         from = graph[from].parent;
     }
     route.push("0");
@@ -54,7 +52,6 @@ function shortestPath() {
 
     var iDtoExplore = [];
     iDtoExplore.push(0);
-
 
     while (iDtoExplore.length > 0) {
         var indexCur = iDtoExplore.shift();
