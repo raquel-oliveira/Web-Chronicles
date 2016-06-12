@@ -18,7 +18,7 @@ angular.module('cApp')
       $scope.goToStep = function (step) {
         if (undefined !== step) {
           $scope.currentStep = null; // Clean data related to last step
-          $http.get('stories/' + story.getFile() + '/step/' + step).success(function (data) {
+          $http.get('play/' + story.getFile() + '/' + step).success(function (data) {
             $scope.currentStep = data;
             $scope.currentStep.url = 'views/play_step/' + data.type + '.html';
             $scope.stepType = data.type;

@@ -152,18 +152,32 @@ function createRiddleStep(step, stepData) {
     };
 
     step.verifyAnswer = function(data){
-        // TODO Rajouter des meilleurs moyens de check qu'une Ã©galitÃ© parfaite
-        for (var i = 0; i < step.outcomes.length; ++i){
-            if (step.outcomes[i].text === data)
-                return {
-                    correct: true,
-                    nextStep: step.outcomes[i].nextStep
-                }
-        }
-        return {
-            correct: false,
-            hint: step.hint
-        };
+        var minLevDist = 100;
+
+        var found = false;
+        var nextStep;
+        //distance
+        step.outcomes.forEach(function (outcome) {
+            if (outcome.text == data) {
+                found = true;
+                nextStep = outcome.nextStep;
+                return;
+            }
+            var lComp = Levenshtein(outcome.text, data);
+            if (lComp < minLevDist)
+                minLevDist = lComp;
+        });
+        if (found)
+            return {
+                correct: true,
+                nextStep: nextStep
+            };
+        else
+            return {
+                correct: false,
+                hint: step.hint,
+                distance: minLevDist
+            }
     };
 
 
@@ -245,6 +259,7 @@ app.get('/play/:storyName/:step', function (req, res) {
 
 function getPlayStep(storyName, stepId) {
     var storyRaw = stories[storyName];
+    console.log(storyName);
     var stepRaw = storyRaw.steps[stepId];
     console.log(stepRaw.getPlayInfos());
     return stepRaw.getPlayInfos();
