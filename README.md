@@ -53,7 +53,7 @@ In this tag we have the same base of the content in the tag vFinal, but with som
 * Persistence
    * After the player starts to play a story, if he return to the mais page `http://localhost:9000/#/` a button will appear that can redictly him to continue the story. If he already play the story he can not do it again (in the same session, needs to restart the server(this way the data is clean)).
 * Riddle with flexibility
-   * This time, the game accepts answer closes, exemple: the ansr is: "left", it accepts "l  #Ã©ft$@"
+   * This time, the game accepts answer closes, exemple: the ansr is: "left", it accepts "l  #éft$@"
 
 ## Mainteneurs ##
 ------------------
@@ -65,6 +65,6 @@ Mainteneurs actuels
 * [Lopes de Oliveira Raquel](mailto:oliveira.raquel.lopes@gmail.com)
 * [Merino Mathieu](mailto:mathieu.merino@outlook.com)
 
-Ce projet a Ã©tÃ© parrainÃ© par
+Ce projet a été parrainé par
 
 * Polytech Nice Sophia
