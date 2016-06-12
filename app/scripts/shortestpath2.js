@@ -38,8 +38,6 @@ function addVertex(item)
     }
 
     if(typeof item.nextStep !== 'undefined' && item.nextStep) {
-	console.log(item);
-
 
         item.nextStep.forEach(function(nextStepID) {
 
@@ -47,18 +45,7 @@ function addVertex(item)
 
         });
     }
-    /*
-    if(typeof item.hiden !== 'undefined' ) {
 
-
-        item.hiden[0].nextStep.forEach(function(step) {
-
-
-            vertex.to.push(step._);
-        });
-
-    }
-    */
     graph[item.id] = vertex;
 }
 
@@ -77,11 +64,9 @@ function shortestPath() {
 
     var iDtoExplore = [];
     iDtoExplore.push(0);
-    //console.log(graph);
     while (iDtoExplore.length>0) {
         var indexCur = iDtoExplore.shift();
-/*	console.log(indexCur);
-	console.log(graph);*/
+
         if(graph[indexCur].end === true || graph[indexCur].end ==='true')
         {
             console.log('end');
@@ -89,10 +74,6 @@ function shortestPath() {
         }
 
         graph[indexCur].to.forEach(function(item) {
-/*	    console.log(item);
-	    console.log(graph);
-	    console.log(graph[item]);
-            console.log('add');*/
 
             if(graph[item].visited===-1)
             {
@@ -106,8 +87,6 @@ function shortestPath() {
 
 
     }
-
-    console.log('not found');
 
     var data = [];
 
